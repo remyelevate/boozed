@@ -1,0 +1,88 @@
+/**
+ * Submenu dropdown – hover-only visibility, absolute positioning.
+ */
+
+.site-header__nav .menu-item-has-children,
+.site-header__nav .dropdown-trigger,
+.site-header__nav .has-dropdown {
+  position: relative !important;
+}
+
+.site-header__nav .menu-item-has-children > a,
+.site-header__nav .dropdown-trigger > a,
+.site-header__nav .has-dropdown > a {
+  display: inline-block;
+  padding: 0.5rem 0;
+}
+
+/* Hidden by default, only show on hover/focus – absolute positioning */
+.site-header__nav .sub-menu,
+.site-header__nav .nav-dropdown {
+  position: absolute !important;
+  left: 0;
+  top: 100%;
+  z-index: 9999;
+  width: max-content !important;
+  min-width: 0;
+  padding: 0.5rem 0;
+  margin: 0;
+  list-style: none;
+  background: #0C0A21;
+  border: 1px solid rgba(44, 63, 113, 0.3);
+  border-radius: 0;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.2s, visibility 0.2s;
+}
+
+.site-header__nav .menu-item-has-children:hover > .sub-menu,
+.site-header__nav .menu-item-has-children:focus-within > .sub-menu,
+.site-header__nav .dropdown-trigger:hover > .sub-menu,
+.site-header__nav .dropdown-trigger:focus-within > .sub-menu,
+.site-header__nav .has-dropdown:hover > .nav-dropdown,
+.site-header__nav .has-dropdown:focus-within > .nav-dropdown {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.site-header__nav .sub-menu li,
+.site-header__nav .nav-dropdown-item {
+  margin: 0;
+}
+
+.site-header__nav .sub-menu a,
+.site-header__nav .nav-dropdown-link {
+  display: flex !important;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 0.375rem;
+  padding: 0.625rem 1rem;
+  color: #FFFCF2;
+  text-decoration: none;
+  font-size: 1rem;
+}
+
+.site-header__nav .sub-menu a:hover,
+.site-header__nav .nav-dropdown-link:hover {
+  background: rgba(44, 63, 113, 0.5);
+  color: #C41E3A;
+}
+
+.site-header__nav .sub-menu .current-menu-item > a {
+  color: #C41E3A;
+}
+
+.site-header__nav .nav-dropdown-link .nav-dropdown-link__inner {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 0.375rem;
+}
+
+.site-header__nav .nav-dropdown-link .nav-vacature-badge {
+  flex-shrink: 0;
+  white-space: nowrap;
+}

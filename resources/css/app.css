@@ -1,0 +1,992 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap');
+
+/* Nexa Bold – local */
+@font-face {
+  font-family: 'Nexa';
+  src: url('../../assets/fonts/Nexa Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --header-height: 72px; /* Main header row height */
+    --header-top-height: 36px; /* Top bar height */
+    --header-total-height: 108px; /* Combined height when top bar is shown */
+    /* Section padding – change here to affect all section horizontal/vertical padding */
+    --section-padding-x: 68px;
+    --section-padding-y: 68px;
+  }
+  body {
+    @apply font-body text-body font-normal antialiased;
+  }
+}
+
+@layer components {
+  /* Header: transparent over hero (white text), white backdrop + dark logo/text when scrolled or hovered */
+  .site-header .site-header__logo {
+    @apply relative;
+  }
+  .site-header .site-header__logo-img {
+    height: 2.5rem;
+    width: auto;
+    max-width: none;
+  }
+  @media (min-width: 768px) {
+    .site-header .site-header__logo-img {
+      height: 3rem;
+    }
+  }
+  .site-header .site-header__logo-img--dark {
+    @apply left-0 top-1/2 -translate-y-1/2;
+  }
+  /* WooCommerce adds .woocommerce to body and enqueues .woocommerce img { height: auto; max-width: 100% },
+     which overrides the header logo size on PDP. Pin the site header logo so it matches other pages. */
+  body.woocommerce .site-header .site-header__logo-img,
+  body.single-product .site-header .site-header__logo-img {
+    height: 2.5rem;
+    max-height: 3rem;
+    max-width: none;
+    width: auto;
+  }
+  @media (min-width: 768px) {
+    body.woocommerce .site-header .site-header__logo-img,
+    body.single-product .site-header .site-header__logo-img {
+      height: 3rem;
+      max-height: 3rem;
+    }
+  }
+  /* Top bar: light when transparent */
+  .site-header .site-header__top {
+    @apply border-white/20;
+  }
+  .site-header.has-backdrop .site-header__top {
+    @apply border-brand-border;
+  }
+  .site-header.has-backdrop .site-header__top-link {
+    @apply text-brand-purple/80 hover:text-brand-purple;
+  }
+  .site-header.has-backdrop {
+    @apply text-brand-purple;
+  }
+  .site-header.has-backdrop .site-header__backdrop {
+    @apply opacity-100;
+  }
+  .site-header.has-backdrop .site-header__logo-img--light {
+    @apply opacity-0 pointer-events-none;
+  }
+  .site-header.has-backdrop .site-header__logo-img--dark {
+    @apply opacity-100 pointer-events-auto;
+  }
+  .site-header.has-backdrop .site-header__toggle:focus {
+    @apply outline-none;
+  }
+  /* Mobile menu open: hamburger to X */
+  .site-header__mobile.is-open {
+    @apply opacity-100 visible;
+  }
+
+  /* Mobile menu – Lottie (boozed.json) at bottom below links, 50% opacity, rotate + scale */
+  .mobile-menu__lottie-inner {
+    flex-shrink: 0;
+    transform: rotate(-10deg) scale(1.5);
+  }
+  .mobile-menu__nav .mobile-menu__items {
+    @apply list-none m-0 p-0 w-full max-w-md;
+  }
+  .mobile-menu__nav .mobile-menu__items > li {
+    @apply border-b border-brand-nude/20;
+  }
+  .mobile-menu__nav .mobile-menu__items .nav-link,
+  .mobile-menu__nav .mobile-menu__items .mobile-menu__accordion-trigger {
+    @apply text-inherit no-underline transition-colors duration-300 py-4;
+  }
+  .mobile-menu__nav .mobile-menu__items a:hover,
+  .mobile-menu__nav .mobile-menu__items .mobile-menu__accordion-trigger:hover {
+    @apply text-brand-white opacity-90;
+  }
+  .mobile-menu__accordion.is-open .mobile-menu__accordion-icon {
+    @apply rotate-180;
+  }
+  .mobile-menu__submenu {
+    @apply list-none m-0 p-0 overflow-hidden;
+  }
+  .mobile-menu__submenu:not([hidden]) {
+    @apply block;
+  }
+  .mobile-menu__submenu-link {
+    @apply text-body-md text-brand-white opacity-90 transition-colors;
+  }
+  .mobile-menu__submenu-link:hover {
+    @apply text-brand-white opacity-100;
+  }
+  .site-header__toggle[aria-expanded="true"] .site-header__toggle-bar:nth-child(1) {
+    @apply rotate-45 translate-y-2;
+  }
+  .site-header__toggle[aria-expanded="true"] .site-header__toggle-bar:nth-child(2) {
+    @apply opacity-0 scale-0;
+  }
+  .site-header__toggle[aria-expanded="true"] .site-header__toggle-bar:nth-child(3) {
+    @apply -rotate-45 -translate-y-2;
+  }
+
+  /* Primary nav list – flex-nowrap keeps items in one row; overflow visible so dropdowns are not clipped */
+  .site-header__nav .nav-menu {
+    @apply flex flex-nowrap items-center justify-center font-body font-medium list-none m-0 p-0 overflow-visible;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .site-header__nav .nav-menu::-webkit-scrollbar {
+    display: none;
+  }
+  .site-header__nav .nav-menu > li {
+    @apply relative m-0;
+  }
+  .site-header__nav .nav-link {
+    @apply relative text-inherit no-underline transition-colors duration-200;
+  }
+  .site-header__nav .nav-link:hover,
+  .site-header__nav .nav-link.is-current,
+  .site-header__nav .nav-link[aria-expanded="true"] {
+    @apply text-brand-red;
+  }
+  .site-header__nav .nav-link::after {
+    content: '';
+    @apply block absolute bottom-0 left-0 w-full h-0.5 bg-brand-red scale-x-0 origin-left transition-transform duration-200;
+  }
+  .site-header__nav .nav-menu > li > .nav-link::after {
+    @apply bottom-0;
+  }
+  .site-header__nav .nav-link:hover::after,
+  .site-header__nav .nav-link.is-current::after,
+  .site-header__nav .nav-link[aria-expanded="true"]::after {
+    @apply scale-x-100;
+  }
+
+  /* Footer: menu links */
+  .site-footer__menu-list a {
+    @apply text-brand-white no-underline transition-colors hover:text-brand-coral;
+  }
+
+  /* Mega menu (first item) */
+  .site-header__nav .has-mega-menu {
+    @apply static;
+  }
+  .site-header__nav .has-mega-menu > .nav-link {
+    @apply inline-block py-2;
+  }
+  
+  /* Mega menu panel - full screen width, starts at top to include header area */
+  .mega-menu-panel {
+    @apply fixed left-0 right-0 w-screen pointer-events-none;
+    top: 0;
+    z-index: 45;
+    overflow: visible;
+  }
+  
+  /* Panel background - full height including header area */
+  .mega-menu-panel__bg {
+    @apply absolute left-0 right-0 bg-brand-indigo;
+    top: 0;
+    bottom: 0;
+    transform: translateY(-100%);
+    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  
+  .mega-menu-panel.is-open .mega-menu-panel__bg {
+    transform: translateY(0);
+  }
+  
+  /* Panel visibility */
+  .mega-menu-panel {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.01s linear 0.5s, visibility 0s linear 0.5s;
+  }
+  .mega-menu-panel.is-open {
+    @apply pointer-events-auto;
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.01s linear 0s, visibility 0s linear 0s;
+  }
+  
+  /* Inner container - centered like header, positioned below header */
+  .mega-menu-inner {
+    @apply relative text-brand-nude px-4 md:px-section-x py-8 max-w-section mx-auto flex flex-wrap gap-6 items-start;
+  }
+  .mega-menu-inner--first {
+    @apply flex-col;
+    /* Push content below the header */
+    padding-top: calc(var(--header-total-height) + 2rem);
+    padding-bottom: 2.5rem;
+  }
+  
+  /* Content container */
+  .mega-menu-first-content {
+    @apply w-full;
+  }
+  
+  /* Menu items container */
+  .mega-menu-items {
+    @apply flex flex-col gap-1;
+  }
+  
+  /* Individual menu item wrapper */
+  .mega-menu-item-wrapper {
+    @apply relative;
+  }
+  
+  /* Staggered content animations - Framer Motion spring-like */
+  .mega-menu-item-wrapper {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  
+  .mega-menu-panel.is-open .mega-menu-item-wrapper:nth-child(1) {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0.1s;
+  }
+  .mega-menu-panel.is-open .mega-menu-item-wrapper:nth-child(2) {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0.15s;
+  }
+  .mega-menu-panel.is-open .mega-menu-item-wrapper:nth-child(3) {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0.2s;
+  }
+  
+  /* Exit animations - faster, all at once */
+  .mega-menu-panel:not(.is-open) .mega-menu-item-wrapper {
+    transition-delay: 0s;
+    transition-duration: 0.15s;
+  }
+  
+  /* Background exit animation - slightly faster */
+  .mega-menu-panel:not(.is-open) .mega-menu-panel__bg {
+    transition-duration: 0.35s;
+  }
+  
+  /* Menu item link - default state (muted) */
+  .mega-menu-first-item {
+    @apply flex items-center gap-3 no-underline py-1;
+  }
+  .mega-menu-first-item .mega-menu-item-title {
+    @apply font-heading font-bold text-h2 text-brand-white transition-colors duration-300;
+  }
+  .mega-menu-first-item .mega-menu-item-arrow {
+    @apply transition-all duration-300 opacity-0 -translate-x-2;
+  }
+  
+  /* Menu item link - hover state (coral) */
+  .mega-menu-first-item:hover .mega-menu-item-title,
+  .mega-menu-item-wrapper.is-active .mega-menu-first-item .mega-menu-item-title {
+    @apply text-brand-coral;
+  }
+  .mega-menu-first-item:hover .mega-menu-item-arrow,
+  .mega-menu-item-wrapper.is-active .mega-menu-first-item .mega-menu-item-arrow {
+    @apply opacity-100 translate-x-0 text-brand-coral;
+  }
+  
+  /* Description text - hidden by default, shows on hover */
+  .mega-menu-item-desc {
+    @apply font-body text-body-md text-brand-white max-w-md overflow-hidden transition-colors duration-300;
+    max-height: 0;
+    opacity: 0;
+    margin-top: 0;
+    transition: max-height 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+                opacity 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+                margin-top 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  
+  .mega-menu-item-wrapper:hover .mega-menu-item-desc,
+  .mega-menu-item-wrapper.is-active .mega-menu-item-desc {
+    max-height: 100px;
+    opacity: 1;
+    margin-top: 0.5rem;
+  }
+  .mega-menu-featured {
+    @apply min-w-[280px] max-w-md;
+  }
+  .mega-menu-featured-link {
+    @apply block p-6 rounded-lg bg-brand-indigo/80 hover:bg-brand-purple/90 transition-colors no-underline text-inherit border border-brand-purple/30;
+  }
+  .mega-menu-featured-title {
+    @apply font-heading text-h3 text-brand-red mt-0 mb-3;
+  }
+  .mega-menu-featured-desc {
+    @apply font-body text-body text-brand-nude/90 m-0 leading-relaxed;
+  }
+  .mega-menu-featured-link .mega-menu-arrow,
+  .mega-menu-link .mega-menu-arrow {
+    @apply inline-block mt-2 text-brand-red transition-transform duration-200;
+  }
+  .mega-menu-featured-link:hover .mega-menu-arrow,
+  .mega-menu-link:hover .mega-menu-arrow {
+    @apply translate-x-1;
+  }
+  .mega-menu-link {
+    @apply flex items-center justify-between gap-3 py-3 px-4 rounded text-brand-nude no-underline font-medium hover:text-brand-red hover:bg-brand-purple/50 transition-colors min-w-[180px];
+  }
+  .mega-menu-link-text {
+    @apply flex-1;
+  }
+
+  /* When header mega menu is open: dark overlay on hero backdrop */
+  .hero__mega-menu-overlay {
+    @apply transition-opacity duration-300 ease-out;
+  }
+  body.header-mega-open #hero-mega-menu-overlay {
+    @apply opacity-100;
+  }
+
+  /* Hero secondary CTA: coral underline expands to full label width on hover */
+  .hero__cta-secondary::after {
+    content: '';
+    @apply block absolute bottom-0 left-0 h-0.5 bg-brand-coral origin-left transition-[width] duration-200 ease-out;
+    width: 2.5em;
+  }
+  .hero__cta-secondary:hover::after {
+    width: 100%;
+  }
+
+  /* Text + Media: secondary CTA same as hero (underline expands on hover), light context */
+  .tekst-media__cta-secondary::after {
+    content: '';
+    @apply block absolute bottom-0 left-0 h-0.5 bg-brand-coral origin-left transition-[width] duration-200 ease-out;
+    width: 2.5em;
+  }
+  .tekst-media__cta-secondary:hover::after {
+    width: 100%;
+  }
+
+  /* Page header: secondary CTA short underline expands on hover */
+  .page-header__cta-secondary::after {
+    content: '';
+    @apply block absolute bottom-0 left-0 h-0.5 bg-brand-coral origin-left transition-[width] duration-200 ease-out;
+    width: 2.5em;
+  }
+  .page-header__cta-secondary:hover::after {
+    width: 100%;
+  }
+
+  /* Product lister CTA card: secondary CTA same as hero (coral underline expands on hover) */
+  .product-lister__cta-secondary::after {
+    content: '';
+    @apply block absolute bottom-0 left-0 h-0.5 bg-brand-coral origin-left transition-[width] duration-200 ease-out;
+    width: 2.5em;
+  }
+  .product-lister__cta-secondary:hover::after {
+    width: 100%;
+  }
+
+  /* Hero nav: hide system cursor so only custom cursor is visible (no text cursor on titles) */
+  .hero__nav-bar,
+  .hero__nav-bar .hero-nav-item,
+  .hero__nav-bar .hero-nav-item * {
+    cursor: none;
+  }
+
+  /* Text + Media section: marquee caption is viewport-wide and independent of container (fixed so nothing can clip it) */
+  .tekst-media__caption-outer {
+    position: fixed;
+    left: 0;
+    width: 100vw;
+    max-width: 100vw;
+    z-index: 1;
+    visibility: hidden;
+    /* top set by JS to align with section; visibility set to visible when in view */
+  }
+
+  /* Text + Media section: optional removal of top padding */
+  .tekst-media.tekst-media--no-top-padding .tekst-media__inner {
+    padding-top: 0;
+  }
+
+  /* Text + Media section: reveal-from-bottom using CSS transition (IntersectionObserver adds .is-revealed) */
+  .tekst-media__media-reveal {
+    clip-path: inset(0 0 100% 0);
+    transition: clip-path 1s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .tekst-media__media-reveal.is-revealed {
+    clip-path: inset(0 0 0 0);
+  }
+
+  /* Text + Media section: WYSIWYG content – headings use heading font and sizes */
+  .tekst-media__body h1,
+  .tekst-media__body h2,
+  .tekst-media__body h3,
+  .tekst-media__body h4,
+  .tekst-media__body h5,
+  .tekst-media__body h6 {
+    @apply font-heading font-bold text-brand-black mt-0 mb-4;
+  }
+  .tekst-media__body h1 { @apply text-h1 md:text-h1-lg; }
+  .tekst-media__body h2 { @apply text-h2 md:text-h2-lg; }
+  .tekst-media__body h3 { @apply text-h3 md:text-h3-lg; }
+  .tekst-media__body h4 { @apply text-h4 md:text-h4-lg; }
+  .tekst-media__body h5 { @apply text-h5 md:text-h5-lg; }
+  .tekst-media__body h6 { @apply text-h6 md:text-h6-lg; }
+  .tekst-media__body h1:first-child,
+  .tekst-media__body h2:first-child,
+  .tekst-media__body h3:first-child,
+  .tekst-media__body h4:first-child,
+  .tekst-media__body h5:first-child,
+  .tekst-media__body h6:first-child {
+    @apply mt-0;
+  }
+  .tekst-media__body p + h1,
+  .tekst-media__body p + h2,
+  .tekst-media__body p + h3,
+  .tekst-media__body p + h4,
+  .tekst-media__body p + h5,
+  .tekst-media__body p + h6 {
+    @apply mt-6;
+  }
+
+  /* Single post: entry content – headings, paragraphs, line breaks, lists */
+  .single .entry-content h1,
+  .single .entry-content h2,
+  .single .entry-content h3,
+  .single .entry-content h4,
+  .single .entry-content h5,
+  .single .entry-content h6 {
+    @apply font-heading font-bold text-brand-indigo mt-0 mb-4;
+  }
+  .single .entry-content h1 { @apply text-h1 md:text-h1-lg; }
+  .single .entry-content h2 { @apply text-h2 md:text-h2-lg; }
+  .single .entry-content h3 { @apply text-h3 md:text-h3-lg; }
+  .single .entry-content h4 { @apply text-h4 md:text-h4-lg; }
+  .single .entry-content h5 { @apply text-h5 md:text-h5-lg; }
+  .single .entry-content h6 { @apply text-h6 md:text-h6-lg; }
+  .single .entry-content h1:first-child,
+  .single .entry-content h2:first-child,
+  .single .entry-content h3:first-child,
+  .single .entry-content h4:first-child,
+  .single .entry-content h5:first-child,
+  .single .entry-content h6:first-child {
+    @apply mt-0;
+  }
+  .single .entry-content p + h1,
+  .single .entry-content p + h2,
+  .single .entry-content p + h3,
+  .single .entry-content p + h4,
+  .single .entry-content p + h5,
+  .single .entry-content p + h6 {
+    @apply mt-6;
+  }
+  .single .entry-content p {
+    @apply mb-4 last:mb-0;
+  }
+  .single .entry-content ul,
+  .single .entry-content ol {
+    @apply mb-4 pl-6 last:mb-0;
+  }
+  .single .entry-content ul { @apply list-disc; }
+  .single .entry-content ol { @apply list-decimal; }
+  .single .entry-content li { @apply mb-1; }
+
+  /* Prose / Text section (and other WYSIWYG blocks): restore list styling after preflight reset */
+  .prose ul,
+  .section-tekst-content ul,
+  .prose ol,
+  .section-tekst-content ol {
+    @apply mb-4 pl-6 last:mb-0;
+  }
+  .prose ul,
+  .section-tekst-content ul {
+    @apply list-disc;
+  }
+  .prose ol,
+  .section-tekst-content ol {
+    @apply list-decimal;
+  }
+  .prose li,
+  .section-tekst-content li {
+    @apply mb-1;
+  }
+
+  .single .entry-content a {
+    @apply text-brand-indigo underline hover:opacity-90;
+  }
+  .single .entry-content img {
+    @apply max-w-full h-auto my-4;
+  }
+  /* Inline/aligned images: float so text wraps correctly (classic & block editor) */
+  .single .entry-content img.alignleft,
+  .single .entry-content .wp-block-image.alignleft,
+  .single .entry-content figure.alignleft {
+    @apply float-left mr-6 mb-4 mt-1 max-w-[min(50%,320px)];
+  }
+  .single .entry-content img.alignright,
+  .single .entry-content .wp-block-image.alignright,
+  .single .entry-content figure.alignright {
+    @apply float-right ml-6 mb-4 mt-1 max-w-[min(50%,320px)];
+  }
+  .single .entry-content .wp-block-image.alignleft img,
+  .single .entry-content .wp-block-image.alignright img,
+  .single .entry-content figure.alignleft img,
+  .single .entry-content figure.alignright img {
+    @apply my-0 max-w-full;
+  }
+  .single .entry-content br {
+    @apply block;
+  }
+
+  /* Text + Media section: caption ticker when content overflows */
+  @keyframes tekst-media-ticker {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  .tekst-media__caption-inner--ticker {
+    animation: tekst-media-ticker 25s linear infinite;
+  }
+  .tekst-media__caption-inner--ticker:hover {
+    animation-play-state: paused;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .tekst-media__caption-inner--ticker {
+      animation: none;
+    }
+  }
+
+  /* Page header: same ticker effect when title overflows */
+  .page-header__title-inner--ticker {
+    animation: tekst-media-ticker 25s linear infinite;
+  }
+  .page-header__title-inner--ticker:hover {
+    animation-play-state: paused;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .page-header__title-inner--ticker {
+      animation: none;
+    }
+  }
+
+  /* Marquee section: same ticker effect when caption overflows */
+  .marquee__caption-inner--ticker {
+    animation: tekst-media-ticker 25s linear infinite;
+  }
+  .marquee__caption-inner--ticker:hover {
+    animation-play-state: paused;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .marquee__caption-inner--ticker {
+      animation: none;
+    }
+  }
+
+  /* Intake process section: same ticker effect when title overflows */
+  .intake-process__title-inner--ticker {
+    animation: tekst-media-ticker 25s linear infinite;
+  }
+  .intake-process__title-inner--ticker:hover {
+    animation-play-state: paused;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .intake-process__title-inner--ticker {
+      animation: none;
+    }
+  }
+
+  /* Vacancy apply banner: solid Indigo background (overrides any bleed-through from page content) */
+  .vacature-apply-banner {
+    background-color: #0C0A21 !important;
+    background: #0C0A21 !important;
+  }
+
+  /* Vacancy apply banner: marquee title on mobile when text overflows */
+  .vacature-apply-banner__title-inner--ticker {
+    animation: tekst-media-ticker 25s linear infinite;
+  }
+  .vacature-apply-banner__title-inner--ticker:hover {
+    animation-play-state: paused;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .vacature-apply-banner__title-inner--ticker {
+      animation: none;
+    }
+  }
+
+  /* Brands section: scattered logos around title, luminosity filter, full color on hover */
+  .brands__content {
+    max-width: 560px;
+  }
+  .brands__logo-img {
+    @apply w-full h-full object-contain;
+  }
+  .brands__logo {
+    @apply absolute items-center justify-center pointer-events-auto;
+    width: 80px;
+    height: 80px;
+    filter: saturate(0) brightness(1.08);
+    @apply opacity-60 transition-all duration-300;
+  }
+  .brands__logo:hover {
+    filter: none;
+    @apply opacity-100;
+  }
+
+  /* Footer CTA banner – large Lottie arrow on top, secondary link underline */
+  .site-footer__cta-secondary::after {
+    content: '';
+    @apply block absolute bottom-0 left-0 h-0.5 bg-brand-coral origin-left transition-[width] duration-200 ease-out;
+    width: 2.5em;
+  }
+  .site-footer__cta-secondary:hover::after {
+    width: 100%;
+  }
+
+  /* Footer newsletter – fallback form (same bar design as CF7) */
+  .site-footer__newsletter-form .site-footer__newsletter-field::before {
+    content: '';
+    @apply absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 pointer-events-none;
+    background-color: #7a6f9e;
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'/%3E%3Cpolyline points='22,6 12,13 2,6'/%3E%3C/svg%3E");
+    mask-size: contain;
+    mask-repeat: no-repeat;
+    mask-position: center;
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'/%3E%3Cpolyline points='22,6 12,13 2,6'/%3E%3C/svg%3E");
+    -webkit-mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+  }
+  .site-footer__newsletter-form input {
+    min-width: 0;
+  }
+  .site-footer__newsletter-shortcode {
+    @apply w-full;
+  }
+  .site-footer__newsletter-shortcode .mc4wp-form,
+  .site-footer__newsletter-shortcode form {
+    @apply flex flex-col sm:flex-row gap-3 w-full;
+  }
+  .site-footer__newsletter-shortcode .mc4wp-form-fields {
+    @apply flex flex-col sm:flex-row gap-3 w-full;
+  }
+  .site-footer__newsletter-shortcode .mc4wp-form-fields input[type="email"] {
+    @apply flex-1 min-w-0;
+  }
+  .site-footer__newsletter-shortcode .mc4wp-form-fields input[type="submit"],
+  .site-footer__newsletter-shortcode .mc4wp-form-fields button {
+    @apply shrink-0;
+  }
+  /* Newsletter (white bg): ensure shortcode forms use dark text/inputs */
+  .site-footer__newsletter .site-footer__newsletter-shortcode input[type="email"],
+  .site-footer__newsletter .site-footer__newsletter-shortcode input[type="text"] {
+    @apply bg-brand-nude border-brand-border text-brand-indigo placeholder:text-brand-indigo/50;
+  }
+
+  /* Footer newsletter – CF7 design: single bar (input + button), envelope icon, dark button on the right */
+  .site-footer__newsletter-shortcode .wpcf7 form {
+    @apply flex flex-row flex-wrap w-full max-w-xl border border-[#333333] rounded-none;
+    min-height: 48px;
+  }
+  /* Hidden fieldset: take no space in the bar */
+  .site-footer__newsletter-shortcode .wpcf7 form > fieldset.hidden-fields-container {
+    flex: 0 0 0;
+    min-width: 0;
+    width: 0;
+    overflow: hidden;
+    @apply m-0 p-0 border-0;
+  }
+  /* CF7 wraps each part in <p>; email takes space, submit pushed to the right edge */
+  .site-footer__newsletter-shortcode .wpcf7 form > p {
+    @apply flex flex-nowrap m-0 w-full;
+  }
+  .site-footer__newsletter-shortcode .wpcf7 form > p:first-of-type {
+    flex: 1 1 0%;
+    min-width: 0;
+  }
+  /* Hide the wpcf7 spinner */
+  .site-footer__newsletter-shortcode .wpcf7 .wpcf7-spinner {
+    display: none !important;
+  }
+  /* Response message on its own row so it doesn’t leave empty space to the right of the button */
+  .site-footer__newsletter-shortcode .wpcf7 form > .wpcf7-response-output {
+    flex: 1 1 100%;
+    order: 10;
+  }
+  .site-footer__newsletter-shortcode .wpcf7 .wpcf7-form-control-wrap {
+    @apply flex-1 flex min-w-0 relative w-full;
+  }
+  .site-footer__newsletter-shortcode .wpcf7 .wpcf7-form-control-wrap::before {
+    content: '';
+    @apply absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 pointer-events-none;
+    background-color: #7a6f9e;
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'/%3E%3Cpolyline points='22,6 12,13 2,6'/%3E%3C/svg%3E");
+    mask-size: contain;
+    mask-repeat: no-repeat;
+    mask-position: center;
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'/%3E%3Cpolyline points='22,6 12,13 2,6'/%3E%3C/svg%3E");
+    -webkit-mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+  }
+  .site-footer__newsletter-shortcode .wpcf7 input[type="email"] {
+    @apply flex-1 min-w-0 w-full border-0 rounded-none bg-white py-3 pl-12 pr-4 font-body text-body text-[#333333];
+    min-height: 48px;
+  }
+  .site-footer__newsletter-shortcode .wpcf7 input[type="email"]::placeholder {
+    color: #7a6f9e;
+  }
+  .site-footer__newsletter-shortcode .wpcf7 input[type="submit"] {
+    @apply shrink-0 border-0 rounded-none bg-brand-indigo text-white font-body text-body font-medium py-3 px-5 cursor-pointer transition-opacity hover:opacity-90;
+    min-height: 48px;
+  }
+  .site-footer__newsletter-shortcode .wpcf7 .wpcf7-response-output {
+    @apply mt-3 m-0;
+  }
+  /* Keep newsletter bar to a sensible width so button sits at right edge of bar (no gap) */
+  .site-footer__newsletter-shortcode .wpcf7 {
+    @apply max-w-xl;
+  }
+
+  /* ── Map banner: contain Leaflet's internal z-indexes ────── */
+  .map-banner {
+    isolation: isolate;
+  }
+
+  /* ── Contact section ───────────────────────────────────────── */
+  .section-contact__bg {
+    @apply bg-brand-indigo;
+  }
+
+  /* Form card – design system: placeholders only (no labels on top), Purple/75 placeholders */
+  .section-contact .wpcf7 {
+    @apply w-full;
+  }
+  .section-contact .wpcf7 form {
+    @apply flex flex-col gap-4;
+  }
+  .section-contact .wpcf7 form > p {
+    @apply m-0;
+  }
+  /* Hide labels above inputs – use placeholders only */
+  .section-contact .wpcf7 form > p > label:first-child {
+    @apply sr-only;
+  }
+  .section-contact .wpcf7 .wpcf7-form-control-wrap {
+    @apply block w-full;
+  }
+  .section-contact .wpcf7 input[type="text"],
+  .section-contact .wpcf7 input[type="email"],
+  .section-contact .wpcf7 input[type="tel"] {
+    @apply w-full rounded border border-brand-border bg-brand-white px-3 py-2.5 text-brand-indigo font-body text-body;
+    @apply placeholder:text-brand-purple/75;
+    @apply focus:outline-none focus:ring-2 focus:ring-brand-border-focus focus:border-brand-border-focus;
+  }
+  .section-contact .wpcf7 textarea {
+    @apply w-full rounded border border-brand-border bg-brand-white px-3 py-2.5 text-brand-indigo font-body text-body;
+    @apply placeholder:text-brand-purple/75;
+    @apply focus:outline-none focus:ring-2 focus:ring-brand-border-focus focus:border-brand-border-focus;
+    @apply resize-y min-h-[120px];
+  }
+  .section-contact .wpcf7 input[type="checkbox"] {
+    @apply w-5 h-5 rounded border-2 border-brand-border text-brand-purple;
+    @apply focus:ring-2 focus:ring-brand-border-focus focus:ring-offset-0;
+  }
+  .section-contact .wpcf7 .wpcf7-list-item {
+    @apply m-0;
+  }
+  .section-contact .wpcf7 .wpcf7-list-item label {
+    @apply inline-flex items-center gap-3 cursor-pointer font-body text-body text-brand-indigo;
+  }
+  .section-contact .wpcf7 input[type="submit"] {
+    @apply inline-flex items-center justify-center gap-2 font-body text-body font-medium rounded-none px-5 py-2.5;
+    @apply !bg-brand-coral text-brand-white hover:opacity-90 cursor-pointer border-0 transition-opacity;
+  }
+  .section-contact .wpcf7 .wpcf7-spinner {
+    display: none !important;
+  }
+  .section-contact .wpcf7 .wpcf7-response-output {
+    @apply mt-3 m-0 text-body-sm;
+  }
+
+  .section-contact__left {
+    transform: rotate(350deg);
+  }
+
+  /* Spot card */
+  .section-contact__spot a {
+    @apply no-underline hover:underline;
+  }
+
+  /* Footer ticker – nude bar, marquee with Indigo/White/Coral items (no border, 6 copies = no gaps) */
+  .site-footer__ticker {
+    border: none !important;
+  }
+  .site-footer__ticker-track {
+    width: max-content;
+  }
+  .site-footer__ticker-track--animate {
+    animation: site-footer-ticker 50s linear infinite;
+  }
+  @keyframes site-footer-ticker {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-16.666%); /* 1/6 of track = one set of items */
+    }
+  }
+
+  /* Ticker – solid indigo bar (brand indigo #0C0A21) */
+  .section-contact__ticker {
+    position: relative;
+    z-index: 10;
+    background-color: #0C0A21 !important;
+  }
+  .section-contact__ticker-inner--animate {
+    animation: section-contact-ticker 30s linear infinite;
+  }
+  @keyframes section-contact-ticker {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-16.666%);
+    }
+  }
+
+  /* ── Request Account section ─────────────────────────────────── */
+  .section-request-account .wpcf7 {
+    @apply w-full;
+  }
+  .section-request-account .wpcf7 form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .section-request-account .wpcf7 form > p,
+  .section-request-account .wpcf7 form > .section-request-account__row {
+    margin: 0 !important;
+  }
+  .section-request-account .wpcf7 form > .section-request-account__row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 0 1rem;
+    margin: 0 !important;
+  }
+  @media (max-width: 767px) {
+    .section-request-account .wpcf7 form > .section-request-account__row {
+      grid-template-columns: 1fr;
+    }
+  }
+  .section-request-account .wpcf7 form > .section-request-account__row > br {
+    display: none;
+  }
+  .section-request-account .wpcf7 form > .section-request-account__row > p {
+    margin: 0 !important;
+    min-width: 0;
+  }
+  /* CF7 puts both shortcodes in one <p> – span full width so inner grid gives true 50/50 */
+  .section-request-account .wpcf7 form > .section-request-account__row > p:only-of-type {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 0 1rem;
+  }
+  .section-request-account .wpcf7 form > .section-request-account__row > p:only-of-type > br {
+    display: none;
+  }
+  .section-request-account .wpcf7 form > .section-request-account__row > p:only-of-type > label:first-of-type,
+  .section-request-account .wpcf7 form > .section-request-account__row > p:only-of-type > .wpcf7-form-control-wrap:first-of-type {
+    grid-column: 1;
+    min-width: 0;
+  }
+  .section-request-account .wpcf7 form > .section-request-account__row > p:only-of-type > label:last-of-type,
+  .section-request-account .wpcf7 form > .section-request-account__row > p:only-of-type > .wpcf7-form-control-wrap:last-of-type {
+    grid-column: 2;
+    min-width: 0;
+  }
+  .section-request-account .wpcf7 form > .section-request-account__row > p:only-of-type .wpcf7-form-control-wrap input {
+    min-width: 0;
+    box-sizing: border-box;
+  }
+  .section-request-account .wpcf7 form > p > label:first-child {
+    @apply sr-only;
+  }
+  .section-request-account .wpcf7 .wpcf7-form-control-wrap {
+    @apply block w-full;
+  }
+  .section-request-account .wpcf7 input[type="text"],
+  .section-request-account .wpcf7 input[type="email"],
+  .section-request-account .wpcf7 input[type="tel"],
+  .section-request-account .wpcf7 input[type="url"] {
+    @apply w-full rounded border border-brand-border bg-brand-white px-3 py-2.5 text-brand-indigo font-body text-body;
+    @apply placeholder:text-brand-purple/75;
+    @apply focus:outline-none focus:ring-2 focus:ring-brand-border-focus focus:border-brand-border-focus;
+  }
+  .section-request-account .wpcf7 input[type="checkbox"] {
+    @apply w-5 h-5 rounded border-2 border-brand-border text-brand-purple;
+    @apply focus:ring-2 focus:ring-brand-border-focus focus:ring-offset-0;
+  }
+  .section-request-account .wpcf7 .wpcf7-list-item {
+    @apply m-0;
+  }
+  .section-request-account .wpcf7 .wpcf7-list-item label {
+    @apply inline-flex items-center gap-3 cursor-pointer font-body text-body text-brand-indigo;
+  }
+  .section-request-account .wpcf7 input[type="submit"] {
+    @apply inline-flex items-center justify-center gap-2 font-body text-body font-medium rounded px-5 py-2.5;
+    @apply !bg-brand-coral text-brand-white hover:opacity-90 cursor-pointer border-0 transition-opacity;
+  }
+  .section-request-account .wpcf7 .wpcf7-spinner {
+    display: none !important;
+  }
+  .section-request-account .wpcf7 .wpcf7-response-output {
+    @apply mt-3 m-0 text-body-sm;
+  }
+
+  /* Page transition overlay: full-screen paint-fill videos */
+  .page-transition-overlay.is-active {
+    @apply opacity-100 visible pointer-events-auto;
+  }
+  .has-page-transition-pending,
+  .has-page-transition-pending body {
+    background-color: theme('colors.brand.indigo') !important;
+  }
+  .has-page-transition-pending .page-transition-overlay {
+    @apply opacity-100 visible pointer-events-auto;
+    background-color: theme('colors.brand.indigo');
+    transition: none !important;
+  }
+  /* Hide all page content while waiting for reverse video first frame */
+  .has-page-transition-pending #page > *:not(#page-transition-overlay) {
+    opacity: 0 !important;
+    transition: none !important;
+  }
+  /* Instant hide: no transition so no flash when removing overlay after reverse */
+  .page-transition-overlay.is-hiding {
+    transition: none;
+    @apply opacity-0 invisible pointer-events-none;
+  }
+  .page-transition-overlay .page-transition-video.u-hidden {
+    @apply hidden;
+  }
+
+  /* Vacancy detail: bottom padding so content is not hidden behind sticky apply banner (taller when stacked on mobile) */
+  body.single-vacature .site-main {
+    @apply pb-[140px] md:pb-24;
+  }
+}
+
+/* py-section-y: less padding on mobile (must be in utilities layer to override Tailwind’s .py-section-y) */
+@layer utilities {
+  @media (max-width: 767px) {
+    .py-section-y {
+      padding-top: 3rem;
+      padding-bottom: 3rem;
+    }
+  }
+}

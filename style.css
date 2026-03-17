@@ -1,0 +1,93 @@
+/*
+Theme Name: Boozed
+Theme URI: https://github.com/roots/sage
+Author: Boozed
+Author URI: https://roots.io/
+Description: Custom theme with ACF flexible page sections.
+Version: 1.0.0
+License: MIT
+License URI: https://opensource.org/licenses/MIT
+Text Domain: boozed
+*/
+
+/* Section layout */
+.section-inner,
+.page-content-inner {
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 1.5rem 1rem;
+}
+
+@media (min-width: 768px) {
+    .section-inner,
+    .page-content-inner {
+        padding: 2rem 1.5rem;
+    }
+}
+
+/* Section backgrounds */
+.section--white { background: #fff; }
+.section--light { background: #f5f5f5; }
+.section--dark { background: #1a1a1a; color: #fff; }
+.section--dark .button { color: #1a1a1a; background: #fff; }
+
+/* Text section */
+.section-tekst-content { margin-bottom: 1rem; }
+.section-tekst-actions.align-left { text-align: left; }
+.section-tekst-actions.align-center { text-align: center; }
+.section-tekst-actions.align-right { text-align: right; }
+.section-tekst-actions .button { display: inline-block; margin-top: 0.5rem; }
+
+/* CTA section */
+.section-cta { background: #eee; text-align: center; }
+.section-cta-inner { padding: 2.5rem 1.5rem; }
+.section-cta-title { margin: 0 0 1rem; font-size: 1.5rem; }
+.section-cta-button { display: inline-block; margin-top: 0.5rem; }
+
+/* Hero section */
+.section-hero { position: relative; min-height: 280px; display: flex; align-items: center; }
+.section-hero-bg {
+    position: absolute; inset: 0; background-size: cover; background-position: center;
+    z-index: 0;
+}
+.section-hero--has-image .section-hero-inner { position: relative; z-index: 1; color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,.5); }
+.section-hero-heading { margin: 0 0 0.5rem; font-size: 2rem; }
+.section-hero-subheading { margin: 0 0 1rem; opacity: .95; }
+.section-hero-button { display: inline-block; margin-top: 0.5rem; }
+
+/* Buttons */
+.button {
+    padding: 0.6rem 1.2rem;
+    background: #333;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 0;
+    border: none;
+    cursor: pointer;
+}
+.button:hover { opacity: 0.9; }
+
+/* Header / footer – header uses Tailwind classes in header.php; avoid conflicting max-width/padding */
+.site-footer-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.site-logo { font-weight: 700; text-decoration: none; color: inherit; }
+.nav-menu { list-style: none; margin: 0; padding: 0; display: flex; gap: 1rem; }
+.site-footer { margin-top: 2rem; padding: 1.5rem; background: #f5f5f5; }
+.site-footer-copy { margin: 0; font-size: 0.9rem; }
+.page-content { padding: 1rem 0; }
+.prose { line-height: 1.6; }
+.prose p { margin: 0 0 0.75rem; }
+.prose p:last-child { margin-bottom: 0; }
+/* Lists – preflight resets list-style; restore for prose content */
+.prose ul { list-style: disc; margin: 0 0 0.75rem; padding-left: 1.5em; }
+.prose ol { list-style: decimal; margin: 0 0 0.75rem; padding-left: 1.5em; }
+.prose li { margin-bottom: 0.25em; }
+.prose li:last-child { margin-bottom: 0; }
+.prose ul ul, .prose ol ol, .prose ul ol, .prose ol ul { margin: 0.25em 0 0; }
