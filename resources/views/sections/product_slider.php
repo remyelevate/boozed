@@ -18,12 +18,40 @@ $search_placeholder = function_exists('get_sub_field') ? (string) get_sub_field(
 $heading   = $heading ?: __('Onze populaire items', 'boozed');
 $btn_label = $btn_label ?: __('Bekijk alle producten', 'boozed');
 $show_btn  = $btn_url !== '' && $btn_label !== '';
-$search_placeholder = $search_placeholder ?: __('Online catalogus (meer dan 2000 producten)', 'boozed');
-if ($search_url === '' && function_exists('wc_get_page_permalink')) {
-	$search_url = wc_get_page_permalink('shop');
+
+if ($source !== 'manual') {
+	$taxonomy   = $source === 'tags' ? 'product_tag' : 'product_cat';
+	$param_name = $source === 'tags' ? 'product_tag' : 'product_cat';
+	$raw_terms  = $source === 'tags'
+		? (function_exists('get_sub_field') ? get_sub_field('product_slider_tag_terms') : [])
+		: (function_exists('get_sub_field') ? get_sub_field('product_slider_collection_terms') : []);
+	$filter_term_ids = [];
+	if (is_array($raw_terms)) {
+		$filter_term_ids = array_filter(array_map('intval', $raw_terms));
+	} elseif (is_numeric($raw_terms)) {
+		$filter_term_ids = [(int) $raw_terms];
+	}
+	if (! empty($filter_term_ids)) {
+		$filter_slugs = [];
+		foreach ($filter_term_ids as $tid) {
+			$term_obj = get_term($tid, $taxonomy);
+			if ($term_obj && ! is_wp_error($term_obj)) {
+				$filter_slugs[] = $term_obj->slug;
+			}
+		}
+		if (! empty($filter_slugs)) {
+			$plp_url = function_exists('boozed_plp_url') ? boozed_plp_url() : home_url('/');
+			foreach ($filter_slugs as $slug) {
+				$plp_url = add_query_arg($param_name . '[]', $slug, $plp_url);
+			}
+			$btn_url  = $plp_url;
+			$show_btn = $btn_label !== '';
+		}
+	}
 }
+$search_placeholder = $search_placeholder ?: __('Online catalogus (meer dan 2000 producten)', 'boozed');
 if ($search_url === '') {
-	$search_url = home_url('/');
+	$search_url = function_exists('boozed_plp_url') ? boozed_plp_url() : home_url('/');
 }
 $show_search = true;
 

@@ -42,6 +42,18 @@ class TekstMedia
                     'wrapper'       => ['width' => '100'],
                 ],
                 [
+                    'key'           => 'field_boozed_tekst_media_image_ratio',
+                    'label'         => 'Image ratio',
+                    'name'          => 'tekst_media_image_ratio',
+                    'type'          => 'radio',
+                    'choices'       => [
+                        'portrait'  => 'Portrait',
+                        'landscape' => 'Landscape',
+                    ],
+                    'default_value' => 'portrait',
+                    'wrapper'       => ['width' => '50'],
+                ],
+                [
                     'key'           => 'field_boozed_tekst_media_type',
                     'label'         => 'Media type',
                     'name'          => 'tekst_media_type',

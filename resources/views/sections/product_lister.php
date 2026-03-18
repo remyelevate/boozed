@@ -10,6 +10,8 @@ $search_url        = function_exists('get_sub_field') ? (string) get_sub_field('
 $search_placeholder = function_exists('get_sub_field') ? (string) get_sub_field('product_lister_search_placeholder') : '';
 $posts_per_page    = function_exists('get_sub_field') ? max(1, min(48, (int) get_sub_field('product_lister_posts_per_page'))) : 12;
 $link_text         = function_exists('get_sub_field') ? (string) get_sub_field('product_lister_link_text') : '';
+$quick_filters_raw = function_exists('get_sub_field') ? get_sub_field('product_lister_quick_filters') : null;
+$quick_filters     = is_array($quick_filters_raw) ? $quick_filters_raw : [];
 $cta_text          = function_exists('get_sub_field') ? (string) get_sub_field('product_lister_cta_text') : '';
 $cta_secondary     = function_exists('get_sub_field') ? (string) get_sub_field('product_lister_cta_secondary_text') : '';
 $cta_btn1_label    = function_exists('get_sub_field') ? (string) get_sub_field('product_lister_cta_btn1_label') : '';
@@ -20,11 +22,8 @@ $cta_btn2_is_login = function_exists('get_sub_field') ? (bool) get_sub_field('pr
 
 $heading            = $heading ?: __('Verhuur', 'boozed');
 $search_placeholder = $search_placeholder ?: __('Online catalogus (meer dan 2000 items)', 'boozed');
-if ($search_url === '' && function_exists('wc_get_page_permalink')) {
-	$search_url = wc_get_page_permalink('shop');
-}
 if ($search_url === '') {
-	$search_url = get_permalink();
+	$search_url = function_exists('boozed_plp_url') ? boozed_plp_url() : get_permalink();
 }
 
 $show_cta_block = !is_user_logged_in() && ($cta_text !== '' || $cta_secondary !== '' || ($cta_btn1_label !== '' && $cta_btn1_url !== '') || ($cta_btn2_label !== '' && $cta_btn2_url !== ''));
@@ -159,7 +158,7 @@ $flyout_id = $section_id . '-filters';
 				?>
 				<span class="product-lister__filter-tag inline-flex items-center gap-1 pl-2 pr-1 py-1 rounded bg-brand-border font-body text-body-sm text-brand-black">
 					<?php echo esc_html($cat_term ? $cat_term->name : $cat_slug); ?>
-					<a href="<?php echo esc_url($clear_url); ?>" class="inline-flex p-1 rounded hover:bg-brand-black/10" aria-label="<?php esc_attr_e('Remove filter', 'boozed'); ?>">
+					<a href="<?php echo esc_url($clear_url); ?>" class="product-lister__filter-remove inline-flex p-1 rounded hover:bg-brand-black/10" data-remove-filter="product_cat" data-remove-slug="<?php echo esc_attr($cat_slug); ?>" data-no-transition aria-label="<?php esc_attr_e('Remove filter', 'boozed'); ?>">
 						<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M205.66 194.34a8 8 0 0 1-11.32 11.32L128 139.31 61.66 205.66a8 8 0 0 1-11.32-11.32L116.69 128 50.34 61.66a8 8 0 0 1 11.32-11.32L128 116.69l66.34-66.35a8 8 0 0 1 11.32 11.32L139.31 128Z"/></svg>
 					</a>
 				</span>
@@ -177,7 +176,7 @@ $flyout_id = $section_id . '-filters';
 					?>
 					<span class="product-lister__filter-tag inline-flex items-center gap-1 pl-2 pr-1 py-1 rounded bg-brand-border font-body text-body-sm text-brand-black">
 						<?php echo esc_html($tag_term ? $tag_term->name : $tag_slug); ?>
-						<a href="<?php echo esc_url($clear_url); ?>" class="inline-flex p-1 rounded hover:bg-brand-black/10" aria-label="<?php esc_attr_e('Remove filter', 'boozed'); ?>">
+						<a href="<?php echo esc_url($clear_url); ?>" class="product-lister__filter-remove inline-flex p-1 rounded hover:bg-brand-black/10" data-remove-filter="product_tag" data-remove-slug="<?php echo esc_attr($tag_slug); ?>" data-no-transition aria-label="<?php esc_attr_e('Remove filter', 'boozed'); ?>">
 							<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M205.66 194.34a8 8 0 0 1-11.32 11.32L128 139.31 61.66 205.66a8 8 0 0 1-11.32-11.32L116.69 128 50.34 61.66a8 8 0 0 1 11.32-11.32L128 116.69l66.34-66.35a8 8 0 0 1 11.32 11.32L139.31 128Z"/></svg>
 						</a>
 					</span>
@@ -199,6 +198,23 @@ $flyout_id = $section_id . '-filters';
 			</div>
 		</div>
 	</div>
+
+	<?php if (! empty($quick_filters)) : ?>
+	<div class="product-lister__quick-filters flex flex-wrap gap-2 mb-6 md:mb-8" data-product-lister-quick-filters>
+		<?php $all_active = empty($product_cat_slugs); ?>
+		<button type="button" data-quick-filter-slug="" class="product-lister__quick-chip inline-flex items-center px-4 py-2 rounded-full font-body text-body-sm font-medium border transition-colors cursor-pointer<?php echo $all_active ? ' product-lister__quick-chip--active' : ''; ?>">
+			<?php esc_html_e('Alles', 'boozed'); ?>
+		</button>
+		<?php foreach ($quick_filters as $qf_term) :
+			if (! $qf_term instanceof \WP_Term) continue;
+			$is_active = in_array($qf_term->slug, $product_cat_slugs, true);
+		?>
+		<button type="button" data-quick-filter-slug="<?php echo esc_attr($qf_term->slug); ?>" class="product-lister__quick-chip inline-flex items-center px-4 py-2 rounded-full font-body text-body-sm font-medium border transition-colors cursor-pointer<?php echo $is_active ? ' product-lister__quick-chip--active' : ''; ?>">
+			<?php echo esc_html($qf_term->name); ?>
+		</button>
+		<?php endforeach; ?>
+	</div>
+	<?php endif; ?>
 
 	<!-- Filters flyout -->
 	<div id="<?php echo esc_attr($flyout_id); ?>" class="product-lister__flyout fixed inset-0 left-0 z-[100] w-full max-w-md bg-brand-white shadow-xl transform -translate-x-full transition-transform duration-300 ease-out flex flex-col h-screen" role="dialog" aria-modal="true" aria-labelledby="<?php echo esc_attr($flyout_id); ?>-title" data-product-lister-flyout>
@@ -283,8 +299,9 @@ $flyout_id = $section_id . '-filters';
 	</div>
 	<div class="product-lister__flyout-backdrop fixed inset-0 z-[99] bg-black/40 opacity-0 pointer-events-none transition-opacity duration-300" aria-hidden="true" data-product-lister-backdrop></div>
 
+	<div class="product-lister__results" data-product-lister-results>
 	<?php if ($has_items) : ?>
-		<div class="product-lister__grid grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+		<div class="product-lister__grid grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6" data-product-lister-grid>
 			<?php
 			$cell_index = 0;
 			$item_index = 0;
@@ -345,6 +362,7 @@ $flyout_id = $section_id . '-filters';
 	<?php else : ?>
 		<p class="font-body text-body text-brand-black/60"><?php esc_html_e('Geen producten gevonden.', 'boozed'); ?></p>
 	<?php endif; ?>
+	</div>
 </section>
 
 <style>
@@ -388,6 +406,27 @@ body.product-lister-flyout-open {
 	background-repeat: no-repeat;
 	background-position: center;
 }
+
+/* Quick-select filter chips */
+.product-lister__quick-chip {
+	background: #fff;
+	border-color: rgba(0,0,0,.2);
+	color: var(--color-brand-black, #1a1a2e);
+}
+.product-lister__quick-chip:hover {
+	border-color: rgba(49,39,131,.5);
+	background: var(--color-brand-nude, #f5f0eb);
+}
+.product-lister__quick-chip--active,
+.product-lister__quick-chip--active:hover {
+	background: #312783;
+	border-color: #312783;
+	color: #fff;
+}
+
+/* Results fade for AJAX loading */
+.product-lister__results { transition: opacity .2s ease; }
+.product-lister__results.is-loading { opacity: .4; pointer-events: none; }
 
 /* Style filter chips: when checkbox is checked, style the span (indigo bg, white text) */
 .product-lister__style-check:checked + span { background-color: #312783; border-color: #312783; color: #fff; }
@@ -469,6 +508,115 @@ body.product-lister-flyout-open {
 					var anyChecked = Array.prototype.some.call(catChecks, function(c) { return c.checked; });
 					catAll.checked = !anyChecked;
 				});
+			});
+		}
+
+		/* ── Shared inline-fetch logic (no page transition) ── */
+		var activeCats = <?php echo json_encode(array_values($product_cat_slugs)); ?>;
+		var activeTags = <?php echo json_encode(array_values($product_tag_slugs)); ?>;
+		var fetching = false;
+		var quickFiltersWrap = section.querySelector('[data-product-lister-quick-filters]');
+
+		function buildFilterUrl() {
+			var url = new URL(<?php echo json_encode($current_url); ?>);
+			url.searchParams.delete('product_cat[]');
+			url.searchParams.delete('product_cat');
+			url.searchParams.delete('product_tag[]');
+			url.searchParams.delete('product_tag');
+			url.searchParams.delete('paged');
+			activeCats.forEach(function(c) { url.searchParams.append('product_cat[]', c); });
+			activeTags.forEach(function(t) { url.searchParams.append('product_tag[]', t); });
+			return url.toString();
+		}
+
+		function updateChipStates() {
+			if (!quickFiltersWrap) return;
+			quickFiltersWrap.querySelectorAll('[data-quick-filter-slug]').forEach(function(btn) {
+				var slug = btn.getAttribute('data-quick-filter-slug');
+				var isActive = slug === '' ? activeCats.length === 0 : activeCats.indexOf(slug) !== -1;
+				btn.classList.toggle('product-lister__quick-chip--active', isActive);
+			});
+		}
+
+		function fetchFilteredResults() {
+			if (fetching) return;
+			fetching = true;
+			var targetUrl = buildFilterUrl();
+			var results = section.querySelector('[data-product-lister-results]');
+			if (results) results.classList.add('is-loading');
+
+			history.replaceState(null, '', targetUrl);
+
+			fetch(targetUrl, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+				.then(function(r) { return r.text(); })
+				.then(function(html) {
+					var parser = new DOMParser();
+					var doc = parser.parseFromString(html, 'text/html');
+					var newSection = doc.getElementById('<?php echo esc_js($section_id); ?>');
+					if (!newSection) { window.location.href = targetUrl; return; }
+
+					var newResults = newSection.querySelector('[data-product-lister-results]');
+					if (newResults && results) {
+						results.innerHTML = newResults.innerHTML;
+						results.classList.remove('is-loading');
+					}
+
+					var newTags = newSection.querySelectorAll('.product-lister__filter-tag');
+					var oldTagsParent = section.querySelector('.product-lister__header .flex.flex-wrap');
+					if (oldTagsParent) {
+						oldTagsParent.querySelectorAll('.product-lister__filter-tag').forEach(function(t) { t.remove(); });
+						var insertBefore = oldTagsParent.querySelector('.product-lister__filters-trigger');
+						newTags.forEach(function(tag) {
+							oldTagsParent.insertBefore(tag, insertBefore);
+						});
+						bindFilterTagRemoval();
+					}
+				})
+				.catch(function() {
+					window.location.href = targetUrl;
+				})
+				.finally(function() {
+					fetching = false;
+				});
+		}
+
+		/* ── Filter tag removal (× buttons on active filter chips) ── */
+		function bindFilterTagRemoval() {
+			section.querySelectorAll('.product-lister__filter-remove').forEach(function(link) {
+				link.addEventListener('click', function(e) {
+					e.preventDefault();
+					var taxonomy = this.getAttribute('data-remove-filter');
+					var slug = this.getAttribute('data-remove-slug');
+					if (taxonomy === 'product_cat') {
+						activeCats = activeCats.filter(function(c) { return c !== slug; });
+					} else if (taxonomy === 'product_tag') {
+						activeTags = activeTags.filter(function(t) { return t !== slug; });
+					}
+					updateChipStates();
+					fetchFilteredResults();
+				});
+			});
+		}
+		bindFilterTagRemoval();
+
+		/* ── Quick-filter chips ── */
+		if (quickFiltersWrap) {
+			quickFiltersWrap.addEventListener('click', function(e) {
+				var btn = e.target.closest('[data-quick-filter-slug]');
+				if (!btn) return;
+				var slug = btn.getAttribute('data-quick-filter-slug');
+				if (slug === '') {
+					activeCats = [];
+				} else {
+					var idx = activeCats.indexOf(slug);
+					if (idx !== -1) {
+						activeCats.splice(idx, 1);
+					} else {
+						activeCats.push(slug);
+					}
+				}
+				updateChipStates();
+				fetchFilteredResults();
 			});
 		}
 	}

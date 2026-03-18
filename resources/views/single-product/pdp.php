@@ -8,7 +8,7 @@ if (!$product || !is_a($product, 'WC_Product')) {
     return;
 }
 
-$shop_url = function_exists('wc_get_page_permalink') ? wc_get_page_permalink('shop') : home_url('/');
+$shop_url = function_exists('boozed_plp_url') ? boozed_plp_url() : home_url('/');
 $product_cats = taxonomy_exists('product_cat') ? get_the_terms($post_id, 'product_cat') : [];
 $product_tags = taxonomy_exists('product_tag') ? get_the_terms($post_id, 'product_tag') : [];
 if (is_wp_error($product_cats)) {
@@ -23,13 +23,11 @@ $length = $product->get_length();
 $width  = $product->get_width();
 $height = $product->get_height();
 $has_dimensions = ($length !== '' && (float) $length > 0) || ($width !== '' && (float) $width > 0) || ($height !== '' && (float) $height > 0);
-$dimensions_short = '';
 $dimensions_long  = '';
 if ($has_dimensions) {
     $l = $length !== '' ? (float) $length : 0;
     $b = $width !== '' ? (float) $width : 0;
     $h = $height !== '' ? (float) $height : 0;
-    $dimensions_short = 'L' . round($l) . ' x B' . round($b) . ' x H' . round($h);
     $dimensions_long  = sprintf(
         __('Afmetingen: lengte %s cm, breedte %s cm, hoogte %s cm.', 'boozed'),
         round($l),
@@ -149,7 +147,7 @@ $check_icon = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns
 			<li><a href="<?php echo esc_url($shop_url); ?>" class="hover:underline"><?php echo esc_html($pdp_breadcrumb_verhuur); ?></a></li>
 			<?php if ($first_cat) : ?>
 				<li><span class="text-brand-black/50" aria-hidden="true">/</span></li>
-				<li><a href="<?php echo esc_url(get_term_link($first_cat)); ?>" class="hover:underline"><?php echo esc_html($first_cat->name); ?></a></li>
+				<li><a href="<?php echo esc_url(add_query_arg('product_cat[]', $first_cat->slug, $shop_url)); ?>" class="hover:underline"><?php echo esc_html($first_cat->name); ?></a></li>
 			<?php endif; ?>
 			<li><span class="text-brand-black/50" aria-hidden="true">/</span></li>
 			<li class="text-brand-black" aria-current="page"><?php echo esc_html(get_the_title()); ?></li>
@@ -243,9 +241,6 @@ $check_icon = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns
 		<div class="pdp__right lg:col-span-5 flex flex-col gap-6 md:gap-8">
 			<div class="pdp__header">
 				<h1 class="pdp__title font-heading font-bold text-h1 md:text-h1-lg text-brand-purple mt-0 mb-1"><?php the_title(); ?></h1>
-				<?php if ($dimensions_short !== '') : ?>
-					<p class="font-body text-body-sm text-brand-black/80"><?php echo esc_html($dimensions_short); ?></p>
-				<?php endif; ?>
 			</div>
 
 			<div class="pdp__cta-price">
@@ -313,10 +308,8 @@ $check_icon = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns
 							<div class="flex flex-wrap gap-2">
 								<?php foreach ($product_cats as $term) :
 									if (is_wp_error($term) || !$term) continue;
-									$term_link = get_term_link($term);
-									if (is_wp_error($term_link)) continue;
 								?>
-									<a href="<?php echo esc_url($term_link); ?>" class="inline-flex items-center h-10 font-body text-body-sm font-medium rounded px-4 py-2 bg-brand-indigo text-brand-white hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-brand-indigo focus:ring-offset-2"><?php echo esc_html($term->name); ?></a>
+									<a href="<?php echo esc_url(add_query_arg('product_cat[]', $term->slug, $shop_url)); ?>" class="inline-flex items-center h-10 font-body text-body-sm font-medium rounded px-4 py-2 bg-brand-indigo text-brand-white hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-brand-indigo focus:ring-offset-2"><?php echo esc_html($term->name); ?></a>
 								<?php endforeach; ?>
 							</div>
 						</div>
@@ -327,10 +320,8 @@ $check_icon = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns
 							<div class="flex flex-wrap gap-2">
 								<?php foreach ($product_tags as $term) :
 									if (is_wp_error($term) || !$term) continue;
-									$term_link = get_term_link($term);
-									if (is_wp_error($term_link)) continue;
 								?>
-									<a href="<?php echo esc_url($term_link); ?>" class="inline-flex items-center h-10 font-body text-body-sm font-medium rounded px-4 py-2 bg-brand-indigo text-brand-white hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-brand-indigo focus:ring-offset-2"><?php echo esc_html($term->name); ?></a>
+									<a href="<?php echo esc_url(add_query_arg('product_tag[]', $term->slug, $shop_url)); ?>" class="inline-flex items-center h-10 font-body text-body-sm font-medium rounded px-4 py-2 bg-brand-indigo text-brand-white hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-brand-indigo focus:ring-offset-2"><?php echo esc_html($term->name); ?></a>
 								<?php endforeach; ?>
 							</div>
 						</div>

@@ -2,6 +2,8 @@
 module.exports = {
   safelist: [
     'aspect-[314/435]',
+    'aspect-[535/688]',
+    'aspect-[688/535]',
     'md:w-1/3',
     '!bg-brand-coral',
     'bg-brand-coral',

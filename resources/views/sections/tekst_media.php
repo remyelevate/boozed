@@ -8,6 +8,7 @@
 $caption           = function_exists('get_sub_field') ? (string) get_sub_field('tekst_media_caption') : '';
 $position          = function_exists('get_sub_field') ? get_sub_field('tekst_media_position') : 'left';
 $remove_top_padding = function_exists('get_sub_field') ? (bool) get_sub_field('tekst_media_remove_top_padding') : false;
+$image_ratio       = function_exists('get_sub_field') ? get_sub_field('tekst_media_image_ratio') : 'portrait';
 $media_type        = function_exists('get_sub_field') ? get_sub_field('tekst_media_type') : 'image';
 $image_id          = function_exists('get_sub_field') ? get_sub_field('tekst_media_image') : null;
 $video_url         = function_exists('get_sub_field') ? get_sub_field('tekst_media_video') : '';
@@ -21,6 +22,7 @@ $is_media_left     = ($position === 'left');
 $use_video         = ($media_type === 'video' && $video_url);
 $image_url         = $image_id ? wp_get_attachment_image_url($image_id, 'large') : '';
 $has_media         = $use_video || $image_url;
+$aspect_class      = ($image_ratio === 'landscape') ? 'aspect-[688/535]' : 'aspect-[535/688]';
 $show_primary_btn  = $primary_url !== '' && $primary_label !== '';
 $show_secondary_btn = $secondary_url !== '' && $secondary_label !== '';
 
@@ -37,7 +39,7 @@ $phosphor_speaker_slash = '<svg xmlns="http://www.w3.org/2000/svg" width="20" he
 				<?php if ($has_media) : ?>
 					<div class="tekst-media__media-inner relative w-full overflow-visible">
 						<?php if ($use_video) : ?>
-							<div class="tekst-media__video-wrap tekst-media__media-reveal relative aspect-[535/688] bg-brand-black overflow-hidden">
+							<div class="tekst-media__video-wrap tekst-media__media-reveal relative <?php echo esc_attr($aspect_class); ?> bg-brand-black overflow-hidden">
 								<video class="tekst-media__video w-full h-full object-cover" autoplay muted loop playsinline>
 									<source src="<?php echo esc_url($video_url); ?>" type="video/mp4">
 								</video>
@@ -48,7 +50,7 @@ $phosphor_speaker_slash = '<svg xmlns="http://www.w3.org/2000/svg" width="20" he
 								<span class="tekst-media__sound-label underline"><?php esc_html_e('Sound on', 'boozed'); ?></span>
 							</button>
 						<?php else : ?>
-							<div class="tekst-media__image-wrap tekst-media__media-reveal relative aspect-[535/688] overflow-hidden bg-brand-border">
+							<div class="tekst-media__image-wrap tekst-media__media-reveal relative <?php echo esc_attr($aspect_class); ?> overflow-hidden bg-brand-border">
 								<img src="<?php echo esc_url($image_url); ?>" alt="" class="w-full h-full object-cover" loading="lazy">
 							</div>
 						<?php endif; ?>

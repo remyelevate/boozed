@@ -71,6 +71,38 @@ add_action('template_redirect', function () {
 });
 
 /**
+ * Make /inloggen work without webserver-specific rewrites.
+ *
+ * On Apache this is usually handled by .htaccess rewriting /inloggen → /inloggen.php.
+ * On Nginx/.htaccess-less setups, we add a WP rewrite so /inloggen resolves via index.php.
+ */
+add_action('init', function () {
+    add_rewrite_rule('^inloggen/?$', 'index.php?boozed_inloggen=1', 'top');
+});
+
+add_filter('query_vars', function ($vars) {
+    $vars[] = 'boozed_inloggen';
+    return $vars;
+});
+
+add_action('template_redirect', function () {
+    if ((int) get_query_var('boozed_inloggen') !== 1) {
+        return;
+    }
+
+    $query = isset($_SERVER['QUERY_STRING']) ? (string) $_SERVER['QUERY_STRING'] : '';
+    $_SERVER['REQUEST_URI'] = '/inloggen' . ($query ? '?' . $query : '');
+    $_SERVER['SCRIPT_NAME'] = '/inloggen';
+
+    require ABSPATH . 'wp-login.php';
+    exit;
+}, 0);
+
+add_action('after_switch_theme', function () {
+    flush_rewrite_rules(false);
+});
+
+/**
  * Login page URL with optional redirect. Use for "Inloggen" links so users return after login.
  * Example: assortment page login button → href="<?php echo esc_url( boozed_login_url( get_permalink() ) ); ?>"
  *
@@ -79,9 +111,36 @@ add_action('template_redirect', function () {
  */
 function boozed_login_url($redirect = '')
 {
-    $login_page = home_url('/login');
+    $login_page = home_url('/inloggen');
     if ($redirect !== '' && wp_validate_redirect($redirect, home_url()) !== false) {
         return add_query_arg('redirect_to', urlencode($redirect), $login_page);
     }
     return $login_page;
+}
+
+/**
+ * PLP (Product Listing Page) URL.
+ *
+ * Returns the permalink of the page whose slug is "assortiment".
+ * Falls back to the WooCommerce shop page, then home.
+ */
+function boozed_plp_url()
+{
+    static $url;
+    if ($url !== null) {
+        return $url;
+    }
+    $page = get_page_by_path('assortiment');
+    if ($page) {
+        $url = get_permalink($page);
+        return $url;
+    }
+    if (function_exists('wc_get_page_permalink')) {
+        $url = wc_get_page_permalink('shop');
+        if ($url) {
+            return $url;
+        }
+    }
+    $url = home_url('/');
+    return $url;
 }
