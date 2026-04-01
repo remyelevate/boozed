@@ -639,6 +639,7 @@
   }
   .brands__logo:hover {
     filter: none;
+    cursor: pointer;
     @apply opacity-100;
   }
 
