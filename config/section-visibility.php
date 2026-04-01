@@ -39,6 +39,7 @@ return [
     'layout_boozed_brands'                 => true,
     'layout_boozed_bcorp'                  => true,
     'layout_boozed_theme_lister'           => true,
+    'layout_boozed_team'                   => true,
 
     // Marketing / conversion
     'layout_boozed_thank_you'              => true,

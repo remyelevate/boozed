@@ -2,9 +2,10 @@
 
 /**
  * Text section
- * Fields: tekst_content, tekst_button_text, tekst_button_url, tekst_button_alignment
+ * Fields: tekst_alignment, tekst_content, tekst_button_text, tekst_button_url, tekst_button_alignment
  */
 
+$text_alignment   = function_exists('get_sub_field') ? (string) get_sub_field('tekst_alignment') : '';
 $content          = function_exists('get_sub_field') ? (string) get_sub_field('tekst_content') : '';
 $button_text      = function_exists('get_sub_field') ? (string) get_sub_field('tekst_button_text') : '';
 $button_url       = function_exists('get_sub_field') ? (string) get_sub_field('tekst_button_url') : '';
@@ -15,10 +16,12 @@ $align_class = [
     'center' => 'align-center',
     'right'  => 'align-right',
 ];
-$wrap_class = $align_class[ $button_alignment ] ?? $align_class['left'];
-$show_btn   = $button_url !== '';
+$resolved_alignment = $text_alignment ?: (string) $button_alignment;
+$wrap_class         = $align_class[ $resolved_alignment ] ?? $align_class['left'];
+$section_align      = 'section-tekst--' . $wrap_class;
+$show_btn           = $button_url !== '';
 ?>
-<section class="section section-tekst max-w-section mx-auto px-4 md:px-section-x py-10 md:py-section-y">
+<section class="section section-tekst <?php echo esc_attr($section_align); ?> max-w-section mx-auto px-4 md:px-section-x py-10 md:py-section-y">
     <div class="section-inner">
         <?php if ($content) : ?>
             <div class="section-tekst-content prose">

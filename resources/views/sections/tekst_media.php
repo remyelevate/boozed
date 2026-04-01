@@ -6,6 +6,7 @@
  */
 
 $caption           = function_exists('get_sub_field') ? (string) get_sub_field('tekst_media_caption') : '';
+$caption_position  = function_exists('get_sub_field') ? (string) get_sub_field('tekst_media_caption_position') : 'below';
 $position          = function_exists('get_sub_field') ? get_sub_field('tekst_media_position') : 'left';
 $remove_top_padding = function_exists('get_sub_field') ? (bool) get_sub_field('tekst_media_remove_top_padding') : false;
 $image_ratio       = function_exists('get_sub_field') ? get_sub_field('tekst_media_image_ratio') : 'portrait';
@@ -25,6 +26,7 @@ $has_media         = $use_video || $image_url;
 $aspect_class      = ($image_ratio === 'landscape') ? 'aspect-[688/535]' : 'aspect-[535/688]';
 $show_primary_btn  = $primary_url !== '' && $primary_label !== '';
 $show_secondary_btn = $secondary_url !== '' && $secondary_label !== '';
+$caption_is_above  = ($caption_position === 'above');
 
 $phosphor_chevron_right = '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 256 256" fill="currentColor" class="w-5 h-5 shrink-0" aria-hidden="true"><path d="m181.66 133.66l-80 80a8 8 0 0 1-11.32-11.32L164.69 128L90.34 53.66a8 8 0 0 1 11.32-11.32l80 80a8 8 0 0 1 0 11.32Z"/></svg>';
 
@@ -88,7 +90,7 @@ $phosphor_speaker_slash = '<svg xmlns="http://www.w3.org/2000/svg" width="20" he
 		</div>
 	</div>
 	<?php if ($caption !== '' && $has_media) : ?>
-		<div class="tekst-media__caption-outer overflow-x-hidden overflow-y-visible pt-4 pointer-events-none" aria-hidden="true" data-tekst-media-caption>
+		<div class="tekst-media__caption-outer overflow-x-hidden overflow-y-visible pt-4 pointer-events-none" aria-hidden="true" data-tekst-media-caption data-caption-position="<?php echo $caption_is_above ? 'above' : 'below'; ?>">
 			<div class="tekst-media__caption-wrap w-full min-w-full overflow-x-hidden overflow-y-visible">
 				<div class="tekst-media__caption-inner flex whitespace-nowrap will-change-transform pl-4 md:pl-section-x">
 					<span class="tekst-media__caption font-heading font-bold text-[56px] md:text-[124px] text-brand-indigo inline-block pr-[1em]">
@@ -157,9 +159,11 @@ $phosphor_speaker_slash = '<svg xmlns="http://www.w3.org/2000/svg" width="20" he
 		/* Fixed caption: position viewport-wide caption so it aligns with section (independent of container) */
 		function positionFixedCaptions() {
 			var offsetBottom = window.innerWidth >= 768 ? 120 : 100;
+			var offsetTop = window.innerWidth >= 768 ? 24 : 16;
 			document.querySelectorAll('.tekst-media').forEach(function(section) {
 				var caption = section.querySelector('[data-tekst-media-caption]');
 				if (!caption) return;
+				var captionPosition = caption.getAttribute('data-caption-position') || 'below';
 				var sectionRect = section.getBoundingClientRect();
 				var vh = window.innerHeight;
 				if (sectionRect.bottom < 0 || sectionRect.top > vh) {
@@ -167,7 +171,9 @@ $phosphor_speaker_slash = '<svg xmlns="http://www.w3.org/2000/svg" width="20" he
 					return;
 				}
 				caption.style.visibility = 'visible';
-				var top = sectionRect.bottom - offsetBottom - caption.offsetHeight;
+				var top = captionPosition === 'above'
+					? sectionRect.top + offsetTop
+					: sectionRect.bottom - offsetBottom - caption.offsetHeight;
 				caption.style.top = top + 'px';
 			});
 		}

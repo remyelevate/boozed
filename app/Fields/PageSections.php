@@ -40,6 +40,7 @@ use App\Fields\Sections\MapBanner;
 use App\Fields\Sections\ThemeLister;
 use App\Fields\Sections\Spacer;
 use App\Fields\Sections\YoutubeEmbed;
+use App\Fields\Sections\Team;
 
 class PageSections
 {
@@ -96,6 +97,7 @@ class PageSections
                         'layout_boozed_highlight_image' => HighlightImage::get(),
                         'layout_boozed_map_banner' => MapBanner::get(),
                         'layout_boozed_theme_lister' => ThemeLister::get(),
+                        'layout_boozed_team' => Team::get(),
                         'layout_boozed_spacer' => Spacer::get(),
                         'layout_boozed_youtube_embed' => YoutubeEmbed::get(),
                     ]),

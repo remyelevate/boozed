@@ -21,6 +21,18 @@ class TekstMedia
                     'wrapper'       => ['width' => '100'],
                 ],
                 [
+                    'key'           => 'field_boozed_tekst_media_caption_position',
+                    'label'         => 'Caption position',
+                    'name'          => 'tekst_media_caption_position',
+                    'type'          => 'radio',
+                    'choices'       => [
+                        'above' => 'Above main text',
+                        'below' => 'Below main text',
+                    ],
+                    'default_value' => 'below',
+                    'wrapper'       => ['width' => '100'],
+                ],
+                [
                     'key'           => 'field_boozed_tekst_media_position',
                     'label'         => 'Content position',
                     'name'          => 'tekst_media_position',

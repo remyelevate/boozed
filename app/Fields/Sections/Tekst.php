@@ -13,6 +13,19 @@ class Tekst
             'display'  => 'block',
             'sub_fields' => [
                 [
+                    'key'           => 'field_boozed_tekst_alignment',
+                    'label'         => 'Text alignment',
+                    'name'          => 'tekst_alignment',
+                    'type'          => 'button_group',
+                    'choices'       => [
+                        'left'   => 'Left',
+                        'center' => 'Center',
+                        'right'  => 'Right',
+                    ],
+                    'default_value' => 'left',
+                    'wrapper'       => ['width' => '100'],
+                ],
+                [
                     'key'     => 'field_boozed_tekst_content',
                     'label'   => 'Content',
                     'name'    => 'tekst_content',

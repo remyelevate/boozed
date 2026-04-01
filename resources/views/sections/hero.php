@@ -47,7 +47,7 @@ $cursor_svg_url  = get_template_directory_uri() . '/assets/images/custom-cursor-
 $show_primary_btn   = $primary_url && $primary_label;
 $show_secondary_btn = $secondary_url && $secondary_label;
 ?>
-<section class="hero relative w-full h-screen min-h-0 md:h-auto md:min-h-screen flex flex-col overflow-x-hidden <?php echo $has_backdrop ? '' : 'bg-brand-indigo'; ?>">
+<section class="hero relative w-full h-screen min-h-screen md:h-auto md:min-h-screen flex flex-col overflow-x-hidden <?php echo $has_backdrop ? '' : 'bg-brand-indigo'; ?>">
 	<?php if ($has_backdrop) : ?>
 		<div class="hero__backdrop absolute inset-0 z-0" aria-hidden="true">
 			<?php if ($use_video) : ?>
@@ -123,7 +123,7 @@ $show_secondary_btn = $secondary_url && $secondary_label;
 			$width_class = isset($card['width_class']) ? $card['width_class'] : 'w-full md:w-1/3';
 			$has_content = ! empty($card['description']);
 			$always_purple = ! empty($card['always_purple']);
-			$item_class = 'hero-nav-item group relative flex items-center justify-between py-4 md:py-10 px-4 md:px-12 text-brand-white transition-colors min-w-0 ' . esc_attr($width_class);
+			$item_class = 'hero-nav-item group relative flex items-center justify-between py-3 md:py-6 px-4 md:px-12 text-brand-white transition-colors min-w-0 ' . esc_attr($width_class);
 			$item_class .= $always_purple ? ' bg-brand-purple' : ' hover:bg-brand-purple';
 		?>
 		<<?php echo $tag; ?> class="<?php echo esc_attr($item_class); ?>"<?php echo $href_attr; ?>>

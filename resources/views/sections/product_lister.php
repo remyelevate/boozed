@@ -43,7 +43,14 @@ if (is_array($product_tag_raw)) {
 } elseif (is_string($product_tag_raw) && $product_tag_raw !== '') {
 	$product_tag_slugs = array_filter(array_map('trim', explode(',', $product_tag_raw)));
 }
-$search_query = isset($_GET['s']) ? sanitize_text_field(wp_unslash($_GET['s'])) : '';
+$search_query_raw = '';
+if (isset($_GET['q'])) {
+	$search_query_raw = wp_unslash($_GET['q']);
+} elseif (isset($_GET['s'])) {
+	// Backward compatibility for old links that still use ?s=...
+	$search_query_raw = wp_unslash($_GET['s']);
+}
+$search_query = $search_query_raw !== '' ? sanitize_text_field($search_query_raw) : '';
 $paged = 1;
 if (isset($_GET['paged']) && is_numeric($_GET['paged'])) {
 	$paged = max(1, (int) $_GET['paged']);
@@ -121,7 +128,7 @@ if ($products_query->have_posts()) {
 
 $has_items = ! empty($items) || $show_cta_block;
 $filter_query_args = array_filter([
-	's' => $search_query !== '' ? $search_query : null,
+	'q' => $search_query !== '' ? $search_query : null,
 ]);
 if (! empty($product_cat_slugs)) {
 	$filter_query_args['product_cat'] = $product_cat_slugs;
@@ -193,7 +200,7 @@ $flyout_id = $section_id . '-filters';
 					<span class="product-lister__search-icon absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-brand-black/50" aria-hidden="true">
 						<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256" fill="currentColor"><path d="M229.66 218.34l-50.07-50.06a88.11 88.11 0 1 0-11.32 11.32l50.07 50.06a8 8 0 0 0 11.32-11.32zM40 112a72 72 0 1 1 72 72 72.08 72.08 0 0 1-72-72z"/></svg>
 					</span>
-					<input type="search" id="<?php echo esc_attr($section_id); ?>-search" name="s" class="product-lister__search-input w-full min-w-[200px] sm:w-[300px] md:w-[500px] h-12 pl-10 pr-4 border border-brand-black/15 rounded-md font-body text-body-sm text-brand-black placeholder:text-brand-black/50 focus:outline-none focus:ring-2 focus:ring-brand-indigo/30 focus:border-brand-indigo" placeholder="<?php echo esc_attr($search_placeholder); ?>" value="<?php echo esc_attr($search_query); ?>">
+					<input type="search" id="<?php echo esc_attr($section_id); ?>-search" name="q" class="product-lister__search-input w-full min-w-[200px] sm:w-[300px] md:w-[500px] h-12 pl-10 pr-4 border border-brand-black/15 rounded-md font-body text-body-sm text-brand-black placeholder:text-brand-black/50 focus:outline-none focus:ring-2 focus:ring-brand-indigo/30 focus:border-brand-indigo" placeholder="<?php echo esc_attr($search_placeholder); ?>" value="<?php echo esc_attr($search_query); ?>">
 				</form>
 			</div>
 		</div>
@@ -246,7 +253,7 @@ $flyout_id = $section_id . '-filters';
 						<span class="absolute left-3 top-1/2 -translate-y-1/2 text-brand-black/50" aria-hidden="true">
 							<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 256 256" fill="currentColor"><path d="M229.66 218.34l-50.07-50.06a88.11 88.11 0 1 0-11.32 11.32l50.07 50.06a8 8 0 0 0 11.32-11.32zM40 112a72 72 0 1 1 72 72 72.08 72.08 0 0 1-72-72z"/></svg>
 						</span>
-						<input type="search" id="<?php echo esc_attr($flyout_id); ?>-flyout-search" name="s" class="w-full h-11 pl-10 pr-4 border border-brand-black/15 rounded-md font-body text-body-sm text-brand-black placeholder:text-brand-black/50" placeholder="<?php esc_attr_e('Meer dan 2000 items', 'boozed'); ?>" value="<?php echo esc_attr($search_query); ?>">
+						<input type="search" id="<?php echo esc_attr($flyout_id); ?>-flyout-search" name="q" class="w-full h-11 pl-10 pr-4 border border-brand-black/15 rounded-md font-body text-body-sm text-brand-black placeholder:text-brand-black/50" placeholder="<?php esc_attr_e('Meer dan 2000 items', 'boozed'); ?>" value="<?php echo esc_attr($search_query); ?>">
 					</div>
 				</div>
 

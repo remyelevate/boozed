@@ -33,11 +33,42 @@ Text Domain: boozed
 .section--dark .button { color: #1a1a1a; background: #fff; }
 
 /* Text section */
-.section-tekst-content { margin-bottom: 1rem; }
+.section-tekst .section-inner {
+    max-width: 900px;
+}
+.section-tekst-content {
+    margin-bottom: 1.5rem;
+    line-height: 1.75;
+}
+.section-tekst-content h1,
+.section-tekst-content h2,
+.section-tekst-content h3,
+.section-tekst-content h4,
+.section-tekst-content h5,
+.section-tekst-content h6 {
+    margin: 0 0 0.75rem;
+}
 .section-tekst-actions.align-left { text-align: left; }
 .section-tekst-actions.align-center { text-align: center; }
 .section-tekst-actions.align-right { text-align: right; }
 .section-tekst-actions .button { display: inline-block; margin-top: 0.5rem; }
+
+.section-tekst--align-left .section-tekst-content { text-align: left; }
+.section-tekst--align-center .section-tekst-content { text-align: center; }
+.section-tekst--align-right .section-tekst-content { text-align: right; }
+
+.section-tekst--align-left .section-inner {
+    margin-left: 0;
+    margin-right: auto;
+}
+.section-tekst--align-center .section-inner {
+    margin-left: auto;
+    margin-right: auto;
+}
+.section-tekst--align-right .section-inner {
+    margin-left: auto;
+    margin-right: 0;
+}
 
 /* CTA section */
 .section-cta { background: #eee; text-align: center; }

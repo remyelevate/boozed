@@ -626,10 +626,16 @@
   }
   .brands__logo {
     @apply absolute items-center justify-center pointer-events-auto;
-    width: 80px;
-    height: 80px;
+    width: 120px;
+    height: 120px;
     filter: saturate(0) brightness(1.08);
     @apply opacity-60 transition-all duration-300;
+  }
+  @screen lg {
+    .brands__logo {
+      width: 140px;
+      height: 140px;
+    }
   }
   .brands__logo:hover {
     filter: none;
