@@ -46,7 +46,7 @@ if (($icon_left || $icon_left_html) && !$is_icon_only) {
 }
 $content .= $is_icon_only ? '<span class="sr-only">' . esc_html($label) . '</span>' : esc_html($label);
 if (($icon_right || $icon_right_html) && !$is_icon_only) {
-  $content .= '<span class="shrink-0 inline-flex" aria-hidden="true">' . ($icon_right_html ? $icon_right_html : esc_html($icon_right)) . '</span>';
+	$content .= '<span class="shrink-0 inline-flex" aria-hidden="true">' . ($icon_right_html ? $icon_right_html : esc_html($icon_right)) . '</span>';
 }
 if ($is_icon_only) {
   $content = '<span aria-hidden="true">' . ($icon_right_html ? $icon_right_html : ($icon_left_html ? $icon_left_html : esc_html($icon_right ?: $icon_left))) . '</span>';

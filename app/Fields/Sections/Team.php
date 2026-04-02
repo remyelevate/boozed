@@ -13,20 +13,17 @@ class Team
             'display'    => 'block',
             'sub_fields' => [
                 [
-                    'key'           => 'field_boozed_team_title',
-                    'label'         => __('Title', 'boozed'),
-                    'name'          => 'team_title',
-                    'type'          => 'text',
-                    'default_value' => __('Ons team', 'boozed'),
-                    'wrapper'       => ['width' => '50'],
-                ],
-                [
-                    'key'           => 'field_boozed_team_intro',
-                    'label'         => __('Intro', 'boozed'),
-                    'name'          => 'team_intro',
-                    'type'          => 'textarea',
-                    'rows'          => 3,
-                    'wrapper'       => ['width' => '50'],
+                    'key'           => 'field_boozed_team_background',
+                    'label'         => __('Background', 'boozed'),
+                    'name'          => 'team_background',
+                    'type'          => 'radio',
+                    'choices'       => [
+                        'gray'  => __('Gray', 'boozed'),
+                        'white' => __('White', 'boozed'),
+                    ],
+                    'default_value' => 'gray',
+                    'layout'        => 'horizontal',
+                    'wrapper'       => ['width' => '100'],
                 ],
                 [
                     'key'          => 'field_boozed_team_members',

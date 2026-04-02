@@ -617,7 +617,7 @@
     }
   }
 
-  /* Brands section: scattered logos around title, luminosity filter, full color on hover */
+  /* Brands section: scattered logos — light mono (grayscale + partial invert) so dark marks read on dark video; full color on hover */
   .brands__content {
     max-width: 560px;
   }
@@ -628,7 +628,8 @@
     @apply absolute items-center justify-center pointer-events-auto;
     width: 120px;
     height: 120px;
-    filter: saturate(0) brightness(1.08);
+    /* Grayscale + lift dark/black pixels toward light gray (readable on dark bg); invert amount tunes “light mono” strength */
+    filter: grayscale(1) brightness(1.12) invert(0.88);
     @apply opacity-60 transition-all duration-300;
   }
   @screen lg {
@@ -987,10 +988,6 @@
     @apply pb-[140px] md:pb-24;
   }
 
-  /* Single news post: reserve space for footer CTA arrow that protrudes upward */
-  body.single-post .site-main {
-    @apply pb-20 md:pb-24;
-  }
 }
 
 /* py-section-y: less padding on mobile (must be in utilities layer to override Tailwind’s .py-section-y) */

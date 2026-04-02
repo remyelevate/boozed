@@ -13,7 +13,7 @@ $show_secondary = ! empty( $secondary_url ) && ! empty( $secondary_label );
 
 $phosphor_chevron_right = '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 256 256" fill="currentColor" class="w-5 h-5 shrink-0" aria-hidden="true"><path d="m181.66 133.66l-80 80a8 8 0 0 1-11.32-11.32L164.69 128L90.34 53.66a8 8 0 0 1 11.32-11.32l80 80a8 8 0 0 1 0 11.32Z"/></svg>';
 ?>
-<section class="page-header <?php echo esc_attr( $bg_class ); ?> pt-24 min-h-0 md:pt-[50px] md:min-h-[600px] flex flex-col justify-start md:justify-end overflow-x-hidden" data-page-header-background="<?php echo esc_attr( $background ); ?>">
+<section class="page-header <?php echo esc_attr( $bg_class ); ?> pt-24 min-h-0 md:pt-[50px] md:min-h-[600px] flex flex-col justify-start overflow-x-hidden" data-page-header-background="<?php echo esc_attr( $background ); ?>">
 	<?php if ( $title !== '' ) : ?>
 		<div class="page-header__title-wrap w-full min-w-[100vw] overflow-x-hidden overflow-y-visible pointer-events-none mb-4 md:mb-6">
 			<div class="page-header__title-inner flex whitespace-nowrap will-change-transform pl-4 md:pl-section-x" style="margin-left: max(0px, calc((100% - 1920px) / 2));">
