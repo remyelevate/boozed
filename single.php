@@ -1,7 +1,7 @@
 <?php
 /**
  * Template for single blog post.
- * Renders: marquee (title with ticker effect), optional featured image banner.
+ * Renders: page header (marquee title + date, author, reading time, breadcrumbs), optional featured image banner.
  * If the post has ACF flexible sections, those are rendered; otherwise the main post content is shown.
  */
 
@@ -15,9 +15,15 @@ while (have_posts()) {
     $has_thumb = (int) $thumb_id > 0;
     $has_sections = function_exists('have_rows') && have_rows('sections', $post_id);
 
-    $marquee_caption_override = get_the_title();
-    $marquee_extra_top = true;
-    include get_template_directory() . '/resources/views/sections/marquee.php';
+    $page_header_override = [
+        'title'             => get_the_title(),
+        'background'        => 'light',
+        'title_top_spacing' => 'min',
+        'show_post_meta'    => true,
+        'post_id'           => $post_id,
+    ];
+    include get_template_directory() . '/resources/views/sections/page_header.php';
+    unset($page_header_override);
     ?>
 
     <?php if ($has_thumb) : ?>

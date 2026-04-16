@@ -9,9 +9,15 @@
  *
  * When $page_header_override is set (e.g. from single post template), title/background are taken from it
  * and ACF sub_fields are skipped; other keys can be omitted for title-only headers.
+ * Optional override keys:
+ * - title_top_spacing — 'min', '50', or '150' (see Page header ACF).
+ * - show_post_meta (bool) + post_id (int) — single blog: date, author, reading time, breadcrumbs under title.
  */
 
 $override = isset($page_header_override) && is_array($page_header_override) ? $page_header_override : [];
+
+$page_header_show_post_meta = false;
+$page_header_meta_post_id   = 0;
 
 if ($override !== []) {
 	$title      = isset($override['title']) ? (string) $override['title'] : '';
@@ -24,6 +30,11 @@ if ($override !== []) {
 	$secondary_url   = '';
 	$desc_left  = '';
 	$desc_right = '';
+	$title_top_spacing = isset($override['title_top_spacing']) ? (string) $override['title_top_spacing'] : 'min';
+	if (!empty($override['show_post_meta'])) {
+		$page_header_show_post_meta = true;
+		$page_header_meta_post_id   = isset($override['post_id']) ? (int) $override['post_id'] : (int) get_the_ID();
+	}
 } else {
 	$background   = function_exists('get_sub_field') ? get_sub_field('page_header_background') : null;
 	$content_type = function_exists('get_sub_field') ? get_sub_field('page_header_content_type') : null;
@@ -49,7 +60,35 @@ if ($override !== []) {
 	// Two columns fields
 	$desc_left  = function_exists('get_sub_field') ? get_sub_field('page_header_description_left') : '';
 	$desc_right = function_exists('get_sub_field') ? get_sub_field('page_header_description_right') : '';
+	$title_top_spacing_raw = function_exists('get_sub_field') ? get_sub_field('page_header_title_top_spacing') : null;
+	$title_top_spacing     = ($title_top_spacing_raw !== null && $title_top_spacing_raw !== false && $title_top_spacing_raw !== '')
+		? (string) $title_top_spacing_raw
+		: 'min';
 }
+
+if ($page_header_show_post_meta && $page_header_meta_post_id > 0) {
+	$p = get_post($page_header_meta_post_id);
+	if (!$p || $p->post_type !== 'post' || $p->post_status !== 'publish') {
+		$page_header_show_post_meta = false;
+		$page_header_meta_post_id   = 0;
+	}
+}
+
+$page_header_nieuws_landing = ($override === [] && $title !== '' && function_exists('is_page') && is_page('nieuws'));
+
+// Legacy ACF value "0" → minimum safe spacing
+if ($title_top_spacing === '0') {
+	$title_top_spacing = 'min';
+}
+$title_top_spacing_allowed = ['min', '50', '150'];
+if (!in_array($title_top_spacing, $title_top_spacing_allowed, true)) {
+	$title_top_spacing = 'min';
+}
+$page_header_pt_class = [
+	'min' => 'page-header--title-top-min',
+	'50'  => 'page-header--title-top-plus-50',
+	'150' => 'page-header--title-top-plus-150',
+][$title_top_spacing];
 
 $is_dark  = ($background === 'dark');
 $has_ctas = ($content_type === 'content_and_ctas');
@@ -57,15 +96,31 @@ $has_ctas = ($content_type === 'content_and_ctas');
 $show_primary_btn   = $has_ctas && $primary_url !== '' && $primary_label !== '';
 $show_secondary_btn = $has_ctas && $secondary_url !== '' && $secondary_label !== '';
 
+// Vacature: "Direct solliciteren" (or #solliciteren URL) opens the sollicitatie modal
+$page_header_primary_sollicitatie_modal = false;
+$page_header_primary_btn_href           = $primary_url;
+if (is_singular('vacature') && $show_primary_btn) {
+	$pl = strtolower($primary_label);
+	$pu = strtolower((string) $primary_url);
+	if ((strpos($pl, 'direct') !== false && strpos($pl, 'solliciteren') !== false) || strpos($pu, '#solliciteren') !== false) {
+		$page_header_primary_sollicitatie_modal = true;
+		if (strpos($primary_url, '#solliciteren') === false) {
+			$page_header_primary_btn_href = '#solliciteren';
+		}
+	}
+}
+
 $bg_class    = $is_dark ? 'bg-brand-indigo' : 'bg-brand-white';
 $title_color = $is_dark ? 'text-brand-white' : 'text-brand-indigo';
 $text_color  = $is_dark ? 'text-brand-white' : 'text-brand-black';
 
 $phosphor_chevron_right = '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 256 256" fill="currentColor" class="w-5 h-5 shrink-0" aria-hidden="true"><path d="m181.66 133.66l-80 80a8 8 0 0 1-11.32-11.32L164.69 128L90.34 53.66a8 8 0 0 1 11.32-11.32l80 80a8 8 0 0 1 0 11.32Z"/></svg>';
+
+$page_header_title_wrap_mb = ($page_header_show_post_meta || $page_header_nieuws_landing) ? 'mb-3 md:mb-4' : 'mb-4 md:mb-6';
 ?>
-<section class="page-header <?php echo esc_attr($bg_class); ?> pt-24 min-h-0 md:pt-[50px] flex flex-col justify-start overflow-x-hidden" data-page-header-background="<?php echo esc_attr($background); ?>">
+<section class="page-header <?php echo esc_attr($bg_class); ?> <?php echo esc_attr($page_header_pt_class); ?> min-h-0 flex flex-col justify-start overflow-x-hidden" data-page-header-background="<?php echo esc_attr($background); ?>" data-page-header-title-top-spacing="<?php echo esc_attr($title_top_spacing); ?>">
 	<?php if ($title !== '') : ?>
-		<div class="page-header__title-wrap w-full min-w-[100vw] overflow-x-hidden overflow-y-visible pointer-events-none mb-4 md:mb-6">
+		<div class="page-header__title-wrap w-full min-w-[100vw] overflow-x-hidden overflow-y-visible pointer-events-none <?php echo esc_attr($page_header_title_wrap_mb); ?>">
 			<div class="page-header__title-inner flex whitespace-nowrap will-change-transform pl-4 md:pl-section-x" style="margin-left: max(0px, calc((100% - 1920px) / 2));">
 				<h1 class="page-header__title font-heading font-bold text-[40px] leading-tight md:text-[124px] md:leading-[1.1] <?php echo esc_attr($title_color); ?> inline-block pr-[1em]">
 					<?php echo esc_html($title); ?>
@@ -75,6 +130,14 @@ $phosphor_chevron_right = '<svg xmlns="http://www.w3.org/2000/svg" width="1em" h
 				</span>
 			</div>
 		</div>
+		<?php if ($page_header_show_post_meta) : ?>
+			<?php
+			$post_id = $page_header_meta_post_id;
+			include get_template_directory() . '/resources/views/partials/page-header-post-meta.php';
+			?>
+		<?php elseif ($page_header_nieuws_landing) : ?>
+			<?php include get_template_directory() . '/resources/views/partials/page-header-nieuws-landing-breadcrumbs.php'; ?>
+		<?php endif; ?>
 	<?php endif; ?>
 
 	<?php if ($content_type === 'columns' && ($desc_left || $desc_right)) : ?>
@@ -101,11 +164,12 @@ $phosphor_chevron_right = '<svg xmlns="http://www.w3.org/2000/svg" width="1em" h
 						<?php if ($show_primary_btn) : ?>
 							<?php
 							\App\Components::render('button', [
-								'variant'          => 'coral',
-								'label'            => $primary_label,
-								'href'             => $primary_url,
-								'icon_right_html'  => $phosphor_chevron_right,
-								'class'            => '!bg-brand-coral',
+								'variant'                    => 'coral',
+								'label'                      => $primary_label,
+								'href'                       => $page_header_primary_btn_href,
+								'icon_right_html'            => $phosphor_chevron_right,
+								'class'                      => '!bg-brand-coral',
+								'vacature_sollicitatie_modal' => $page_header_primary_sollicitatie_modal,
 							]);
 							?>
 						<?php endif; ?>

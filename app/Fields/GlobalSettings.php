@@ -10,6 +10,7 @@ class GlobalSettings
         self::register_business_fields();
         self::register_footer_fields();
         self::register_vacature_fields();
+        self::register_vacature_sollicitatie_fields();
         self::register_pdp_fields();
         self::load_header_menu_choices();
         self::load_footer_menu_choices();
@@ -171,6 +172,40 @@ class GlobalSettings
             'title'                 => __('Vacature feature icons', 'boozed'),
             'fields'                => $fields,
             'location' => [
+                [
+                    [
+                        'param'    => 'options_page',
+                        'operator' => '==',
+                        'value'    => 'vacatures',
+                    ],
+                ],
+            ],
+            'position'              => 'normal',
+            'style'                 => 'default',
+            'label_placement'       => 'top',
+            'instruction_placement' => 'label',
+            'active'                => true,
+        ]);
+    }
+
+    protected static function register_vacature_sollicitatie_fields()
+    {
+        acf_add_local_field_group([
+            'key'                   => 'group_boozed_global_settings_vacatures_sollicitatie',
+            'title'                 => __('Vacature sollicitatie', 'boozed'),
+            'fields'                => [
+                [
+                    'key'           => 'field_boozed_vacature_sollicitatie_cf7_shortcode',
+                    'label'         => __('Sollicitatieformulier (shortcode)', 'boozed'),
+                    'name'          => 'vacature_sollicitatie_cf7_shortcode',
+                    'type'          => 'textarea',
+                    'rows'          => 2,
+                    'placeholder'   => '[contact-form-7 id="123" title="Boozed Vacature sollicitatie"]',
+                    'instructions'  => __('Paste the full Contact Form 7 shortcode for the vacancy application modal (opens via #solliciteren on vacature pages). Leave empty to use the theme default: the form titled “Boozed Vacature sollicitatie” if it exists, or see VACATURE-SOLLICITATIE-CF7-MARKUP.md in the theme.', 'boozed'),
+                    'new_lines'     => '',
+                ],
+            ],
+            'location'              => [
                 [
                     [
                         'param'    => 'options_page',

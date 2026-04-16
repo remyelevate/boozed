@@ -71,7 +71,7 @@ class VacatureFields
                 'name'          => 'apply_url',
                 'type'          => 'link',
                 'return_format' => 'url',
-                'instructions'  => __('Optional. Link for the sticky "Solliciteer" button. Leave empty to use #solliciteren on this page.', 'boozed'),
+                'instructions'  => __('Optional. Link for the sticky "Solliciteer" button. Leave empty to open the sollicitatie form on this page (same as linking to this page with #solliciteren). Use an external URL only if applications go elsewhere.', 'boozed'),
                 'wrapper'       => [ 'width' => '50' ],
             ],
             [

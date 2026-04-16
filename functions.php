@@ -144,3 +144,44 @@ function boozed_plp_url()
     $url = home_url('/');
     return $url;
 }
+
+/**
+ * Permalink for the news overview (page slug "nieuws", else Posts page, else home).
+ */
+function boozed_news_index_url()
+{
+    static $cached = null;
+    if ($cached !== null) {
+        return $cached;
+    }
+    $page = get_page_by_path('nieuws');
+    if ($page instanceof \WP_Post) {
+        $cached = get_permalink($page);
+        return $cached;
+    }
+    $posts_page = (int) get_option('page_for_posts');
+    if ($posts_page > 0) {
+        $cached = get_permalink($posts_page);
+        return $cached;
+    }
+    $cached = home_url('/');
+    return $cached;
+}
+
+/**
+ * Estimated reading time in minutes (min 1) from post content.
+ */
+function boozed_post_reading_time_minutes($post_id)
+{
+    $post_id = (int) $post_id;
+    if ($post_id <= 0) {
+        return 1;
+    }
+    $post = get_post($post_id);
+    if (!$post) {
+        return 1;
+    }
+    $text = wp_strip_all_tags(strip_shortcodes((string) $post->post_content));
+    $words = $text !== '' ? str_word_count($text) : 0;
+    return max(1, (int) ceil($words / 200));
+}

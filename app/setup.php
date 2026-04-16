@@ -195,6 +195,19 @@ add_action('wp_enqueue_scripts', function () {
             true
         );
     }
+
+    if (is_singular('vacature')) {
+        $vac_sol_js = $theme_dir . '/assets/js/vacature-apply-modal.js';
+        if (file_exists($vac_sol_js)) {
+            wp_enqueue_script(
+                'boozed-vacature-apply-modal',
+                $theme_uri . '/assets/js/vacature-apply-modal.js',
+                [],
+                filemtime($vac_sol_js),
+                true
+            );
+        }
+    }
 }, 10);
 
 add_action('acf/init', function () {
@@ -256,6 +269,10 @@ add_action('acf/init', function () {
 
 // Offerte aanvraag: AJAX form submission.
 \App\OfferteAanvraagHandler::init();
+
+// Vacature sollicitatie modal: Contact Form 7 template (shortcode in option).
+\App\ContactForm7VacatureSollicitatie::init();
+
 
 // Contact Form 7: create Boozed Newsletter form and default shortcode for footer.
 \App\ContactForm7Newsletter::init();
@@ -327,6 +344,16 @@ add_action('wp_footer', function () {
         include $banner_part;
     }
 }, 5);
+
+add_action('wp_footer', function () {
+    if (!is_singular('vacature')) {
+        return;
+    }
+    $modal_part = get_template_directory() . '/resources/views/partials/vacature-apply-modal.php';
+    if (is_file($modal_part)) {
+        include $modal_part;
+    }
+}, 6);
 
 /**
  * Temporary debug: add ?boozed_debug=1 to any page.

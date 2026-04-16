@@ -18,8 +18,23 @@ $icon_right = $args['icon_right'] ?? '';
 $icon_left_html = $args['icon_left_html'] ?? '';
 $icon_right_html = $args['icon_right_html'] ?? '';
 $class = $args['class'] ?? '';
+$vacature_sollicitatie_modal = !empty($args['vacature_sollicitatie_modal']);
 $is_link = $href !== '';
 $is_icon_only = $variant === 'icon-only';
+
+// esc_url() strips or breaks fragment-only / query-only hrefs (e.g. #solliciteren)
+$href_output = '';
+if ($is_link) {
+	$t = trim((string) $href);
+	if ($t !== '' && ($t[0] === '#' || $t[0] === '?')) {
+		$href_output = esc_attr($t);
+	} else {
+		$href_output = esc_url($href);
+	}
+	if ($href_output === '') {
+		$is_link = false;
+	}
+}
 
 $base = 'inline-flex items-center justify-center gap-2 font-body text-body font-medium rounded-none transition-colors focus:outline-none focus:ring-2 focus:ring-brand-purple focus:ring-offset-2 disabled:opacity-50';
 $coral_styles   = '!bg-brand-coral text-brand-white hover:opacity-90';
@@ -53,7 +68,7 @@ if ($is_icon_only) {
 }
 ?>
 <?php if ($is_link) : ?>
-<a href="<?php echo esc_url($href); ?>" class="<?php echo esc_attr($styles); ?>">
+<a href="<?php echo $href_output; ?>" class="<?php echo esc_attr($styles); ?>"<?php echo $vacature_sollicitatie_modal ? ' data-vacature-sollicitatie-open' : ''; ?>>
   <?php echo $content; ?>
 </a>
 <?php else : ?>

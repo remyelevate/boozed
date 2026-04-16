@@ -13,7 +13,11 @@
     if (!href || href === '#') return false;
     if (href.indexOf('tel:') === 0 || href.indexOf('mailto:') === 0 || href.indexOf('javascript:') === 0) return false;
     if (link.target === '_blank' || link.hasAttribute('data-no-transition')) return false;
+    if (link.hasAttribute('data-vacature-sollicitatie-open')) return false;
+    if (href.charAt(0) === '#') return false;
     try {
+      var u = new URL(link.href, window.location.href);
+      if (u.hash && u.pathname === window.location.pathname && u.search === window.location.search) return false;
       var linkHost = link.hostname || '';
       return linkHost === window.location.hostname;
     } catch (e) {
@@ -120,4 +124,23 @@
   } else {
     playReverseThenReveal();
   }
+
+  // BFCache (browser back/forward): DOMContentLoaded does not run again. A page
+  // frozen mid leave-transition still has the overlay active, or a page frozen
+  // before the reverse "playing" handler ran can keep has-page-transition-pending
+  // and the solid indigo mask — clear both so content is visible.
+  window.addEventListener(
+    'pageshow',
+    function (ev) {
+      if (!ev.persisted) return;
+      var stuckPending = document.documentElement.classList.contains('has-page-transition-pending');
+      var stuckOverlay = overlay.classList.contains('is-active');
+      if (!stuckPending && !stuckOverlay) return;
+      try {
+        sessionStorage.removeItem(STORAGE_KEY);
+      } catch (e) {}
+      hideOverlay();
+    },
+    false
+  );
 })();
