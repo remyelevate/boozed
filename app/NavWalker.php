@@ -189,7 +189,7 @@ class NavWalker extends \Walker_Nav_Menu {
             $html .= '<span class="mega-menu-item-title">' . esc_html( $item['title'] ) . '</span>';
             $html .= $arrow;
             $html .= '</a>';
-            $html .= '<p class="mega-menu-item-desc">' . esc_html( $item['desc'] ) . '</p>';
+            $html .= '<p class="mega-menu-item-desc"><span class="mega-menu-item-desc-text">' . esc_html( $item['desc'] ) . '</span></p>';
             $html .= '</div>';
         }
 

@@ -243,6 +243,14 @@ class GlobalSettings
                     'placeholder'   => home_url('/registreren'),
                 ],
                 [
+                    'key'           => 'field_boozed_pdp_login_url',
+                    'label'         => __('Login-URL (bestaand account)', 'boozed'),
+                    'name'          => 'pdp_login_url',
+                    'type'          => 'link',
+                    'return_format' => 'url',
+                    'placeholder'   => home_url('/inloggen'),
+                ],
+                [
                     'key'           => 'field_boozed_pdp_maatwerk_url',
                     'label'         => __('Maatwerk-URL', 'boozed'),
                     'name'          => 'pdp_maatwerk_url',
@@ -325,6 +333,13 @@ class GlobalSettings
                     'name'          => 'pdp_cta_account',
                     'type'          => 'text',
                     'default_value' => __('Maak een account aan >', 'boozed'),
+                ],
+                [
+                    'key'           => 'field_boozed_pdp_cta_login',
+                    'label'         => __('CTA-link: Inloggen', 'boozed'),
+                    'name'          => 'pdp_cta_login',
+                    'type'          => 'text',
+                    'default_value' => __('Inloggen', 'boozed'),
                 ],
                 [
                     'key'           => 'field_boozed_pdp_usp_aria',

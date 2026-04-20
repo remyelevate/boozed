@@ -26,6 +26,7 @@ use App\Fields\Sections\IntakeProcess;
 use App\Fields\Sections\Faq;
 use App\Fields\Sections\MapBanner;
 use App\Fields\Sections\YoutubeEmbed;
+use App\Fields\Sections\Wysiwyg;
 
 class ProjectFields
 {
@@ -104,6 +105,7 @@ class ProjectFields
                     'layout_boozed_image_carousel' => ImageCarousel::get(),
                     'layout_boozed_map_banner' => MapBanner::get(),
                     'layout_boozed_youtube_embed' => YoutubeEmbed::get(),
+                    'layout_boozed_wysiwyg' => Wysiwyg::get(),
                 ]),
             ],
         ];

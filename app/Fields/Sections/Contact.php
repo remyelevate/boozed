@@ -38,6 +38,17 @@ class Contact
                     'wrapper'       => ['width' => '100'],
                 ],
                 [
+                    'key'           => 'field_boozed_contact_thank_you_page',
+                    'label'         => __('Thank-you destination page', 'boozed'),
+                    'name'          => 'contact_thank_you_page',
+                    'type'          => 'page_link',
+                    'post_type'     => ['page'],
+                    'allow_archives'=> 0,
+                    'multiple'      => 0,
+                    'instructions'  => __('Optional. After a successful form submit, visitors are redirected to this page.', 'boozed'),
+                    'wrapper'       => ['width' => '100'],
+                ],
+                [
                     'key'           => 'field_boozed_contact_spot_icon',
                     'label'         => __('Arrow target: Icon', 'boozed'),
                     'name'          => 'contact_spot_icon',

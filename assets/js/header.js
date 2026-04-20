@@ -11,7 +11,7 @@
   var hovered = false;
   var hasHeroFirst = false;
 
-  // Transparent header when first section is hero, page-header, or thank-you (dark background, white text)
+  // Transparent header when first section is hero or dark page-header.
   function checkHeroFirst() {
     var main = document.getElementById('main');
     if (!main) {
@@ -21,8 +21,7 @@
     var firstSection = main.querySelector('section');
     hasHeroFirst = !!(firstSection && (
       firstSection.classList.contains('hero') ||
-      firstSection.classList.contains('page-header') ||
-      firstSection.classList.contains('thank-you')
+      firstSection.classList.contains('page-header')
     ));
   }
 

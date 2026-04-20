@@ -31,6 +31,7 @@ use App\Fields\Sections\VacatureFeatures;
 use App\Fields\Sections\VacatureContent;
 use App\Fields\Sections\MapBanner;
 use App\Fields\Sections\YoutubeEmbed;
+use App\Fields\Sections\Wysiwyg;
 
 class VacatureFields
 {
@@ -120,6 +121,7 @@ class VacatureFields
                     'layout_boozed_vacature_content'       => VacatureContent::get(),
                     'layout_boozed_map_banner'           => MapBanner::get(),
                     'layout_boozed_youtube_embed'       => YoutubeEmbed::get(),
+                    'layout_boozed_wysiwyg'             => Wysiwyg::get(),
                 ]),
             ],
         ];

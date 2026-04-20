@@ -26,11 +26,42 @@ if (is_file($setup)) {
 }
 
 /**
+ * Resolve auth page URL from page slug, with fallback path.
+ */
+function boozed_auth_page_url($slug, $fallback_path)
+{
+    $page = get_page_by_path($slug);
+    if ($page instanceof \WP_Post) {
+        return trailingslashit(get_permalink($page));
+    }
+    return trailingslashit(home_url($fallback_path));
+}
+
+function boozed_login_page_url()
+{
+    return boozed_auth_page_url('inloggen', '/inloggen');
+}
+
+function boozed_forgot_password_page_url()
+{
+    return boozed_auth_page_url('wachtwoord-vergeten', '/wachtwoord-vergeten');
+}
+
+function boozed_reset_password_page_url()
+{
+    return boozed_auth_page_url('wachtwoord-resetten', '/wachtwoord-resetten');
+}
+
+/**
  * Use /inloggen instead of /wp-login (Dutch login URL).
  */
-add_filter('login_url', function ($login_url) {
-    return str_replace(['wp-login.php', 'wp-login'], 'inloggen', $login_url);
-}, 10, 1);
+add_filter('login_url', function ($login_url, $redirect, $force_reauth) {
+    $url = boozed_login_page_url();
+    if (!empty($redirect) && wp_validate_redirect($redirect, home_url()) !== false) {
+        $url = add_query_arg('redirect_to', rawurlencode($redirect), $url);
+    }
+    return $url;
+}, 10, 3);
 
 add_filter('logout_url', function ($logout_url) {
     return str_replace(['wp-login.php', 'wp-login'], 'inloggen', $logout_url);
@@ -41,7 +72,7 @@ add_filter('register_url', function ($register_url) {
 }, 10, 1);
 
 add_filter('lostpassword_url', function ($lostpassword_url) {
-    return str_replace(['wp-login.php', 'wp-login'], 'inloggen', $lostpassword_url);
+    return boozed_forgot_password_page_url();
 }, 10, 1);
 
 add_filter('login_redirect', function ($redirect_to, $requested_redirect_to, $user) {
@@ -54,52 +85,63 @@ add_filter('login_redirect', function ($redirect_to, $requested_redirect_to, $us
 // Redirect GET requests to wp-login.php to /inloggen (allow POST so the login form submission works).
 add_action('login_init', function () {
     $script = isset($_SERVER['SCRIPT_NAME']) ? $_SERVER['SCRIPT_NAME'] : '';
-    if (strpos($script, 'wp-login') !== false && $_SERVER['REQUEST_METHOD'] !== 'POST') {
-        $query = isset($_SERVER['QUERY_STRING']) && $_SERVER['QUERY_STRING'] ? '?' . $_SERVER['QUERY_STRING'] : '';
-        wp_safe_redirect(site_url('/inloggen' . $query));
-        exit;
+    if (strpos($script, 'wp-login') === false || $_SERVER['REQUEST_METHOD'] === 'POST') {
+        return;
     }
+
+    $action = isset($_GET['action']) ? sanitize_key((string) $_GET['action']) : 'login';
+    $target = boozed_login_page_url();
+    if (in_array($action, ['lostpassword', 'retrievepassword'], true)) {
+        $target = boozed_forgot_password_page_url();
+    } elseif (in_array($action, ['rp', 'resetpass'], true)) {
+        $target = boozed_reset_password_page_url();
+    }
+
+    $query = [];
+    if (isset($_GET['key'])) {
+        $query['key'] = sanitize_text_field((string) wp_unslash($_GET['key']));
+    }
+    if (isset($_GET['login'])) {
+        $query['login'] = sanitize_text_field((string) wp_unslash($_GET['login']));
+    }
+    if (isset($_GET['redirect_to'])) {
+        $query['redirect_to'] = esc_url_raw((string) wp_unslash($_GET['redirect_to']));
+    }
+    if (!empty($query)) {
+        $target = add_query_arg($query, $target);
+    }
+
+    wp_safe_redirect($target);
+    exit;
 });
 
 add_action('template_redirect', function () {
     $uri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
     if (preg_match('#^/wp-login(\?|$)#', $uri)) {
-        $query = isset($_SERVER['QUERY_STRING']) && $_SERVER['QUERY_STRING'] ? '?' . $_SERVER['QUERY_STRING'] : '';
-        wp_safe_redirect(site_url('/inloggen' . $query));
+        $target = boozed_login_page_url();
+        if (!empty($_GET['action']) && in_array(sanitize_key((string) $_GET['action']), ['lostpassword', 'retrievepassword'], true)) {
+            $target = boozed_forgot_password_page_url();
+        } elseif (!empty($_GET['action']) && in_array(sanitize_key((string) $_GET['action']), ['rp', 'resetpass'], true)) {
+            $target = boozed_reset_password_page_url();
+        }
+
+        $query = [];
+        if (isset($_GET['key'])) {
+            $query['key'] = sanitize_text_field((string) wp_unslash($_GET['key']));
+        }
+        if (isset($_GET['login'])) {
+            $query['login'] = sanitize_text_field((string) wp_unslash($_GET['login']));
+        }
+        if (isset($_GET['redirect_to'])) {
+            $query['redirect_to'] = esc_url_raw((string) wp_unslash($_GET['redirect_to']));
+        }
+        if (!empty($query)) {
+            $target = add_query_arg($query, $target);
+        }
+
+        wp_safe_redirect($target);
         exit;
     }
-});
-
-/**
- * Make /inloggen work without webserver-specific rewrites.
- *
- * On Apache this is usually handled by .htaccess rewriting /inloggen → /inloggen.php.
- * On Nginx/.htaccess-less setups, we add a WP rewrite so /inloggen resolves via index.php.
- */
-add_action('init', function () {
-    add_rewrite_rule('^inloggen/?$', 'index.php?boozed_inloggen=1', 'top');
-});
-
-add_filter('query_vars', function ($vars) {
-    $vars[] = 'boozed_inloggen';
-    return $vars;
-});
-
-add_action('template_redirect', function () {
-    if ((int) get_query_var('boozed_inloggen') !== 1) {
-        return;
-    }
-
-    $query = isset($_SERVER['QUERY_STRING']) ? (string) $_SERVER['QUERY_STRING'] : '';
-    $_SERVER['REQUEST_URI'] = '/inloggen' . ($query ? '?' . $query : '');
-    $_SERVER['SCRIPT_NAME'] = '/inloggen';
-
-    require ABSPATH . 'wp-login.php';
-    exit;
-}, 0);
-
-add_action('after_switch_theme', function () {
-    flush_rewrite_rules(false);
 });
 
 /**
@@ -111,12 +153,35 @@ add_action('after_switch_theme', function () {
  */
 function boozed_login_url($redirect = '')
 {
-    $login_page = home_url('/inloggen');
+    $login_page = boozed_login_page_url();
     if ($redirect !== '' && wp_validate_redirect($redirect, home_url()) !== false) {
         return add_query_arg('redirect_to', urlencode($redirect), $login_page);
     }
     return $login_page;
 }
+
+/**
+ * Replace wp-login reset links in the password reset email.
+ */
+add_filter('retrieve_password_message', function ($message, $key, $user_login, $user_data) {
+    $target_reset_page = boozed_reset_password_page_url();
+    if (!empty($_POST['boozed_reset_target'])) {
+        $posted = esc_url_raw((string) wp_unslash($_POST['boozed_reset_target']));
+        if ($posted !== '' && wp_validate_redirect($posted, home_url()) !== false) {
+            $target_reset_page = $posted;
+        }
+    }
+
+    $reset_url = add_query_arg(
+        [
+            'key'   => rawurlencode($key),
+            'login' => rawurlencode($user_login),
+        ],
+        $target_reset_page
+    );
+
+    return preg_replace('#https?://[^\s]*wp-login\.php\?action=rp[^\s]*#', $reset_url, $message);
+}, 10, 4);
 
 /**
  * PLP (Product Listing Page) URL.

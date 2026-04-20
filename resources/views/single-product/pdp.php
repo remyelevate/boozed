@@ -37,6 +37,7 @@ if ($has_dimensions) {
 }
 
 $account_url = (function_exists('get_field') ? get_field('pdp_registration_url', 'option') : null) ?: home_url('/registreren');
+$login_url = (function_exists('get_field') ? get_field('pdp_login_url', 'option') : null) ?: home_url('/inloggen');
 $maatwerk_url = (function_exists('get_field') ? get_field('pdp_maatwerk_url', 'option') : null) ?: '#';
 
 // Translatable texts from global ACF (PDP)
@@ -50,6 +51,7 @@ $pdp_gerelateerde         = (function_exists('get_field') ? (string) get_field('
 $pdp_benieuwd_prijs       = (function_exists('get_field') ? (string) get_field('pdp_benieuwd_prijs', 'option') : '') ?: __('Benieuwd naar de prijs?', 'boozed');
 $pdp_cta_account          = (function_exists('get_field') ? (string) get_field('pdp_cta_account', 'option') : '') ?: __('Maak een account aan', 'boozed');
 $pdp_cta_account          = trim(preg_replace('/\s*>\s*$/', '', $pdp_cta_account));
+$pdp_cta_login            = (function_exists('get_field') ? (string) get_field('pdp_cta_login', 'option') : '') ?: __('Inloggen', 'boozed');
 $pdp_usp_aria             = (function_exists('get_field') ? (string) get_field('pdp_usp_aria', 'option') : '') ?: __('Voordelen', 'boozed');
 $pdp_usp_1                = (function_exists('get_field') ? (string) get_field('pdp_usp_1', 'option') : '') ?: __('Alles voor je event onder één dak', 'boozed');
 $pdp_usp_2                = (function_exists('get_field') ? (string) get_field('pdp_usp_2', 'option') : '') ?: __('Duurzaam & impact-gedreven', 'boozed');
@@ -256,6 +258,11 @@ $check_icon = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns
 						'href'            => $account_url,
 						'icon_right_html' => $phosphor_chevron_right,
 					]); ?>
+					<p class="font-body text-body-sm text-brand-black mt-3 mb-0">
+						<a href="<?php echo esc_url($login_url); ?>" class="text-brand-indigo underline underline-offset-2 hover:no-underline focus:outline-none focus:ring-2 focus:ring-brand-indigo focus:ring-offset-2 rounded-sm">
+							<?php echo esc_html($pdp_cta_login); ?>
+						</a>
+					</p>
 				<?php endif; ?>
 			</div>
 

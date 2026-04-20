@@ -36,11 +36,14 @@ use App\Fields\Sections\RequestAccount;
 use App\Fields\Sections\OfferteAanvraag;
 use App\Fields\Sections\HighlightImage;
 use App\Fields\Sections\Login;
+use App\Fields\Sections\ForgotPassword;
 use App\Fields\Sections\MapBanner;
+use App\Fields\Sections\ResetPassword;
 use App\Fields\Sections\ThemeLister;
 use App\Fields\Sections\Spacer;
 use App\Fields\Sections\YoutubeEmbed;
 use App\Fields\Sections\Team;
+use App\Fields\Sections\Wysiwyg;
 
 class PageSections
 {
@@ -92,6 +95,8 @@ class PageSections
                         'layout_boozed_vacature_lister' => VacatureLister::get(),
                         'layout_boozed_contact' => Contact::get(),
                         'layout_boozed_login' => Login::get(),
+                        'layout_boozed_forgot_password' => ForgotPassword::get(),
+                        'layout_boozed_reset_password' => ResetPassword::get(),
                         'layout_boozed_request_account' => RequestAccount::get(),
                         'layout_boozed_offerte_aanvraag' => OfferteAanvraag::get(),
                         'layout_boozed_highlight_image' => HighlightImage::get(),
@@ -100,6 +105,7 @@ class PageSections
                         'layout_boozed_team' => Team::get(),
                         'layout_boozed_spacer' => Spacer::get(),
                         'layout_boozed_youtube_embed' => YoutubeEmbed::get(),
+                        'layout_boozed_wysiwyg' => Wysiwyg::get(),
                     ]),
                 ],
             ],

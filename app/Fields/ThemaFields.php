@@ -11,6 +11,7 @@ use App\Fields\Sections\ImageCarousel;
 use App\Fields\Sections\InstagramSlider;
 use App\Fields\Sections\Spacer;
 use App\Fields\Sections\YoutubeEmbed;
+use App\Fields\Sections\Wysiwyg;
 
 /**
  * ACF field group for the Thema CPT.
@@ -61,6 +62,7 @@ class ThemaFields
                     'layout_boozed_instagram_slider' => InstagramSlider::get(),
                     'layout_boozed_spacer'           => Spacer::get(),
                     'layout_boozed_youtube_embed'    => YoutubeEmbed::get(),
+                    'layout_boozed_wysiwyg'          => Wysiwyg::get(),
                 ]),
             ],
         ];

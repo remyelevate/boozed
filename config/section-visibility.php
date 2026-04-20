@@ -70,4 +70,5 @@ return [
     'layout_boozed_highlight_image'        => true,
     'layout_boozed_map_banner'             => true,
     'layout_boozed_youtube_embed'          => true,
+    'layout_boozed_wysiwyg'                => true,
 ];

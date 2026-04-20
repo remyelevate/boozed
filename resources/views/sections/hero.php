@@ -47,9 +47,9 @@ $cursor_svg_url  = get_template_directory_uri() . '/assets/images/custom-cursor-
 $show_primary_btn   = $primary_url && $primary_label;
 $show_secondary_btn = $secondary_url && $secondary_label;
 ?>
-<section class="hero relative w-full h-screen min-h-screen md:h-auto md:min-h-screen flex flex-col overflow-x-hidden <?php echo $has_backdrop ? '' : 'bg-brand-indigo'; ?>">
+<section class="hero relative w-full min-h-[100svh] md:h-auto md:min-h-screen flex flex-col overflow-visible <?php echo $has_backdrop ? '' : 'bg-brand-indigo'; ?>">
 	<?php if ($has_backdrop) : ?>
-		<div class="hero__backdrop absolute inset-0 z-0" aria-hidden="true">
+		<div class="hero__backdrop absolute inset-0 z-0 overflow-x-hidden" aria-hidden="true">
 			<?php if ($use_video) : ?>
 				<video class="hero__video absolute inset-0 w-full h-full object-cover" autoplay muted loop playsinline>
 					<source src="<?php echo esc_url($video_url); ?>" type="video/mp4">
@@ -71,7 +71,8 @@ $show_secondary_btn = $secondary_url && $secondary_label;
 		</div>
 	<?php endif; ?>
 
-	<div class="hero__content relative z-10 flex flex-1 min-h-0 flex-col justify-center items-center text-center max-w-section mx-auto px-4 md:px-section-x py-section-y w-full box-border">
+	<div class="hero__content relative z-10 flex flex-1 min-h-0 flex-col justify-center items-center text-center w-full box-border overflow-y-visible overflow-x-visible">
+		<div class="max-w-section mx-auto px-4 md:px-section-x py-section-y w-full overflow-x-hidden">
 		<h1 class="font-heading font-bold text-h1 md:text-h1-lg text-brand-white mb-6 md:mb-8 break-words"><?php echo esc_html($heading); ?></h1>
 		<div class="flex flex-wrap items-center justify-center gap-4 md:gap-6">
 			<?php if ($show_primary_btn) : ?>
@@ -92,9 +93,10 @@ $show_secondary_btn = $secondary_url && $secondary_label;
 				</a>
 			<?php endif; ?>
 		</div>
+		</div>
 	</div>
 
-	<div class="hero__nav-bar relative z-10 w-full flex-shrink-0 bg-brand-indigo flex flex-wrap">
+	<div class="hero__nav-bar relative z-[15] w-full flex-shrink-0 bg-brand-indigo flex flex-wrap overflow-visible">
 		<?php
 		$cards = [
 			[
@@ -123,19 +125,21 @@ $show_secondary_btn = $secondary_url && $secondary_label;
 			$width_class = isset($card['width_class']) ? $card['width_class'] : 'w-full md:w-1/3';
 			$has_content = ! empty($card['description']);
 			$always_purple = ! empty($card['always_purple']);
-			$item_class = 'hero-nav-item group relative flex items-center justify-between py-3 md:py-6 px-4 md:px-12 text-brand-white transition-colors min-w-0 ' . esc_attr($width_class);
+			$item_class = 'hero-nav-item group relative block min-w-0 py-3 md:py-6 px-4 md:px-12 text-brand-white transition-colors ' . esc_attr($width_class);
 			$item_class .= $always_purple ? ' bg-brand-purple' : ' hover:bg-brand-purple';
 		?>
 		<<?php echo $tag; ?> class="<?php echo esc_attr($item_class); ?>"<?php echo $href_attr; ?>>
 			<?php if ($has_content) : ?>
-			<div class="hero-nav-item__content absolute bottom-full left-0 right-0 w-full bg-brand-purple rounded-t-lg p-4 md:p-10 opacity-0 invisible translate-y-3 md:translate-y-[12px] pointer-events-none md:pointer-events-auto hidden md:block" style="cursor:none;" aria-hidden="true">
-				<p class="font-body text-body-sm md:text-body-md text-brand-white"><?php echo esc_html($card['description']); ?></p>
+			<div class="hero-nav-item__content absolute bottom-full left-0 right-0 z-[20] w-full bg-brand-purple rounded-t-lg p-4 pb-6 md:p-10 md:pb-12 opacity-0 invisible pointer-events-none md:pointer-events-auto hidden md:block overflow-visible" style="cursor:none;" aria-hidden="true">
+				<p class="font-body text-body-sm md:text-body-md text-brand-white leading-relaxed pb-1 m-0"><?php echo esc_html($card['description']); ?></p>
 			</div>
 			<?php endif; ?>
-			<span class="font-heading font-bold text-lg md:text-h2-lg truncate min-w-0">
-				<?php echo esc_html($card['label']); ?>
-			</span>
-			<svg class="w-5 h-5 md:w-6 md:h-6 shrink-0 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="#C41E3A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
+			<div class="relative z-10 flex items-center justify-between gap-3 min-h-[2.75rem] md:min-h-0">
+				<span class="font-heading font-bold text-lg md:text-h2-lg truncate min-w-0">
+					<?php echo esc_html($card['label']); ?>
+				</span>
+				<svg class="w-5 h-5 md:w-6 md:h-6 shrink-0 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="#C41E3A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
+			</div>
 		</<?php echo $tag; ?>>
 		<?php endforeach; ?>
 	</div>
@@ -231,10 +235,10 @@ $show_secondary_btn = $secondary_url && $secondary_label;
 			item.addEventListener('mouseenter', function() {
 				if (content) {
 					gsap.killTweensOf(content);
+					gsap.set(content, { clearProps: 'transform' });
 					gsap.to(content, {
 						opacity: 1,
 						visibility: 'visible',
-						y: 0,
 						duration: 0.35,
 						ease: 'power3.out',
 					});
@@ -246,11 +250,11 @@ $show_secondary_btn = $secondary_url && $secondary_label;
 					gsap.killTweensOf(content);
 					gsap.to(content, {
 						opacity: 0,
-						y: 12,
 						duration: 0.25,
 						ease: 'power2.in',
 						onComplete: function() {
 							content.style.visibility = 'hidden';
+							gsap.set(content, { clearProps: 'transform' });
 						}
 					});
 				}

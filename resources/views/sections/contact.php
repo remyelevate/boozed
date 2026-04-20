@@ -9,6 +9,7 @@
 $bg_image_id    = function_exists('get_sub_field') ? get_sub_field('contact_background_image') : null;
 $heading        = function_exists('get_sub_field') ? (string) get_sub_field('contact_heading') : '';
 $form_shortcode = function_exists('get_sub_field') ? (string) get_sub_field('contact_form_shortcode') : '';
+$thank_you_url  = function_exists('get_sub_field') ? (string) get_sub_field('contact_thank_you_page') : '';
 $spot_icon_id   = function_exists('get_sub_field') ? get_sub_field('contact_spot_icon') : null;
 $spot_label     = function_exists('get_sub_field') ? (string) get_sub_field('contact_spot_label') : '';
 $spot_url       = function_exists('get_sub_field') ? (string) get_sub_field('contact_spot_url') : '';
@@ -33,7 +34,7 @@ foreach ($ticker_rows as $row) {
 $has_ticker = count($ticker_items) > 0;
 $has_spot   = $spot_label !== '' || $spot_icon_id;
 ?>
-<section class="section-contact relative min-h-[400px] overflow-hidden <?php echo $bg_image_url ? '' : 'bg-brand-indigo'; ?>">
+<section class="section-contact relative min-h-[400px] overflow-hidden <?php echo $bg_image_url ? '' : 'bg-brand-indigo'; ?>"<?php echo $thank_you_url !== '' ? ' data-contact-thank-you-url="' . esc_url($thank_you_url) . '"' : ''; ?>>
 	<?php if ($bg_image_url) : ?>
 		<div class="section-contact__bg absolute inset-0 z-0" aria-hidden="true">
 			<div class="absolute inset-0 bg-cover bg-center" style="background-image: url(<?php echo esc_url($bg_image_url); ?>);"></div>
@@ -104,8 +105,8 @@ $has_spot   = $spot_label !== '' || $spot_icon_id;
 	<?php endif; ?>
 </section>
 
-<?php if ($has_spot && empty($GLOBALS['boozed_contact_arrow_script_printed'])) : ?>
-	<?php $GLOBALS['boozed_contact_arrow_script_printed'] = true; ?>
+<?php if (($has_spot || $thank_you_url !== '') && empty($GLOBALS['boozed_contact_script_printed'])) : ?>
+	<?php $GLOBALS['boozed_contact_script_printed'] = true; ?>
 	<script>
 	(function() {
 		var DELAY_MS = 400;
@@ -113,6 +114,14 @@ $has_spot   = $spot_label !== '' || $spot_icon_id;
 			var section = document.querySelector('.section-contact');
 			var arrowContainer = section ? section.querySelector('.section-contact__lottie') : null;
 			var lottieUrl = arrowContainer ? arrowContainer.getAttribute('data-contact-arrow-lottie') : '';
+			var thankYouUrl = section ? section.getAttribute('data-contact-thank-you-url') : '';
+			if (section && thankYouUrl) {
+				document.addEventListener('wpcf7mailsent', function(event) {
+					var form = event && event.target ? event.target.closest('.section-contact') : null;
+					if (form !== section) return;
+					window.location.href = thankYouUrl;
+				});
+			}
 			if (!section || !arrowContainer || !lottieUrl || typeof lottie === 'undefined') return;
 			var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 			if (reducedMotion) return;

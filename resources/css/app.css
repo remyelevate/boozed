@@ -157,6 +157,13 @@
   .site-header__nav .nav-link {
     @apply relative text-inherit no-underline transition-colors duration-200;
   }
+  /* Prevent descender clipping on labels like "Wat wij doen" */
+  .site-header__nav .nav-menu > li > .nav-link {
+    @apply inline-flex items-center py-2;
+    line-height: 1.5;
+    padding-bottom: calc(0.5rem + 1px);
+    overflow: visible;
+  }
   .site-header__nav .nav-link:hover,
   .site-header__nav .nav-link.is-current,
   .site-header__nav .nav-link[aria-expanded="true"] {
@@ -175,6 +182,31 @@
     @apply scale-x-100;
   }
 
+  /* Compact desktop header: keep nav readable and prevent right-side overlap */
+  @media (min-width: 768px) and (max-width: 1279px) {
+    .site-header .site-header-inner {
+      gap: 0.75rem;
+    }
+    .site-header .site-header__nav {
+      margin-inline: 0.5rem;
+    }
+    .site-header .site-header__nav .nav-menu {
+      gap: 1rem;
+    }
+    .site-header .site-header__actions {
+      gap: 0.75rem;
+    }
+    .site-header .site-header__lang,
+    .site-header .site-header__phone {
+      display: none;
+    }
+    .site-header .site-header__cta {
+      padding-inline: 0.875rem;
+      font-size: 0.875rem;
+      line-height: 1.2;
+    }
+  }
+
   /* Footer: menu links */
   .site-footer__menu-list a {
     @apply text-brand-white no-underline transition-colors hover:text-brand-coral;
@@ -185,7 +217,7 @@
     @apply static;
   }
   .site-header__nav .has-mega-menu > .nav-link {
-    @apply inline-block py-2;
+    @apply inline-flex;
   }
   
   /* Mega menu panel - full screen width, starts at top to include header area */
@@ -304,20 +336,29 @@
     @apply opacity-100 translate-x-0 text-brand-coral;
   }
   
-  /* Description text - hidden by default, shows on hover */
+  /* Description text - hidden by default, shows on hover.
+     Uses the grid-template-rows 0fr → 1fr technique so the animation targets
+     the content's natural height. This keeps the motion smooth regardless of
+     description length (animating max-height to a fixed ceiling either clips
+     long text or snaps short text to full opacity too quickly). */
   .mega-menu-item-desc {
-    @apply font-body text-body-md text-brand-white max-w-md overflow-hidden transition-colors duration-300;
-    max-height: 0;
+    @apply font-body text-body-md text-brand-white max-w-md transition-colors duration-300;
+    display: grid;
+    grid-template-rows: 0fr;
     opacity: 0;
     margin-top: 0;
-    transition: max-height 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    transition: grid-template-rows 0.4s cubic-bezier(0.22, 1, 0.36, 1),
                 opacity 0.3s cubic-bezier(0.22, 1, 0.36, 1),
                 margin-top 0.4s cubic-bezier(0.22, 1, 0.36, 1);
   }
-  
+  .mega-menu-item-desc > .mega-menu-item-desc-text {
+    min-height: 0;
+    overflow: hidden;
+  }
+
   .mega-menu-item-wrapper:hover .mega-menu-item-desc,
   .mega-menu-item-wrapper.is-active .mega-menu-item-desc {
-    max-height: 100px;
+    grid-template-rows: 1fr;
     opacity: 1;
     margin-top: 0.5rem;
   }
@@ -387,6 +428,15 @@
   .page-header--title-top-plus-150 {
     padding-top: calc(var(--page-header-site-header-offset) + 24px + 150px);
   }
+  /* PDP: keep breadcrumbs clear of the fixed header */
+  body.single-product .pdp {
+    padding-top: calc(var(--page-header-site-header-offset) + 24px);
+  }
+  /* PLP: keep title/filters clear of the fixed header */
+  body.post-type-archive-product .product-lister,
+  body.page-template-page-flexible .product-lister:first-of-type {
+    padding-top: calc(var(--page-header-site-header-offset) + 24px);
+  }
 
   .page-header__cta-secondary::after {
     content: '';
@@ -412,6 +462,20 @@
   .hero__nav-bar .hero-nav-item,
   .hero__nav-bar .hero-nav-item * {
     cursor: none;
+  }
+
+  /* Hover panels sit above the bar (bottom-full); parent overflow-x-hidden would force overflow-y to clip — keep nav chain visible */
+  .hero .hero__nav-bar,
+  .hero .hero-nav-item {
+    overflow: visible;
+  }
+
+  /* Tooltip column: absolute panel must not inherit flex/clip descenders */
+  .hero-nav-item__content {
+    contain: none;
+    max-height: none;
+    overflow-x: visible;
+    overflow-y: visible;
   }
 
   /* Text + Media section: marquee caption is viewport-wide and independent of container (fixed so nothing can clip it) */
