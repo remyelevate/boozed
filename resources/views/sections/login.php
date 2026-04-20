@@ -13,14 +13,18 @@ $heading   = $heading ?: __('Inloggen', 'boozed');
 $image_url = $image_id ? wp_get_attachment_image_url($image_id, 'large') : '';
 $has_image = $image_url !== '';
 
-$redirect_to_param = isset($_GET['redirect_to']) ? trim((string) wp_unslash($_GET['redirect_to'])) : '';
+$redirect_to_param = '';
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['redirect_to'])) {
+	$redirect_to_param = trim((string) wp_unslash($_POST['redirect_to']));
+} elseif (isset($_GET['redirect_to'])) {
+	$redirect_to_param = trim((string) wp_unslash($_GET['redirect_to']));
+}
+
 if ($redirect_to_param !== '') {
-	$redirect_to = (wp_parse_url($redirect_to_param, PHP_URL_HOST) !== null)
+	$redirect_candidate = (wp_parse_url($redirect_to_param, PHP_URL_HOST) !== null)
 		? esc_url_raw($redirect_to_param)
 		: home_url($redirect_to_param);
-	if (wp_validate_redirect($redirect_to, home_url()) === false) {
-		$redirect_to = home_url();
-	}
+	$redirect_to = wp_validate_redirect($redirect_candidate, home_url());
 } else {
 	$redirect_to = home_url();
 }
