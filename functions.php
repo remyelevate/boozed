@@ -82,6 +82,45 @@ add_filter('login_redirect', function ($redirect_to, $requested_redirect_to, $us
     return $redirect_to;
 }, 10, 3);
 
+/**
+ * Handle front-end logout action on custom login page URL.
+ * Supports URLs like /inloggen/?action=logout&_wpnonce=...&redirect_to=...
+ */
+add_action('template_redirect', function () {
+    if (strtolower((string) ($_SERVER['REQUEST_METHOD'] ?? 'GET')) !== 'get') {
+        return;
+    }
+
+    $action = isset($_GET['action']) ? sanitize_key((string) $_GET['action']) : '';
+    if ($action !== 'logout') {
+        return;
+    }
+
+    $request_path = wp_parse_url(home_url((string) ($_SERVER['REQUEST_URI'] ?? '')), PHP_URL_PATH);
+    $login_path   = wp_parse_url(boozed_login_page_url(), PHP_URL_PATH);
+    if (!is_string($request_path) || !is_string($login_path)) {
+        return;
+    }
+
+    if (trailingslashit($request_path) !== trailingslashit($login_path)) {
+        return;
+    }
+
+    if (!isset($_GET['_wpnonce']) || !wp_verify_nonce((string) $_GET['_wpnonce'], 'log-out')) {
+        wp_die(__('Weet je zeker dat je wilt uitloggen?', 'boozed'), 403);
+    }
+
+    wp_logout();
+
+    $redirect_to = isset($_GET['redirect_to']) ? esc_url_raw((string) wp_unslash($_GET['redirect_to'])) : home_url('/');
+    if (wp_validate_redirect($redirect_to, home_url('/')) === false) {
+        $redirect_to = home_url('/');
+    }
+
+    wp_safe_redirect($redirect_to);
+    exit;
+});
+
 // Redirect GET requests to wp-login.php to /inloggen (allow POST so the login form submission works).
 add_action('login_init', function () {
     $script = isset($_SERVER['SCRIPT_NAME']) ? $_SERVER['SCRIPT_NAME'] : '';
