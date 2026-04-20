@@ -225,6 +225,38 @@ function boozed_login_url($redirect = '')
 }
 
 /**
+ * Swap footer "Inloggen" item to logout for authenticated users.
+ *
+ * Keeps the menu management simple in WP admin: editors can keep one "Inloggen"
+ * item in the footer and this filter turns it into "Uitloggen" when needed.
+ */
+add_filter('wp_nav_menu_objects', function ($items, $args) {
+    if (!is_array($items) || !is_user_logged_in() || !is_object($args)) {
+        return $items;
+    }
+
+    $menu_class = isset($args->menu_class) ? (string) $args->menu_class : '';
+    if ($menu_class === '' || strpos($menu_class, 'site-footer__menu-list') === false) {
+        return $items;
+    }
+
+    foreach ($items as $item) {
+        if (!is_object($item) || !isset($item->title)) {
+            continue;
+        }
+
+        if (trim(wp_strip_all_tags((string) $item->title)) !== __('Inloggen', 'boozed')) {
+            continue;
+        }
+
+        $item->title = __('Uitloggen', 'boozed');
+        $item->url   = wp_logout_url(home_url('/'));
+    }
+
+    return $items;
+}, 10, 2);
+
+/**
  * Replace wp-login reset links in the password reset email.
  */
 add_filter('retrieve_password_message', function ($message, $key, $user_login, $user_data) {
