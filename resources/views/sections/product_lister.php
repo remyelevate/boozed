@@ -18,7 +18,6 @@ $cta_btn1_label    = function_exists('get_sub_field') ? (string) get_sub_field('
 $cta_btn1_url      = function_exists('get_sub_field') ? (string) get_sub_field('product_lister_cta_btn1_url') : '';
 $cta_btn2_label    = function_exists('get_sub_field') ? (string) get_sub_field('product_lister_cta_btn2_label') : '';
 $cta_btn2_url      = function_exists('get_sub_field') ? (string) get_sub_field('product_lister_cta_btn2_url') : '';
-$cta_btn2_is_login = function_exists('get_sub_field') ? (bool) get_sub_field('product_lister_cta_btn2_is_login') : false;
 
 $heading            = $heading ?: __('Verhuur', 'boozed');
 $search_placeholder = $search_placeholder ?: __('Online catalogus (meer dan 2000 items)', 'boozed');
@@ -26,9 +25,19 @@ if ($search_url === '') {
 	$search_url = function_exists('boozed_plp_url') ? boozed_plp_url() : get_permalink();
 }
 
-$show_cta_block = !is_user_logged_in() && ($cta_text !== '' || $cta_secondary !== '' || ($cta_btn1_label !== '' && $cta_btn1_url !== '') || ($cta_btn2_label !== '' && $cta_btn2_url !== ''));
+$show_cta_block = !is_user_logged_in() && ($cta_text !== '' || $cta_secondary !== '' || ($cta_btn1_label !== '' && $cta_btn1_url !== '') || $cta_btn2_label !== '');
 
 $current_url = get_permalink();
+$assortiment_url = function_exists('boozed_plp_url') ? boozed_plp_url() : home_url('/assortiment');
+$acf_login_url = function_exists('get_field') ? (string) get_field('pdp_login_url', 'option') : '';
+if ($acf_login_url === '') {
+	$acf_login_url = function_exists('boozed_login_page_url') ? boozed_login_page_url() : home_url('/inloggen');
+}
+$acf_login_url = wp_validate_redirect(
+	$acf_login_url,
+	function_exists('boozed_login_page_url') ? boozed_login_page_url() : home_url('/inloggen')
+);
+$cta_login_href = add_query_arg('redirect_to', $assortiment_url, $acf_login_url);
 $product_cat_raw = isset($_GET['product_cat']) ? $_GET['product_cat'] : '';
 $product_cat_slugs = [];
 if (is_array($product_cat_raw)) {
@@ -331,9 +340,7 @@ $flyout_id = $section_id . '-filters';
 							<?php endif; ?>
 							<?php if ($cta_btn2_label !== '') : ?>
 								<?php
-								$cta_btn2_href = ($cta_btn2_is_login && function_exists('boozed_login_url'))
-									? boozed_login_url($current_url)
-									: $cta_btn2_url;
+								$cta_btn2_href = $cta_btn2_url !== '' ? $cta_btn2_url : $cta_login_href;
 								if ($cta_btn2_href !== '') :
 								?>
 									<a href="<?php echo esc_url($cta_btn2_href); ?>" class="product-lister__cta-secondary self-start font-body text-body-md font-medium text-brand-white no-underline relative inline-block hover:opacity-90 transition-opacity focus:outline-none focus:ring-2 focus:ring-brand-white focus:ring-offset-2 focus:ring-offset-brand-indigo"><?php echo esc_html($cta_btn2_label); ?></a>

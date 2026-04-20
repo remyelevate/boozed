@@ -126,16 +126,6 @@ class ProductLister
                     'return_format' => 'url',
                     'wrapper'       => ['width' => '50'],
                 ],
-                [
-                    'key'           => 'field_boozed_product_lister_cta_btn2_is_login',
-                    'label'         => __('Button 2 is login', 'boozed'),
-                    'name'          => 'product_lister_cta_btn2_is_login',
-                    'type'          => 'true_false',
-                    'instructions'  => __('If enabled, Button 2 links to the login page and redirects back here after login. Ignored if Button 2 URL is empty.', 'boozed'),
-                    'default_value' => 0,
-                    'ui'            => 1,
-                    'wrapper'       => ['width' => '100'],
-                ],
             ],
         ];
     }
