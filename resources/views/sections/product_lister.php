@@ -340,7 +340,7 @@ $flyout_id = $section_id . '-filters';
 							<?php endif; ?>
 							<?php if ($cta_btn2_label !== '') : ?>
 								<?php
-								$cta_btn2_href = $cta_btn2_url !== '' ? $cta_btn2_url : $cta_login_href;
+								$cta_btn2_href = $cta_login_href;
 								if ($cta_btn2_href !== '') :
 								?>
 									<a href="<?php echo esc_url($cta_btn2_href); ?>" class="product-lister__cta-secondary self-start font-body text-body-md font-medium text-brand-white no-underline relative inline-block hover:opacity-90 transition-opacity focus:outline-none focus:ring-2 focus:ring-brand-white focus:ring-offset-2 focus:ring-offset-brand-indigo"><?php echo esc_html($cta_btn2_label); ?></a>
