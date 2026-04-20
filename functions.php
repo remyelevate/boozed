@@ -63,9 +63,38 @@ add_filter('login_url', function ($login_url, $redirect, $force_reauth) {
     return $url;
 }, 10, 3);
 
-add_filter('logout_url', function ($logout_url) {
-    return str_replace(['wp-login.php', 'wp-login'], 'inloggen', $logout_url);
-}, 10, 1);
+add_filter('logout_url', function ($logout_url, $redirect) {
+    $target = boozed_login_page_url();
+    $query  = [];
+    $parsed = [];
+
+    $logout_query = wp_parse_url((string) $logout_url, PHP_URL_QUERY);
+    if (is_string($logout_query) && $logout_query !== '') {
+        parse_str($logout_query, $parsed);
+        if (is_array($parsed)) {
+            if (!empty($parsed['action'])) {
+                $query['action'] = sanitize_key((string) $parsed['action']);
+            }
+            if (!empty($parsed['_wpnonce'])) {
+                $query['_wpnonce'] = sanitize_text_field((string) $parsed['_wpnonce']);
+            }
+        }
+    }
+
+    if (!isset($query['action'])) {
+        $query['action'] = 'logout';
+    }
+
+    $resolved_redirect = is_string($redirect) ? $redirect : '';
+    if ($resolved_redirect === '' && !empty($parsed['redirect_to'])) {
+        $resolved_redirect = (string) $parsed['redirect_to'];
+    }
+    if ($resolved_redirect !== '' && wp_validate_redirect($resolved_redirect, home_url('/')) !== false) {
+        $query['redirect_to'] = $resolved_redirect;
+    }
+
+    return add_query_arg($query, $target);
+}, 10, 2);
 
 add_filter('register_url', function ($register_url) {
     return str_replace(['wp-login.php', 'wp-login'], 'inloggen', $register_url);
@@ -83,26 +112,16 @@ add_filter('login_redirect', function ($redirect_to, $requested_redirect_to, $us
 }, 10, 3);
 
 /**
- * Handle front-end logout action on custom login page URL.
+ * Handle front-end logout action.
  * Supports URLs like /inloggen/?action=logout&_wpnonce=...&redirect_to=...
  */
-add_action('template_redirect', function () {
+add_action('init', function () {
     if (strtolower((string) ($_SERVER['REQUEST_METHOD'] ?? 'GET')) !== 'get') {
         return;
     }
 
     $action = isset($_GET['action']) ? sanitize_key((string) $_GET['action']) : '';
     if ($action !== 'logout') {
-        return;
-    }
-
-    $request_path = wp_parse_url(home_url((string) ($_SERVER['REQUEST_URI'] ?? '')), PHP_URL_PATH);
-    $login_path   = wp_parse_url(boozed_login_page_url(), PHP_URL_PATH);
-    if (!is_string($request_path) || !is_string($login_path)) {
-        return;
-    }
-
-    if (trailingslashit($request_path) !== trailingslashit($login_path)) {
         return;
     }
 
