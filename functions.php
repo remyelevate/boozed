@@ -67,22 +67,28 @@ add_filter('logout_url', function ($logout_url, $redirect) {
     $target = boozed_login_page_url();
     $query  = [];
     $parsed = [];
+    $raw_logout_url = (string) $logout_url;
 
-    $logout_query = wp_parse_url((string) $logout_url, PHP_URL_QUERY);
+    $logout_query = wp_parse_url($raw_logout_url, PHP_URL_QUERY);
     if (is_string($logout_query) && $logout_query !== '') {
-        parse_str($logout_query, $parsed);
-        if (is_array($parsed)) {
-            if (!empty($parsed['action'])) {
-                $query['action'] = sanitize_key((string) $parsed['action']);
-            }
-            if (!empty($parsed['_wpnonce'])) {
-                $query['_wpnonce'] = sanitize_text_field((string) $parsed['_wpnonce']);
-            }
+        // Handle both normal query strings and escaped ampersands (&amp;).
+        parse_str(str_replace('&amp;', '&', $logout_query), $parsed);
+        if (is_array($parsed) && !empty($parsed['action'])) {
+            $query['action'] = sanitize_key((string) $parsed['action']);
         }
     }
 
     if (!isset($query['action'])) {
         $query['action'] = 'logout';
+    }
+
+    if (!empty($parsed['_wpnonce'])) {
+        $query['_wpnonce'] = sanitize_text_field((string) $parsed['_wpnonce']);
+    } else {
+        // Fallback: extract nonce directly if query parsing missed it.
+        if (preg_match('/(?:[?&]|&amp;)_wpnonce=([a-zA-Z0-9]+)/', $raw_logout_url, $m) === 1) {
+            $query['_wpnonce'] = sanitize_text_field((string) $m[1]);
+        }
     }
 
     $resolved_redirect = is_string($redirect) ? $redirect : '';
