@@ -64,6 +64,7 @@ function boozed_filter_sections_by_visibility($layouts)
 \App\PostTypes\Thema::register();
 \App\PostTypes\Vacature::register();
 \App\PostTypes\Testimonial::register();
+\App\PostTypes\Wishlist::register();
 
 add_action('after_setup_theme', function () {
     add_theme_support('title-tag');
@@ -208,6 +209,35 @@ add_action('wp_enqueue_scripts', function () {
             );
         }
     }
+
+    if (
+        is_singular('product')
+        || is_page('musthaves')
+        || get_query_var(\App\WishlistHandler::QUERY_VAR) !== ''
+        || (string) get_query_var(\App\WishlistHandler::INDEX_QUERY_VAR) === '1'
+    ) {
+        $wishlist_js = $theme_dir . '/assets/js/wishlist.js';
+        if (file_exists($wishlist_js)) {
+            $redirect_target = is_singular() ? get_permalink() : home_url('/');
+            wp_enqueue_script(
+                'boozed-wishlist',
+                $theme_uri . '/assets/js/wishlist.js',
+                [],
+                filemtime($wishlist_js),
+                true
+            );
+            wp_localize_script('boozed-wishlist', 'boozedWishlist', [
+                'ajax_url'       => admin_url('admin-ajax.php'),
+                'nonce'          => wp_create_nonce(\App\WishlistHandler::NONCE_ACTION),
+                'is_logged_in'   => is_user_logged_in(),
+                'login_url'      => function_exists('boozed_login_url') ? boozed_login_url($redirect_target) : wp_login_url($redirect_target),
+                'wishlist_base_url' => home_url('/wishlist/'),
+                'messages'       => [
+                    'generic_error' => __('Er ging iets mis. Probeer opnieuw.', 'boozed'),
+                ],
+            ]);
+        }
+    }
 }, 10);
 
 add_action('acf/init', function () {
@@ -252,6 +282,12 @@ add_action('acf/init', function () {
         'menu_slug'    => 'pdp',
         'parent_slug'  => 'boozed-global-settings',
     ]);
+    acf_add_options_sub_page([
+        'page_title'   => __('Projects overview', 'boozed'),
+        'menu_title'   => __('Overview page', 'boozed'),
+        'menu_slug'    => 'projects-overview',
+        'parent_slug'  => 'edit.php?post_type=project',
+    ]);
 });
 
 add_action('acf/init', function () {
@@ -261,6 +297,7 @@ add_action('acf/init', function () {
     \App\Fields\PageSections::init();
     \App\Fields\GlobalSettings::init();
     \App\Fields\ProjectFields::init();
+    \App\Fields\ProjectArchiveFields::init();
     \App\Fields\BlogFields::init();
     \App\Fields\ThemaFields::init();
     \App\Fields\VacatureFields::init();
@@ -269,6 +306,7 @@ add_action('acf/init', function () {
 
 // Offerte aanvraag: AJAX form submission.
 \App\OfferteAanvraagHandler::init();
+\App\WishlistHandler::init();
 
 // Vacature sollicitatie modal: Contact Form 7 template (shortcode in option).
 \App\ContactForm7VacatureSollicitatie::init();
@@ -354,6 +392,16 @@ add_action('wp_footer', function () {
         include $modal_part;
     }
 }, 6);
+
+add_action('wp_footer', function () {
+    if (!is_singular('product')) {
+        return;
+    }
+    $modal_part = get_template_directory() . '/resources/views/partials/wishlist-modal.php';
+    if (is_file($modal_part)) {
+        include $modal_part;
+    }
+}, 7);
 
 /**
  * Temporary debug: add ?boozed_debug=1 to any page.

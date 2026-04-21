@@ -71,6 +71,9 @@ $pdp_label_sku            = (function_exists('get_field') ? (string) get_field('
 $thumb_id = get_post_thumbnail_id($post_id);
 $main_image_url = $thumb_id ? wp_get_attachment_image_url($thumb_id, 'large') : '';
 $main_image_alt = get_the_title();
+$is_in_wishlist = is_user_logged_in() && class_exists(\App\WishlistHandler::class)
+    ? \App\WishlistHandler::isProductInCurrentUserWishlists((int) $post_id)
+    : false;
 
 $related_ids = [];
 if ($first_cat && isset($first_cat->term_id)) {
@@ -160,8 +163,19 @@ $check_icon = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns
 		<!-- Left column: main image + tabs + more + related (6/12 cols) -->
 		<div class="pdp__left lg:col-span-6 flex flex-col gap-6 md:gap-8">
 			<?php if ($main_image_url) : ?>
-				<div class="pdp__image aspect-[4/3] w-full rounded overflow-hidden border-2 border-black">
+				<div class="pdp__image relative aspect-[4/3] w-full rounded overflow-hidden border-2 border-black">
 					<img src="<?php echo esc_url($main_image_url); ?>" alt="<?php echo esc_attr($main_image_alt); ?>" class="w-full h-full object-cover" loading="eager">
+					<button
+						type="button"
+						class="pdp__wishlist-trigger<?php echo $is_in_wishlist ? ' is-active' : ''; ?>"
+						data-wishlist-heart
+						data-product-id="<?php echo esc_attr($post_id); ?>"
+						aria-pressed="<?php echo $is_in_wishlist ? 'true' : 'false'; ?>"
+						aria-label="<?php esc_attr_e('Toevoegen aan wenslijst', 'boozed'); ?>">
+						<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
+							<path d="M178,42c-20.65,0-38.73,11.47-50,29.24C116.73,53.47,98.65,42,78,42A58.07,58.07,0,0,0,20,100c0,78.22,99.2,130.77,103.43,133a9.66,9.66,0,0,0,9.14,0c4.23-2.2,103.43-54.75,103.43-133A58.07,58.07,0,0,0,178,42Z"/>
+						</svg>
+					</button>
 				</div>
 			<?php endif; ?>
 

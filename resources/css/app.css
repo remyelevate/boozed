@@ -794,6 +794,150 @@
     @apply mt-1 block font-body text-body-xs text-brand-coral;
   }
 
+  .pdp__wishlist-trigger {
+    @apply absolute bottom-3 right-3 inline-flex h-12 w-12 items-center justify-center rounded-full bg-brand-purple text-brand-white transition-opacity hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-brand-purple focus:ring-offset-2;
+  }
+
+  .pdp__wishlist-trigger svg {
+    width: 1.4rem;
+    height: 1.4rem;
+  }
+
+  .pdp__wishlist-trigger.is-active {
+    @apply bg-brand-coral text-brand-white;
+  }
+
+  .wishlist-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 220;
+    display: none;
+    pointer-events: none;
+  }
+
+  .wishlist-modal.is-open {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr);
+    place-items: center;
+    padding: 1rem;
+    pointer-events: auto;
+  }
+
+  .wishlist-modal__backdrop {
+    grid-column: 1 / -1;
+    grid-row: 1 / -1;
+    place-self: stretch;
+    margin: -1rem;
+    width: auto;
+    height: auto;
+    background: rgba(12, 10, 33, 0.72);
+  }
+
+  .wishlist-modal__panel {
+    grid-column: 1 / -1;
+    grid-row: 1 / -1;
+    place-self: center;
+    width: min(100%, 540px);
+    max-height: min(90vh, 720px);
+    overflow: auto;
+    position: relative;
+  }
+
+  .wishlist-modal__shell {
+    @apply p-8 md:p-10;
+  }
+
+  .wishlist-modal__close {
+    @apply absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full text-brand-indigo hover:bg-brand-border focus:outline-none focus:ring-2 focus:ring-brand-purple;
+  }
+
+  .wishlist-modal__state {
+    display: none;
+    text-align: center;
+  }
+
+  .wishlist-modal__state.is-active {
+    display: block;
+  }
+
+  .wishlist-modal__icon {
+    @apply mx-auto mb-5 text-brand-indigo;
+    width: 3rem;
+    height: 3rem;
+  }
+
+  .wishlist-modal__icon svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .wishlist-modal__title {
+    @apply mb-4 text-left font-heading text-h4 font-bold text-brand-indigo;
+  }
+
+  .wishlist-modal__message {
+    @apply mb-6 font-body text-body-md text-brand-indigo;
+  }
+
+  .wishlist-modal__hint {
+    @apply mb-4 text-left font-body text-body-sm text-brand-black/75;
+  }
+
+  .wishlist-modal__input {
+    @apply mb-3 block h-12 w-full border border-brand-border bg-brand-white px-4 font-body text-body text-brand-indigo focus:border-brand-purple focus:outline-none focus:ring-2 focus:ring-brand-purple/30;
+  }
+
+  .wishlist-modal__button {
+    @apply mb-3 inline-flex min-h-[48px] w-full items-center justify-center border-2 border-brand-purple bg-brand-white px-6 py-3 font-body text-body font-medium text-brand-purple transition-colors hover:bg-brand-nude focus:outline-none focus:ring-2 focus:ring-brand-purple focus:ring-offset-2;
+  }
+
+  .wishlist-modal__button--primary {
+    @apply bg-brand-purple text-brand-white hover:opacity-90;
+  }
+
+  .wishlist-list__action {
+    @apply inline-flex items-center justify-center border border-brand-purple bg-brand-white px-3 py-1 font-body text-body-sm font-medium text-brand-purple hover:bg-brand-nude focus:outline-none focus:ring-2 focus:ring-brand-purple;
+  }
+
+  .wishlist-route__back-link {
+    @apply inline-flex items-center font-body text-body-sm font-medium text-brand-indigo underline underline-offset-2 hover:no-underline focus:outline-none focus:ring-2 focus:ring-brand-purple focus:ring-offset-2;
+  }
+
+  .wishlist-list__table {
+    border-collapse: collapse;
+  }
+
+  .wishlist-list__table th,
+  .wishlist-list__table td {
+    @apply border-b border-brand-border py-4 text-left font-body text-body-sm text-brand-black;
+    vertical-align: middle;
+  }
+
+  .wishlist-list__product {
+    @apply flex items-center gap-3;
+  }
+
+  .wishlist-list__product img {
+    @apply h-12 w-12 object-cover;
+  }
+
+  .wishlist-list__actions {
+    @apply flex flex-wrap justify-end gap-2;
+  }
+
+  .wishlist-list__actions-col {
+    text-align: right !important;
+  }
+
+  .wishlist-list__actions button {
+    @apply inline-flex items-center justify-center bg-brand-purple px-3 py-2 font-body text-body-sm font-medium text-brand-white transition-opacity hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-brand-purple;
+  }
+
+  html.wishlist-modal-open {
+    overflow: hidden;
+  }
+
   /* Vacancy apply banner: solid Indigo background (overrides any bleed-through from page content) */
   .vacature-apply-banner {
     background-color: #0C0A21 !important;
