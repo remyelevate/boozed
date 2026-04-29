@@ -88,6 +88,7 @@ class ProjectFields
                     'layout_boozed_hero'              => Hero::get(),
                     'layout_boozed_projects_slider'   => ProjectsSlider::get(),
                     'layout_boozed_projects_lister'   => ProjectsLister::get(),
+                    'layout_boozed_product_slider'    => ProductSlider::get(),
                     'layout_boozed_blog_lister'       => BlogLister::get(),
                     'layout_boozed_brands'            => Brands::get(),
                     'layout_boozed_bcorp'             => Bcorp::get(),
