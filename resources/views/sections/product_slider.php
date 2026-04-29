@@ -12,7 +12,8 @@ $btn_url    = function_exists('get_sub_field') ? (string) get_sub_field('product
 $link_text  = function_exists('get_sub_field') ? (string) get_sub_field('product_slider_link_text') : '';
 $source     = function_exists('get_sub_field') ? (string) get_sub_field('product_slider_source') : 'manual';
 $limit      = function_exists('get_sub_field') ? max(1, min(48, (int) get_sub_field('product_slider_limit'))) : 12;
-$search_url = function_exists('get_sub_field') ? (string) get_sub_field('product_slider_search_url') : '';
+$show_search_raw = function_exists('get_sub_field') ? get_sub_field('product_slider_search_url') : 1;
+$show_search = (bool) $show_search_raw;
 $search_placeholder = function_exists('get_sub_field') ? (string) get_sub_field('product_slider_search_placeholder') : '';
 
 $heading   = $heading ?: __('Onze populaire items', 'boozed');
@@ -50,10 +51,7 @@ if ($source !== 'manual') {
 	}
 }
 $search_placeholder = $search_placeholder ?: __('Online catalogus (meer dan 2000 producten)', 'boozed');
-if ($search_url === '') {
-	$search_url = function_exists('boozed_plp_url') ? boozed_plp_url() : home_url('/');
-}
-$show_search = true;
+$search_url = function_exists('boozed_plp_url') ? boozed_plp_url() : home_url('/assortiment');
 
 $product_ids = [];
 $post_type   = 'product';

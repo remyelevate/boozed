@@ -26,6 +26,11 @@ if ($is_archive) {
 	$filter_query_args = $filter_slug ? [ 'locatie' => $filter_slug ] : [];
 } else {
 	$paged = 1;
+	// Support both pagination URL styles:
+	// - `/page/N/` => WordPress sets the `paged` query var
+	// - `...?paged=N` => `paged` appears in the query string
+	$paged_from_wp = get_query_var('paged', 1);
+	$paged = is_numeric($paged_from_wp) ? max(1, (int) $paged_from_wp) : 1;
 	if (isset($_GET['paged']) && is_numeric($_GET['paged'])) {
 		$paged = max(1, (int) $_GET['paged']);
 	}

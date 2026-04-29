@@ -22,6 +22,23 @@ $category_slug = isset($_GET['category']) ? sanitize_text_field(wp_unslash($_GET
 $current_url   = get_permalink();
 
 $paged = 1;
+// Support both pagination URL styles:
+// - `/nieuws/page/3/` => WordPress sets the `paged` query var
+// - `...?paged=3`    => `paged` appears in the query string
+$paged_from_wp = get_query_var('paged', 0);
+if (is_numeric($paged_from_wp) && (int) $paged_from_wp > 0) {
+	$paged = max(1, (int) $paged_from_wp);
+} else {
+	// Fallback: parse `/page/<n>/` directly from the request URL.
+	$req_uri = isset($_SERVER['REQUEST_URI']) ? sanitize_text_field(wp_unslash($_SERVER['REQUEST_URI'])) : '';
+	$parsed_paged = 0;
+	if ($req_uri !== '' && preg_match('#/page/([0-9]+)/#', $req_uri, $m)) {
+		$parsed_paged = (int) ($m[1] ?? 0);
+	}
+	if ($parsed_paged > 0) {
+		$paged = max(1, $parsed_paged);
+	}
+}
 if (isset($_GET['paged']) && is_numeric($_GET['paged'])) {
 	$paged = max(1, (int) $_GET['paged']);
 }

@@ -22,11 +22,11 @@ class ProductSlider
                 ],
                 [
                     'key'           => 'field_boozed_product_slider_search_url',
-                    'label'         => __('Search bar URL', 'boozed'),
+                    'label'         => __('Show search bar', 'boozed'),
                     'name'          => 'product_slider_search_url',
-                    'type'          => 'link',
-                    'return_format' => 'url',
-                    'instructions'  => __('URL of the catalog/search page. Leave empty to hide the search bar.', 'boozed'),
+                    'type'          => 'true_false',
+                    'instructions'  => __('Enable to show the search bar. Submits to the PLP at /assortiment.', 'boozed'),
+                    'default_value' => 1,
                     'wrapper'       => ['width' => '50'],
                 ],
                 [
