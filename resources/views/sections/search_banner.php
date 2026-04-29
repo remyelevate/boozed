@@ -16,8 +16,16 @@ $placeholder    = $placeholder ?: 'Zoek naar meer dan 2000 items uit onze catalo
 $right_title    = $right_title ?: 'Wat kun je huren?';
 $right_body     = $right_body ?: "Om je een indruk te geven van wat wij allemaal verhuren hebben wij onze productcategoriën hieronder voor je uitgewerkt. Weet je al wat je nodig hebt? Gebruik dan de zoekfunctie hiernaast. Wil je liever gelijk alle verhuurproducten bekijken? Klik dan hiernaast.";
 
-// Search results page: use ACF URL or default to /zoeken/ (to be built later)
-$form_action = $results_url !== '' ? $results_url : home_url('/zoeken/');
+// Search results page: use ACF URL or default to the assortment (PLP) page.
+$assortiment_url = function_exists('boozed_plp_url') ? boozed_plp_url() : home_url('/assortiment/');
+$form_action = $results_url !== '' ? $results_url : $assortiment_url;
+
+// Some editors/configurations may still point to the /zoeken/ page (which is currently broken).
+// If configured to /zoeken/, always fall back to assortiment to avoid a 404.
+$form_action_path = trim((string) parse_url((string) $form_action, PHP_URL_PATH), '/');
+if ($form_action_path === 'zoeken') {
+	$form_action = $assortiment_url;
+}
 
 $search_icon_svg = '<svg xmlns="http://www.w3.org/2000/svg" width="1.25em" height="1.25em" viewBox="0 0 256 256" fill="currentColor" class="text-brand-black/50 shrink-0" aria-hidden="true"><path d="m228.24 219.76l-51.38-51.38a86.15 86.15 0 1 0-8.48 8.48l51.38 51.38a6 6 0 0 0 8.48-8.48ZM38 118a76 76 0 1 1 76 76a76.08 76.08 0 0 1-76-76Z"/></svg>';
 ?>

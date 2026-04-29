@@ -27,6 +27,7 @@ use App\Fields\Sections\Faq;
 use App\Fields\Sections\MapBanner;
 use App\Fields\Sections\YoutubeEmbed;
 use App\Fields\Sections\Wysiwyg;
+use App\Fields\Sections\ProductSlider;
 
 class ProjectFields
 {

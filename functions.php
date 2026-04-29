@@ -307,6 +307,40 @@ function boozed_plp_url()
 }
 
 /**
+ * Redirect broken `/zoeken/` route to the assortiment (PLP) page.
+ *
+ * Some search UIs still submit to `/zoeken/` which currently returns a 404.
+ * This keeps search functional by routing it to the product lister instead.
+ */
+add_action('template_redirect', function () {
+    if (is_admin()) {
+        return;
+    }
+
+    $request_path = trim((string) parse_url((string) ($_SERVER['REQUEST_URI'] ?? ''), PHP_URL_PATH), '/');
+    if ($request_path !== 'zoeken') {
+        return;
+    }
+
+    $target = function_exists('boozed_plp_url') ? boozed_plp_url() : home_url('/assortiment/');
+
+    $args = [];
+    if (isset($_GET['q'])) {
+        $args['q'] = sanitize_text_field(wp_unslash((string) $_GET['q']));
+    } elseif (isset($_GET['s'])) {
+        // Backwards compatibility: WordPress search uses `s`, while the PLP uses `q`.
+        $args['q'] = sanitize_text_field(wp_unslash((string) $_GET['s']));
+    }
+
+    if (! empty($args)) {
+        $target = add_query_arg($args, $target);
+    }
+
+    wp_safe_redirect($target, 301);
+    exit;
+});
+
+/**
  * Permalink for the news overview (page slug "nieuws", else Posts page, else home).
  */
 function boozed_news_index_url()

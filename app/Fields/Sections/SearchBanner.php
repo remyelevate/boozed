@@ -34,7 +34,7 @@ class SearchBanner
                     'name'          => 'search_banner_results_url',
                     'type'          => 'link',
                     'return_format' => 'url',
-                    'instructions'  => __('Page where search results will be shown. Leave empty to use default (e.g. /zoeken/).', 'boozed'),
+                    'instructions'  => __('Page where search results will be shown. Leave empty to use default (e.g. /assortiment/).', 'boozed'),
                     'wrapper'       => ['width' => '100'],
                 ],
                 [

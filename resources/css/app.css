@@ -438,6 +438,12 @@
     padding-top: calc(var(--page-header-site-header-offset) + 24px);
   }
 
+  /* Projects PLP: keep title/filters clear of the fixed header */
+  body.post-type-archive-project .projects-lister,
+  body.page-template-page-flexible .projects-lister:first-of-type {
+    padding-top: calc(var(--page-header-site-header-offset) + 24px);
+  }
+
   .page-header__cta-secondary::after {
     content: '';
     @apply block absolute bottom-0 left-0 h-0.5 bg-brand-coral origin-left transition-[width] duration-200 ease-out;

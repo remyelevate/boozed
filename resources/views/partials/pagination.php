@@ -17,9 +17,11 @@ $base = str_replace(999999999, '%#%', esc_url(get_pagenum_link(999999999)));
 
 // On a static page with sections, use permalink + paged=%#% and any preserved query args
 if (is_singular()) {
-	$base = add_query_arg(array_merge($query_args, [ 'paged' => '%#%' ]), get_permalink());
-	$base = str_replace('%#%', '999999999', $base);
-	$base = str_replace('999999999', '%#%', esc_url($base));
+	// IMPORTANT: `add_query_arg()` will URL-encode the placeholder if we pass '%#%'.
+	// Use a safe token and inject '%#%' after escaping so `paginate_links()` can substitute it.
+	$paged_placeholder = 'BOOZED_PAGED_PLACEHOLDER';
+	$base = add_query_arg(array_merge($query_args, [ 'paged' => $paged_placeholder ]), get_permalink());
+	$base = str_replace($paged_placeholder, '%#%', esc_url($base));
 }
 
 $links = paginate_links([
