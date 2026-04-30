@@ -73,7 +73,7 @@ if (is_wp_error($filter_terms)) {
 				$title       = get_the_title($post);
 				$excerpt     = has_excerpt($post) ? get_the_excerpt($post) : wp_trim_words(get_the_content(null, false, $post), 25);
 				$thumb_id    = get_post_thumbnail_id($post);
-				$featured_url = $thumb_id ? wp_get_attachment_image_url($thumb_id, 'large') : '';
+				$featured_url = $thumb_id ? wp_get_attachment_image_url($thumb_id, 'full') : '';
 				?>
 				<a href="<?php echo esc_url($permalink); ?>" class="tl-card group flex flex-col rounded-lg overflow-hidden bg-transparent no-underline text-inherit outline-none focus:outline-none [&_*]:!cursor-none cursor-none" role="listitem">
 					<div class="tl-card__img aspect-[4/3] overflow-hidden bg-brand-border">

@@ -11,7 +11,7 @@ $heading        = function_exists('get_sub_field') ? (string) get_sub_field('req
 $form_shortcode = function_exists('get_sub_field') ? (string) get_sub_field('request_account_form_shortcode') : '';
 
 $heading      = $heading ?: 'Vul je gegevens in';
-$image_url   = $image_id ? wp_get_attachment_image_url($image_id, 'large') : '';
+$image_url   = $image_id ? wp_get_attachment_image_url($image_id, 'full') : '';
 $has_image   = $image_url !== '';
 ?>
 <section class="section-request-account bg-brand-white">

@@ -15,8 +15,8 @@ $image_1_id    = function_exists('get_sub_field') ? (int) get_sub_field('intake_
 $image_2_id    = function_exists('get_sub_field') ? (int) get_sub_field('intake_process_image_2') : 0;
 $steps_raw     = function_exists('get_sub_field') ? (array) get_sub_field('intake_process_steps') : [];
 
-$image_1_url = $image_1_id ? wp_get_attachment_image_url($image_1_id, 'large') : '';
-$image_2_url = $image_2_id ? wp_get_attachment_image_url($image_2_id, 'large') : '';
+$image_1_url = $image_1_id ? wp_get_attachment_image_url($image_1_id, 'full') : '';
+$image_2_url = $image_2_id ? wp_get_attachment_image_url($image_2_id, 'full') : '';
 $show_button = $button_url !== '' && $button_label !== '';
 
 $steps = [];

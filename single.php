@@ -31,7 +31,7 @@ while (have_posts()) {
         <section class="single-post-banner w-full bg-brand-border" aria-hidden="true">
             <div class="single-post-banner__inner max-w-section mx-auto w-full">
                 <div class="single-post-banner__image-wrap w-full h-[50vw] min-h-[280px] md:h-[400px] overflow-hidden">
-                    <?php echo get_the_post_thumbnail($post_id, 'large', ['class' => 'w-full h-full object-cover', 'loading' => 'eager']); ?>
+                    <?php echo get_the_post_thumbnail($post_id, 'full', ['class' => 'w-full h-full object-cover', 'loading' => 'eager']); ?>
                 </div>
             </div>
         </section>

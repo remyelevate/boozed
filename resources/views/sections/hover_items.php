@@ -14,7 +14,7 @@ $cursor_label    = function_exists('get_sub_field') ? (string) get_sub_field('ho
 $cursor_label    = $cursor_label !== '' ? $cursor_label : 'Lees meer';
 $items           = function_exists('get_sub_field') ? array_slice((array) get_sub_field('hover_items_items'), 0, 6) : [];
 
-$default_img_url = $default_img_id ? wp_get_attachment_image_url($default_img_id, 'large') : '';
+$default_img_url = $default_img_id ? wp_get_attachment_image_url($default_img_id, 'full') : '';
 $placeholder_img = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
 
 /* Phosphor CheckCircle icon (regular weight, coral fill) */
@@ -39,7 +39,7 @@ $checkmark_svg = '<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28"
 				<?php foreach ($items as $i => $item) :
 					$label  = isset($item['label']) ? (string) $item['label'] : '';
 					$img_id = isset($item['image']) ? (int) $item['image'] : 0;
-					$img_url = $img_id ? wp_get_attachment_image_url($img_id, 'large') : '';
+					$img_url = $img_id ? wp_get_attachment_image_url($img_id, 'full') : '';
 					if ($label === '') continue;
 				?>
 				<div class="hover-items__item flex items-center gap-3 border-t border-brand-border transition-colors duration-200"

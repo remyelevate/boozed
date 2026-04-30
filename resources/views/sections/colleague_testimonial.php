@@ -37,7 +37,7 @@ while ($testimonials_query->have_posts()) {
 	$items[]   = [
 		'title'     => $title,
 		'full_text' => $full_text,
-		'image_url' => $thumb_id ? wp_get_attachment_image_url($thumb_id, 'large') : '',
+		'image_url' => $thumb_id ? wp_get_attachment_image_url($thumb_id, 'full') : '',
 	];
 }
 wp_reset_postdata();

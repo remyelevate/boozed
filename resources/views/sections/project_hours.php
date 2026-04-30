@@ -57,7 +57,7 @@ $phosphor_chevron_right = '<svg xmlns="http://www.w3.org/2000/svg" width="1em" h
 				$number = isset($row['number']) ? (string) $row['number'] : '';
 				$label = isset($row['label']) ? (string) $row['label'] : '';
 				$img_id = isset($row['image']) ? (int) $row['image'] : 0;
-				$img_url = $img_id ? wp_get_attachment_image_url($img_id, 'large') : '';
+				$img_url = $img_id ? wp_get_attachment_image_url($img_id, 'full') : '';
 				?>
 				<div class="ph-table__row relative grid items-center border-b border-brand-black/10 transition-colors duration-200 group"
 				     <?php if ($img_url) : ?>data-featured-url="<?php echo esc_url($img_url); ?>"<?php endif; ?>>

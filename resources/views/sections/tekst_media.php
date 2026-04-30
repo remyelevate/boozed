@@ -21,7 +21,7 @@ $secondary_url     = function_exists('get_sub_field') ? (string) get_sub_field('
 
 $is_media_left     = ($position === 'left');
 $use_video         = ($media_type === 'video' && $video_url);
-$image_url         = $image_id ? wp_get_attachment_image_url($image_id, 'large') : '';
+$image_url         = $image_id ? wp_get_attachment_image_url($image_id, 'full') : '';
 $has_media         = $use_video || $image_url;
 $aspect_class      = ($image_ratio === 'landscape') ? 'aspect-[688/535]' : 'aspect-[535/688]';
 $show_primary_btn  = $primary_url !== '' && $primary_label !== '';

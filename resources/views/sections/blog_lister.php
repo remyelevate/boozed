@@ -67,7 +67,7 @@ $has_posts = !empty($posts);
 					$cats        = get_the_category($post->ID);
 					$cat_name    = ($cats && !is_wp_error($cats)) ? $cats[0]->name : '';
 					$thumb_id    = get_post_thumbnail_id($post);
-					$featured_url = $thumb_id ? wp_get_attachment_image_url($thumb_id, 'large') : '';
+					$featured_url = $thumb_id ? wp_get_attachment_image_url($thumb_id, 'full') : '';
 					?>
 					<a href="<?php echo esc_url($permalink); ?>" class="bl-card flex-shrink-0 flex rounded-lg overflow-hidden bg-brand-white border border-brand-border no-underline text-inherit hover:border-brand-purple/30 transition-colors" style="width: var(--bl-slide-width, 912px); height: 486px; min-height: 486px;"<?php echo $featured_url ? ' data-featured-url="' . esc_url($featured_url) . '"' : ''; ?> data-permalink="<?php echo esc_url($permalink); ?>" data-title="<?php echo esc_attr($title); ?>" data-excerpt="<?php echo esc_attr($excerpt); ?>" data-cat="<?php echo esc_attr($cat_name); ?>">
 						<div class="bl-card-text w-[426px] flex-shrink-0 p-8 flex flex-col justify-center">

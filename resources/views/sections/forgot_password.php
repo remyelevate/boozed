@@ -11,7 +11,7 @@ $reset_page_link = function_exists('get_sub_field') ? (string) get_sub_field('fo
 
 $heading   = $heading ?: __('Wachtwoord vergeten', 'boozed');
 $intro     = $intro ?: __('Vul je gebruikersnaam of e-mailadres in. We sturen je een link om je wachtwoord te resetten.', 'boozed');
-$image_url = $image_id ? wp_get_attachment_image_url($image_id, 'large') : '';
+$image_url = $image_id ? wp_get_attachment_image_url($image_id, 'full') : '';
 $has_image = $image_url !== '';
 $forgot_form_action = get_permalink() ? trailingslashit((string) get_permalink()) : (function_exists('boozed_forgot_password_page_url') ? boozed_forgot_password_page_url() : trailingslashit(home_url('/wachtwoord-vergeten')));
 $login_url = $login_page_link !== ''

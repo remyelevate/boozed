@@ -13,7 +13,7 @@ $content_label = function_exists('get_sub_field') ? (string) get_sub_field('high
 $content_url   = function_exists('get_sub_field') ? (string) get_sub_field('highlight_image_url') : '';
 
 $position     = $position === 'left' ? 'left' : 'right';
-$bg_image_url = $bg_image_id ? wp_get_attachment_image_url($bg_image_id, 'large') : '';
+$bg_image_url = $bg_image_id ? wp_get_attachment_image_url($bg_image_id, 'full') : '';
 $theme_uri    = get_template_directory_uri();
 $arrow_lottie = $theme_uri . '/assets/animations/arrow.json';
 

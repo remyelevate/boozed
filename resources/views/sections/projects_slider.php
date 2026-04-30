@@ -24,7 +24,7 @@ if ($content_source === 'custom') {
 		foreach ($raw_items as $row) {
 			$img_id = isset($row['image']) ? (int) $row['image'] : 0;
 			$items[] = [
-				'image_url' => $img_id ? wp_get_attachment_image_url($img_id, 'large') : '',
+				'image_url' => $img_id ? wp_get_attachment_image_url($img_id, 'full') : '',
 				'tagline'   => isset($row['tagline']) ? (string) $row['tagline'] : '',
 				'title'     => isset($row['title']) ? (string) $row['title'] : '',
 				'link'      => isset($row['link']) ? esc_url($row['link']) : '',
@@ -52,7 +52,7 @@ if ($content_source === 'custom') {
 			}
 		}
 		$items[] = [
-			'image_url' => $thumb_id ? wp_get_attachment_image_url($thumb_id, 'large') : '',
+			'image_url' => $thumb_id ? wp_get_attachment_image_url($thumb_id, 'full') : '',
 			'tagline'   => $tag_name,
 			'title'     => get_the_title(),
 			'link'      => get_permalink(),

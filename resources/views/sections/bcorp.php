@@ -14,7 +14,7 @@ $primary_url         = function_exists('get_sub_field') ? (string) get_sub_field
 $secondary_label     = function_exists('get_sub_field') ? (string) get_sub_field('bcorp_secondary_label') : '';
 $secondary_url       = function_exists('get_sub_field') ? (string) get_sub_field('bcorp_secondary_url') : '';
 
-$image_url         = $image_id ? wp_get_attachment_image_url($image_id, 'large') : '';
+$image_url         = $image_id ? wp_get_attachment_image_url($image_id, 'full') : '';
 $show_primary_btn  = $primary_url !== '' && $primary_label !== '';
 $show_secondary_btn = $secondary_url !== '' && $secondary_label !== '';
 $confetti_url      = get_template_directory_uri() . '/assets/animations/confetti.json';

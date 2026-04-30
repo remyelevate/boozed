@@ -24,24 +24,24 @@ $show_visible_link = $is_link && $show_link_label && $link_text !== '';
 $card_class = 'product-card flex flex-col bg-brand-white border border-brand-border shadow-sm overflow-hidden transition-shadow hover:shadow-md hover:border-brand-indigo/20 ' . $class;
 ?>
 <?php if ($is_link && !$show_visible_link) : ?>
-<a href="<?php echo esc_url($url); ?>" class="<?php echo esc_attr($card_class); ?>">
+<a href="<?php echo esc_url($url); ?>" class="<?php echo esc_attr($card_class); ?> h-full">
 <?php else : ?>
-<div class="<?php echo esc_attr($card_class); ?>">
+<div class="<?php echo esc_attr($card_class); ?> h-full">
 <?php endif; ?>
 	<div class="product-card__img <?php echo esc_attr($img_aspect_class); ?> w-full <?php echo esc_attr($img_bg_class); ?> overflow-hidden">
 		<?php if ($image_url !== '') : ?>
 			<img src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($image_alt ?: $title); ?>" class="w-full h-full object-cover" loading="lazy">
 		<?php endif; ?>
 	</div>
-	<div class="product-card__content p-4 md:p-5 flex flex-col gap-1">
+	<div class="product-card__content p-4 md:p-5 flex-1 flex flex-col gap-1">
 		<?php if ($category_label !== '') : ?>
 			<span class="product-card__category font-body text-body-sm text-brand-indigo/60"><?php echo esc_html($category_label); ?></span>
 		<?php endif; ?>
 		<?php if ($title !== '') : ?>
-			<h3 class="product-card__title font-heading font-bold text-body-md md:text-body-lg text-brand-indigo"><?php echo esc_html($title); ?></h3>
+			<h3 class="product-card__title font-heading font-bold text-body-md md:text-body-lg text-brand-indigo line-clamp-2 min-h-[3.25rem]"><?php echo esc_html($title); ?></h3>
 		<?php endif; ?>
 		<?php if ($price_html !== '') : ?>
-			<span class="product-card__price font-body text-body-sm font-medium text-brand-black"><?php echo wp_kses_post($price_html); ?></span>
+			<span class="product-card__price mt-auto font-body text-body-sm font-medium text-brand-black"><?php echo wp_kses_post($price_html); ?></span>
 		<?php endif; ?>
 		<?php if ($show_visible_link) : ?>
 			<a href="<?php echo esc_url($url); ?>" class="product-card__link-label inline-flex items-center gap-1 font-body text-body-sm font-medium text-brand-purple hover:text-brand-indigo focus:outline-none focus:ring-2 focus:ring-brand-purple focus:ring-offset-2 rounded mt-1 self-start">

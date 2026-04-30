@@ -184,7 +184,7 @@ $nonce       = wp_create_nonce('boozed_offerte_aanvraag');
 				<?php foreach ([1, 2, 3, 4] as $i) : ?>
 					<?php
 					$img_id = $image_ids[ $i ] ?? null;
-					$img_url = $img_id ? wp_get_attachment_image_url($img_id, 'large') : '';
+					$img_url = $img_id ? wp_get_attachment_image_url($img_id, 'full') : '';
 					?>
 					<div class="section-offerte-aanvraag__image-wrap <?php echo $i === 1 ? '' : 'hidden'; ?> overflow-hidden rounded-lg bg-brand-border aspect-[4/3]" data-image-step="<?php echo (int) $i; ?>">
 						<?php if ($img_url) : ?>

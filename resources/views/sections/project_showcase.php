@@ -11,8 +11,8 @@ $image_2_id  = function_exists('get_sub_field') ? get_sub_field('project_showcas
 $caption     = function_exists('get_sub_field') ? (string) get_sub_field('project_showcase_caption') : '';
 $description = function_exists('get_sub_field') ? get_sub_field('project_showcase_description') : '';
 
-$image_1_url = $image_1_id ? wp_get_attachment_image_url($image_1_id, 'large') : '';
-$image_2_url = $image_2_id ? wp_get_attachment_image_url($image_2_id, 'large') : '';
+$image_1_url = $image_1_id ? wp_get_attachment_image_url($image_1_id, 'full') : '';
+$image_2_url = $image_2_id ? wp_get_attachment_image_url($image_2_id, 'full') : '';
 $has_images  = $image_1_url || $image_2_url;
 ?>
 <section class="project-showcase max-w-section mx-auto px-4 py-10 md:px-0 md:py-section-y">

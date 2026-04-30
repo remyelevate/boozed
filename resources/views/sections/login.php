@@ -10,7 +10,7 @@ $intro    = function_exists('get_sub_field') ? (string) get_sub_field('login_int
 $forgot_page_link = function_exists('get_sub_field') ? (string) get_sub_field('login_forgot_password_page') : '';
 
 $heading   = $heading ?: __('Inloggen', 'boozed');
-$image_url = $image_id ? wp_get_attachment_image_url($image_id, 'large') : '';
+$image_url = $image_id ? wp_get_attachment_image_url($image_id, 'full') : '';
 $has_image = $image_url !== '';
 
 $redirect_to_param = '';

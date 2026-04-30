@@ -117,7 +117,7 @@ $project_types = get_terms([
 						$thumb_id = (int) $gallery[0];
 					}
 				}
-				$img_url = $thumb_id ? wp_get_attachment_image_url($thumb_id, 'large') : '';
+				$img_url = $thumb_id ? wp_get_attachment_image_url($thumb_id, 'full') : '';
 		?>
 		<a href="<?php echo esc_url($permalink); ?>"
 		   class="pl-table__row relative grid items-center border-b border-brand-black/10 no-underline transition-colors duration-200 group"

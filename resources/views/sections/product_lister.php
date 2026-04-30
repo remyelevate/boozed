@@ -112,7 +112,7 @@ if ($products_query->have_posts()) {
 		$products_query->the_post();
 		$pid = get_the_ID();
 		$thumb_id = get_post_thumbnail_id($pid);
-		$img_url  = $thumb_id ? wp_get_attachment_image_url($thumb_id, 'large') : '';
+		$img_url  = $thumb_id ? wp_get_attachment_image_url($thumb_id, 'full') : '';
 		$category = '';
 		if (taxonomy_exists('product_cat')) {
 			$terms = get_the_terms($pid, 'product_cat');

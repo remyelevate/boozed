@@ -13,7 +13,7 @@ $default_title   = function_exists('get_sub_field') ? (string) get_sub_field('fe
 $default_desc    = function_exists('get_sub_field') ? (string) get_sub_field('features_default_description') : '';
 $features_items  = function_exists('get_sub_field') ? array_slice((array) get_sub_field('features_items'), 0, 4) : [];
 
-$default_img_url = $default_img_id ? wp_get_attachment_image_url($default_img_id, 'large') : '';
+$default_img_url = $default_img_id ? wp_get_attachment_image_url($default_img_id, 'full') : '';
 $placeholder_img = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
 
 $phosphor_chevron_right = '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 256 256" fill="currentColor" class="w-5 h-5 shrink-0" aria-hidden="true"><path d="m181.66 133.66l-80 80a8 8 0 0 1-11.32-11.32L164.69 128L90.34 53.66a8 8 0 0 1 11.32-11.32l80 80a8 8 0 0 1 0 11.32Z"/></svg>';
@@ -40,7 +40,7 @@ $phosphor_chevron_right = '<svg xmlns="http://www.w3.org/2000/svg" width="1em" h
 				<?php foreach ($features_items as $item) :
 					$label   = isset($item['label']) ? (string) $item['label'] : '';
 					$img_id  = isset($item['image']) ? (int) $item['image'] : 0;
-					$img_url = $img_id ? wp_get_attachment_image_url($img_id, 'large') : '';
+					$img_url = $img_id ? wp_get_attachment_image_url($img_id, 'full') : '';
 					if ($label === '') continue;
 				?>
 				<div class="features__item flex items-center justify-between border-t border-brand-border transition-colors duration-200 cursor-default"

@@ -12,7 +12,7 @@ if (is_array($raw_items)) {
 	foreach ($raw_items as $row) {
 		$img_id = isset($row['image']) ? (int) $row['image'] : 0;
 		if (!$img_id) continue;
-		$img_url = wp_get_attachment_image_url($img_id, 'large');
+		$img_url = wp_get_attachment_image_url($img_id, 'full');
 		if (!$img_url) continue;
 		$items[] = ['image_url' => $img_url];
 	}

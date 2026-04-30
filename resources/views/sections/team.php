@@ -30,7 +30,7 @@ if (empty($items)) {
                 <article class="text-center">
                     <div class="aspect-square w-full bg-[#ece8e8] overflow-hidden">
                         <?php if (!empty($item['photo'])) : ?>
-                            <?php echo wp_get_attachment_image($item['photo'], 'large', false, ['class' => 'w-full h-full object-cover']); ?>
+                            <?php echo wp_get_attachment_image($item['photo'], 'full', false, ['class' => 'w-full h-full object-cover']); ?>
                         <?php endif; ?>
                     </div>
                     <h3 class="mt-4 text-lg font-semibold leading-tight"><?php echo esc_html($item['name']); ?></h3>

@@ -123,7 +123,7 @@ $locatie_terms = get_terms([
 				$niveau_name = ($niveau && !is_wp_error($niveau) && !empty($niveau)) ? $niveau[0]->name : '';
 				$dienst_name = ($dienst && !is_wp_error($dienst) && !empty($dienst)) ? $dienst[0]->name : '';
 				$thumb_id = get_post_thumbnail_id();
-				$img_url  = $thumb_id ? wp_get_attachment_image_url($thumb_id, 'large') : '';
+				$img_url  = $thumb_id ? wp_get_attachment_image_url($thumb_id, 'full') : '';
 		?>
 		<a href="<?php echo esc_url($permalink); ?>"
 		   class="vl-table__row vl-table__subgrid relative border-b border-brand-black/10 no-underline transition-colors duration-200 group"

@@ -17,7 +17,7 @@ foreach ($raw_items as $item) {
 	if ($heading === '' && ! $img_id) {
 		continue;
 	}
-	$img_url    = $img_id ? wp_get_attachment_image_url($img_id, 'large') : $placeholder_img;
+	$img_url    = $img_id ? wp_get_attachment_image_url($img_id, 'full') : $placeholder_img;
 	$eyebrow    = isset($item['eyebrow']) ? (string) $item['eyebrow'] : '';
 	$content    = isset($item['content']) ? (string) $item['content'] : '';
 	$list_rows  = isset($item['list_items']) && is_array($item['list_items']) ? $item['list_items'] : [];

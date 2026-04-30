@@ -69,7 +69,7 @@ $pdp_label_gewicht        = (function_exists('get_field') ? (string) get_field('
 $pdp_label_sku            = (function_exists('get_field') ? (string) get_field('pdp_label_sku', 'option') : '') ?: __('SKU', 'boozed');
 
 $thumb_id = get_post_thumbnail_id($post_id);
-$main_image_url = $thumb_id ? wp_get_attachment_image_url($thumb_id, 'large') : '';
+$main_image_url = $thumb_id ? wp_get_attachment_image_url($thumb_id, 'full') : '';
 $main_image_alt = get_the_title();
 $is_in_wishlist = is_user_logged_in() && class_exists(\App\WishlistHandler::class)
     ? \App\WishlistHandler::isProductInCurrentUserWishlists((int) $post_id)
@@ -116,7 +116,7 @@ $show_prices = is_user_logged_in() && function_exists('wc_get_product');
 $related_items = [];
 foreach ($related_ids as $pid) {
     $thumb_id_rel = get_post_thumbnail_id($pid);
-    $img_url_rel  = $thumb_id_rel ? wp_get_attachment_image_url($thumb_id_rel, 'large') : '';
+    $img_url_rel  = $thumb_id_rel ? wp_get_attachment_image_url($thumb_id_rel, 'full') : '';
     $cat_label    = '';
     if (taxonomy_exists('product_cat')) {
         $terms_rel = get_the_terms($pid, 'product_cat');

@@ -90,7 +90,7 @@ $filter_query_args = $category_slug !== '' ? ['category' => $category_slug] : []
 			while ($news_query->have_posts()) {
 				$news_query->the_post();
 				$thumb_id = get_post_thumbnail_id(get_the_ID());
-				$img_url  = $thumb_id ? wp_get_attachment_image_url($thumb_id, 'large') : '';
+				$img_url  = $thumb_id ? wp_get_attachment_image_url($thumb_id, 'full') : '';
 				$excerpt  = has_excerpt() ? get_the_excerpt() : wp_trim_words(get_the_content(), 25);
 				\App\Components::render('news-card', [
 					'permalink'      => get_permalink(),

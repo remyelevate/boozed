@@ -11,7 +11,7 @@ $use_featured = ($raw === null || $raw === '') ? true : (bool) $raw;
 $post_id     = get_the_ID();
 $thumb_id    = $post_id ? get_post_thumbnail_id($post_id) : null;
 $image_id    = $use_featured ? $thumb_id : (function_exists('get_sub_field') ? get_sub_field('banner_image') : null);
-$image_url   = $image_id ? wp_get_attachment_image_url($image_id, 'large') : '';
+$image_url   = $image_id ? wp_get_attachment_image_url($image_id, 'full') : '';
 
 if (!$image_url) {
     return;
