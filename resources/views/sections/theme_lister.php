@@ -69,7 +69,7 @@ if (is_wp_error($filter_terms)) {
 			<?php
 			foreach ($themes as $post) {
 				setup_postdata($post);
-				$permalink   = get_permalink($post);
+				$permalink   = function_exists('boozed_thema_card_url') ? boozed_thema_card_url($post->ID) : get_permalink($post);
 				$title       = get_the_title($post);
 				$excerpt     = has_excerpt($post) ? get_the_excerpt($post) : wp_trim_words(get_the_content(null, false, $post), 25);
 				$thumb_id    = get_post_thumbnail_id($post);

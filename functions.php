@@ -307,6 +307,119 @@ function boozed_plp_url()
 }
 
 /**
+ * Resolve how a Thema card should behave in the lister.
+ *
+ * @param int $thema_id
+ * @return string Either "detail" or "products".
+ */
+function boozed_thema_click_target($thema_id)
+{
+    $thema_id = (int) $thema_id;
+    if ($thema_id <= 0 || !function_exists('get_field')) {
+        return 'detail';
+    }
+    $target = (string) get_field('thema_click_target', $thema_id);
+    return in_array($target, ['detail', 'products'], true) ? $target : 'detail';
+}
+
+/**
+ * Build the PLP URL for a Thema based on its first Product Slider section.
+ *
+ * @param int $thema_id
+ * @return string Empty string when no valid PLP target can be resolved.
+ */
+function boozed_thema_products_url($thema_id)
+{
+    $thema_id = (int) $thema_id;
+    if ($thema_id <= 0 || !function_exists('get_field')) {
+        return '';
+    }
+
+    $sections = get_field('sections', $thema_id);
+    if (!is_array($sections) || empty($sections)) {
+        return '';
+    }
+
+    foreach ($sections as $row) {
+        if (!is_array($row)) {
+            continue;
+        }
+
+        $layout = isset($row['acf_fc_layout']) ? (string) $row['acf_fc_layout'] : '';
+        if (function_exists('boozed_section_layout_name')) {
+            $layout = boozed_section_layout_name($layout);
+        }
+        if ($layout !== 'product_slider') {
+            continue;
+        }
+
+        $source = isset($row['product_slider_source']) ? (string) $row['product_slider_source'] : 'manual';
+        if ($source === 'tags' || $source === 'collection') {
+            $taxonomy = $source === 'tags' ? 'product_tag' : 'product_cat';
+            $param    = $source === 'tags' ? 'product_tag' : 'product_cat';
+            $raw_ids  = $source === 'tags'
+                ? ($row['product_slider_tag_terms'] ?? [])
+                : ($row['product_slider_collection_terms'] ?? []);
+
+            if (!is_array($raw_ids)) {
+                $raw_ids = is_numeric($raw_ids) ? [(int) $raw_ids] : [];
+            }
+
+            $term_ids = array_values(array_filter(array_map('intval', $raw_ids)));
+            if (empty($term_ids)) {
+                continue;
+            }
+
+            $slugs = [];
+            foreach ($term_ids as $term_id) {
+                $term = get_term($term_id, $taxonomy);
+                if ($term && !is_wp_error($term)) {
+                    $slugs[] = $term->slug;
+                }
+            }
+            if (empty($slugs)) {
+                continue;
+            }
+
+            $url = function_exists('boozed_plp_url') ? boozed_plp_url() : home_url('/assortiment/');
+            foreach ($slugs as $slug) {
+                $url = add_query_arg($param . '[]', $slug, $url);
+            }
+            return (string) $url;
+        }
+
+        if (!empty($row['product_slider_button_url']) && is_string($row['product_slider_button_url'])) {
+            return esc_url_raw($row['product_slider_button_url']);
+        }
+    }
+
+    return '';
+}
+
+/**
+ * Public URL for a Thema card in the lister.
+ *
+ * @param int $thema_id
+ * @return string
+ */
+function boozed_thema_card_url($thema_id)
+{
+    $thema_id = (int) $thema_id;
+    if ($thema_id <= 0) {
+        return home_url('/');
+    }
+
+    if (boozed_thema_click_target($thema_id) === 'products') {
+        $products_url = boozed_thema_products_url($thema_id);
+        if ($products_url !== '') {
+            return $products_url;
+        }
+    }
+
+    return get_permalink($thema_id);
+}
+
+/**
  * Redirect broken `/zoeken/` route to the assortiment (PLP) page.
  *
  * Some search UIs still submit to `/zoeken/` which currently returns a 404.
@@ -318,27 +431,70 @@ add_action('template_redirect', function () {
     }
 
     $request_path = trim((string) parse_url((string) ($_SERVER['REQUEST_URI'] ?? ''), PHP_URL_PATH), '/');
-    if ($request_path !== 'zoeken') {
+
+    // Broken WordPress-ish search route: `/zoeken/?s=...` => `/assortiment/?q=...`
+    if ($request_path === 'zoeken') {
+        $target = function_exists('boozed_plp_url') ? boozed_plp_url() : home_url('/assortiment/');
+
+        $args = [];
+        if (isset($_GET['q'])) {
+            $args['q'] = sanitize_text_field(wp_unslash((string) $_GET['q']));
+        } elseif (isset($_GET['s'])) {
+            // Backwards compatibility: WordPress search uses `s`, while the PLP uses `q`.
+            $args['q'] = sanitize_text_field(wp_unslash((string) $_GET['s']));
+        }
+
+        if (! empty($args)) {
+            $target = add_query_arg($args, $target);
+        }
+
+        wp_safe_redirect($target, 301);
+        exit;
+    }
+
+    // Ensure the PLP always uses `q` (internal code supports `s`, but URL should be consistent).
+    if ($request_path === 'assortiment' && isset($_GET['s']) && ! isset($_GET['q'])) {
+        $target = function_exists('boozed_plp_url') ? boozed_plp_url() : home_url('/assortiment/');
+
+        $q = sanitize_text_field(wp_unslash((string) $_GET['s']));
+        if ($q !== '') {
+            $redirect_args = $_GET;
+            unset($redirect_args['s']);
+            $redirect_args['q'] = $q;
+
+            $target = add_query_arg($redirect_args, $target);
+            wp_safe_redirect($target, 301);
+            exit;
+        }
+    }
+});
+
+/**
+ * Optional Thema redirect: send visitors directly to PLP when enabled per Thema.
+ */
+add_action('template_redirect', function () {
+    if (is_admin() || !is_singular('thema')) {
         return;
     }
 
-    $target = function_exists('boozed_plp_url') ? boozed_plp_url() : home_url('/assortiment/');
-
-    $args = [];
-    if (isset($_GET['q'])) {
-        $args['q'] = sanitize_text_field(wp_unslash((string) $_GET['q']));
-    } elseif (isset($_GET['s'])) {
-        // Backwards compatibility: WordPress search uses `s`, while the PLP uses `q`.
-        $args['q'] = sanitize_text_field(wp_unslash((string) $_GET['s']));
+    $thema_id = get_queried_object_id();
+    if (!$thema_id || boozed_thema_click_target($thema_id) !== 'products') {
+        return;
     }
 
-    if (! empty($args)) {
-        $target = add_query_arg($args, $target);
+    $target = boozed_thema_products_url($thema_id);
+    if ($target === '') {
+        return;
     }
 
-    wp_safe_redirect($target, 301);
+    $single_url = get_permalink($thema_id);
+    if ($single_url && untrailingslashit((string) strtok($target, '?')) === untrailingslashit((string) strtok($single_url, '?'))) {
+        return;
+    }
+
+    wp_safe_redirect($target, 302);
     exit;
-});
+}, 20);
 
 /**
  * Permalink for the news overview (page slug "nieuws", else Posts page, else home).

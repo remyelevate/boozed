@@ -41,7 +41,7 @@ $search_icon_svg = '<svg xmlns="http://www.w3.org/2000/svg" width="1.25em" heigh
 						<input
 							type="search"
 							id="search-banner-input"
-							name="s"
+							name="q"
 							class="search-banner__input flex-1 min-w-0 bg-transparent border-0 font-body text-body-md text-brand-black placeholder:text-brand-black/50 focus:outline-none focus:ring-0"
 							placeholder="<?php echo esc_attr($placeholder); ?>"
 							autocomplete="off"

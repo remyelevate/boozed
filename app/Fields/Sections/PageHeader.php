@@ -70,6 +70,7 @@ class PageHeader
                     'tabs'          => 'all',
                     'toolbar'       => 'basic',
                     'media_upload'  => 0,
+                    'delay'         => 0,
                     'wrapper'       => ['width' => '100'],
                     'conditional_logic' => [
                         [['field' => 'field_boozed_page_header_content_type', 'operator' => '==', 'value' => 'content_and_ctas']],

@@ -46,6 +46,19 @@ class ThemaFields
     {
         return [
             [
+                'key'           => 'field_boozed_thema_click_target',
+                'label'         => __('Klikgedrag op thema lister', 'boozed'),
+                'name'          => 'thema_click_target',
+                'type'          => 'radio',
+                'instructions'  => __("Kies of een klik op dit thema in de thema lister naar de detailpagina gaat of direct naar de thema-producten op de PLP.", 'boozed'),
+                'choices'       => [
+                    'detail'  => __('Ga naar thema detailpagina', 'boozed'),
+                    'products' => __('Ga direct naar thema-producten (PLP)', 'boozed'),
+                ],
+                'default_value' => 'detail',
+                'layout'        => 'vertical',
+            ],
+            [
                 'key'           => 'field_boozed_thema_sections',
                 'label'         => __('Sections', 'boozed'),
                 'name'          => 'sections',

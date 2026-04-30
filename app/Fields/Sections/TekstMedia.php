@@ -106,6 +106,10 @@ class TekstMedia
                     'label'   => 'Content',
                     'name'    => 'tekst_media_content',
                     'type'    => 'wysiwyg',
+                    'tabs'    => 'all',
+                    'toolbar' => 'full',
+                    'media_upload'  => 1,
+                    'delay'   => 0,
                     'wrapper' => ['width' => '100'],
                 ],
                 [

@@ -290,6 +290,39 @@ add_action('acf/init', function () {
     ]);
 });
 
+/**
+ * ACF hides the Visual/Text (code) tabs for `wysiwyg` fields when
+ * `user_can_richedit()` is false. Some roles/users don't have that
+ * capability, but we still want the tabs visible in the ACF UI.
+ *
+ * Scope: only while ACF is rendering a `wysiwyg` field (theme admin screens).
+ */
+$boozed_acf_force_richedit_for_wysiwyg = false;
+add_action('acf/render_field', function ($field) {
+    if (!is_admin()) {
+        return;
+    }
+    global $boozed_acf_force_richedit_for_wysiwyg;
+    $boozed_acf_force_richedit_for_wysiwyg = is_array($field) && (($field['type'] ?? '') === 'wysiwyg');
+}, -1000);
+add_action('acf/render_field', function () {
+    if (!is_admin()) {
+        return;
+    }
+    global $boozed_acf_force_richedit_for_wysiwyg;
+    $boozed_acf_force_richedit_for_wysiwyg = false;
+}, 10000);
+add_filter('user_can_richedit', function ($can) {
+    if (!is_admin()) {
+        return $can;
+    }
+    global $boozed_acf_force_richedit_for_wysiwyg;
+    if (!empty($boozed_acf_force_richedit_for_wysiwyg)) {
+        return true;
+    }
+    return $can;
+}, 999);
+
 add_action('acf/init', function () {
     if (!function_exists('acf_add_local_field_group')) {
         return;
