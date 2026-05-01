@@ -335,6 +335,32 @@ function boozed_thema_products_url($thema_id)
         return '';
     }
 
+    $plp_url = function_exists('boozed_plp_url') ? boozed_plp_url() : home_url('/assortiment/');
+
+    $thema_plp_tags = get_field('thema_plp_tags', $thema_id);
+    if (!is_array($thema_plp_tags)) {
+        $thema_plp_tags = is_numeric($thema_plp_tags) ? [(int) $thema_plp_tags] : [];
+    }
+
+    $thema_plp_tag_ids = array_values(array_filter(array_map('intval', $thema_plp_tags)));
+    if (!empty($thema_plp_tag_ids)) {
+        $tag_slugs = [];
+        foreach ($thema_plp_tag_ids as $term_id) {
+            $term = get_term($term_id, 'product_tag');
+            if ($term && !is_wp_error($term)) {
+                $tag_slugs[] = $term->slug;
+            }
+        }
+
+        if (!empty($tag_slugs)) {
+            $url = $plp_url;
+            foreach ($tag_slugs as $slug) {
+                $url = add_query_arg('product_tag[]', $slug, $url);
+            }
+            return (string) $url;
+        }
+    }
+
     $sections = get_field('sections', $thema_id);
     if (!is_array($sections) || empty($sections)) {
         return '';
@@ -381,7 +407,7 @@ function boozed_thema_products_url($thema_id)
                 continue;
             }
 
-            $url = function_exists('boozed_plp_url') ? boozed_plp_url() : home_url('/assortiment/');
+            $url = $plp_url;
             foreach ($slugs as $slug) {
                 $url = add_query_arg($param . '[]', $slug, $url);
             }

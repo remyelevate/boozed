@@ -59,6 +59,32 @@ class ThemaFields
                 'layout'        => 'vertical',
             ],
             [
+                'key'               => 'field_boozed_thema_plp_tags',
+                'label'             => __('PLP tags', 'boozed'),
+                'name'              => 'thema_plp_tags',
+                'type'              => 'taxonomy',
+                'taxonomy'          => 'product_tag',
+                'field_type'        => 'multi_select',
+                'instructions'      => __('Selecteer 1 of meer product tags die gebruikt worden om naar de juiste PLP te linken.', 'boozed'),
+                'allow_null'        => 0,
+                'add_term'          => 0,
+                'save_terms'        => 0,
+                'load_terms'        => 0,
+                'return_format'     => 'id',
+                'multiple'          => 1,
+                'required'          => 1,
+                'conditional_logic' => [
+                    [
+                        [
+                            'field'    => 'field_boozed_thema_click_target',
+                            'operator' => '==',
+                            'value'    => 'products',
+                        ],
+                    ],
+                ],
+                'wrapper'           => ['width' => '100'],
+            ],
+            [
                 'key'           => 'field_boozed_thema_sections',
                 'label'         => __('Sections', 'boozed'),
                 'name'          => 'sections',
