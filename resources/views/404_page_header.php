@@ -15,12 +15,12 @@ $phosphor_chevron_right = '<svg xmlns="http://www.w3.org/2000/svg" width="1em" h
 ?>
 <section class="page-header page-header--title-top-min <?php echo esc_attr( $bg_class ); ?> min-h-0 flex flex-col justify-start overflow-x-hidden" data-page-header-background="<?php echo esc_attr( $background ); ?>" data-page-header-title-top-spacing="min">
 	<?php if ( $title !== '' ) : ?>
-		<div class="page-header__title-wrap w-full min-w-[100vw] overflow-x-hidden overflow-y-visible pointer-events-none mb-4 md:mb-6">
+		<div class="page-header__title-wrap w-full min-w-[100vw] overflow-x-hidden overflow-y-visible pointer-events-none mb-4 md:mb-6 pb-1 md:pb-2">
 			<div class="page-header__title-inner flex whitespace-nowrap will-change-transform pl-4 md:pl-section-x" style="margin-left: max(0px, calc((100% - 1920px) / 2));">
-				<h1 class="page-header__title font-heading font-bold text-[40px] leading-tight md:text-[124px] md:leading-[1.1] <?php echo esc_attr( $title_color ); ?> inline-block pr-[1em]">
+				<h1 class="page-header__title font-heading font-bold text-[40px] leading-tight md:text-[124px] md:leading-[1.1] <?php echo esc_attr( $title_color ); ?> inline-block pr-[1em] pb-1 md:pb-2">
 					<?php echo esc_html( $title ); ?>
 				</h1>
-				<span class="page-header__title-dupe font-heading font-bold text-[40px] leading-tight md:text-[124px] md:leading-[1.1] <?php echo esc_attr( $title_color ); ?> inline-block pr-[1em] hidden" aria-hidden="true">
+				<span class="page-header__title-dupe font-heading font-bold text-[40px] leading-tight md:text-[124px] md:leading-[1.1] <?php echo esc_attr( $title_color ); ?> inline-block pr-[1em] pb-1 md:pb-2 hidden" aria-hidden="true">
 					<?php echo esc_html( $title ); ?>
 				</span>
 			</div>

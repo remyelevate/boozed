@@ -63,7 +63,7 @@ $title_color = 'text-brand-indigo';
 
 	<?php if ($banner_id > 0) : ?>
 		<div class="vacature-content__banner max-w-section mx-auto px-section-x w-full overflow-hidden">
-			<?php echo wp_get_attachment_image($banner_id, 'full', false, ['class' => 'w-full h-auto object-cover', 'loading' => 'lazy']); ?>
+			<?php echo wp_get_attachment_image($banner_id, 'full', false, ['class' => 'w-full h-[260px] md:h-[420px] object-cover', 'loading' => 'lazy']); ?>
 		</div>
 	<?php endif; ?>
 

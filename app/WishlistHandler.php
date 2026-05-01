@@ -588,7 +588,6 @@ class WishlistHandler
                 'url'        => get_permalink($product_id),
                 'image_url'  => get_the_post_thumbnail_url($product_id, 'thumbnail') ?: '',
                 'price_html' => $product ? $product->get_price_html() : '',
-                'stock_text' => $product && $product->is_in_stock() ? __('Op voorraad', 'boozed') : __('Niet op voorraad', 'boozed'),
             ];
         }
         return $items;

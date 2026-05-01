@@ -66,7 +66,6 @@ $pdp_maatwerk_btn         = (function_exists('get_field') ? (string) get_field('
 $pdp_related_link_text    = (function_exists('get_field') ? (string) get_field('pdp_related_link_text', 'option') : '') ?: __('Bekijken >', 'boozed');
 $pdp_label_afmetingen     = (function_exists('get_field') ? (string) get_field('pdp_label_afmetingen', 'option') : '') ?: __('Afmetingen', 'boozed');
 $pdp_label_gewicht        = (function_exists('get_field') ? (string) get_field('pdp_label_gewicht', 'option') : '') ?: __('Gewicht', 'boozed');
-$pdp_label_sku            = (function_exists('get_field') ? (string) get_field('pdp_label_sku', 'option') : '') ?: __('SKU', 'boozed');
 
 $thumb_id = get_post_thumbnail_id($post_id);
 $main_image_url = $thumb_id ? wp_get_attachment_image_url($thumb_id, 'full') : '';
@@ -309,13 +308,7 @@ $check_icon = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns
 							<dd class="mt-0.5"><?php printf(esc_html__('%s kg', 'boozed'), esc_html($product->get_weight())); ?></dd>
 						</div>
 					<?php endif; ?>
-					<?php if ($product->get_sku()) : ?>
-						<div>
-							<dt class="font-medium text-brand-indigo"><?php echo esc_html($pdp_label_sku); ?></dt>
-							<dd class="mt-0.5"><?php echo esc_html($product->get_sku()); ?></dd>
-						</div>
-					<?php endif; ?>
-					<?php if (!$product->get_short_description() && !$has_dimensions && !$product->get_weight() && !$product->get_sku()) : ?>
+					<?php if (!$product->get_short_description() && !$has_dimensions && !$product->get_weight()) : ?>
 						<p class="text-brand-black/70"><?php echo esc_html($pdp_geen_extra_info); ?></p>
 					<?php endif; ?>
 				</dl>

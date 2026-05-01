@@ -120,12 +120,12 @@ $page_header_title_wrap_mb = ($page_header_show_post_meta || $page_header_nieuws
 ?>
 <section class="page-header <?php echo esc_attr($bg_class); ?> <?php echo esc_attr($page_header_pt_class); ?> min-h-0 flex flex-col justify-start overflow-x-hidden" data-page-header-background="<?php echo esc_attr($background); ?>" data-page-header-title-top-spacing="<?php echo esc_attr($title_top_spacing); ?>">
 	<?php if ($title !== '') : ?>
-		<div class="page-header__title-wrap w-full min-w-[100vw] overflow-x-hidden overflow-y-visible pointer-events-none <?php echo esc_attr($page_header_title_wrap_mb); ?>">
+		<div class="page-header__title-wrap w-full min-w-[100vw] overflow-x-hidden overflow-y-visible pointer-events-none pb-1 md:pb-2 <?php echo esc_attr($page_header_title_wrap_mb); ?>">
 			<div class="page-header__title-inner flex whitespace-nowrap will-change-transform pl-4 md:pl-section-x" style="margin-left: max(0px, calc((100% - 1920px) / 2));">
-				<h1 class="page-header__title font-heading font-bold text-[40px] leading-tight md:text-[124px] md:leading-[1.1] <?php echo esc_attr($title_color); ?> inline-block pr-[1em]">
+				<h1 class="page-header__title font-heading font-bold text-[40px] leading-tight md:text-[124px] md:leading-[1.1] <?php echo esc_attr($title_color); ?> inline-block pr-[1em] pb-1 md:pb-2">
 					<?php echo esc_html($title); ?>
 				</h1>
-				<span class="page-header__title-dupe font-heading font-bold text-[40px] leading-tight md:text-[124px] md:leading-[1.1] <?php echo esc_attr($title_color); ?> inline-block pr-[1em] hidden" aria-hidden="true">
+				<span class="page-header__title-dupe font-heading font-bold text-[40px] leading-tight md:text-[124px] md:leading-[1.1] <?php echo esc_attr($title_color); ?> inline-block pr-[1em] pb-1 md:pb-2 hidden" aria-hidden="true">
 					<?php echo esc_html($title); ?>
 				</span>
 			</div>

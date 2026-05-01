@@ -62,7 +62,6 @@ if (!$current) {
                             <tr>
                                 <th><?php esc_html_e('Productnaam', 'boozed'); ?></th>
                                 <th><?php esc_html_e('Stuksprijs', 'boozed'); ?></th>
-                                <th><?php esc_html_e('Voorraadstatus', 'boozed'); ?></th>
                                 <th class="wishlist-list__actions-col"><?php esc_html_e('Acties', 'boozed'); ?></th>
                             </tr>
                         </thead>
@@ -78,7 +77,6 @@ if (!$current) {
                                         </div>
                                     </td>
                                     <td><?php echo wp_kses_post($item['price_html'] ?: '&mdash;'); ?></td>
-                                    <td><?php echo esc_html($item['stock_text']); ?></td>
                                     <td class="wishlist-list__actions-col">
                                         <div class="wishlist-list__actions">
                                             <button type="button" data-wishlist-remove><?php esc_html_e('Verwijderen', 'boozed'); ?></button>

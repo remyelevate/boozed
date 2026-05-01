@@ -120,6 +120,7 @@ foreach ($product_ids as $pid) {
 		'image_url'      => $img_url ?: '',
 		'image_alt'      => get_the_title($pid),
 		'category_label' => $category,
+		'show_category'  => false,
 		'title'          => get_the_title($pid),
 		'url'            => get_permalink($pid),
 		'link_text'      => $link_text,
