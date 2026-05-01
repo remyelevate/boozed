@@ -248,7 +248,7 @@ class GlobalSettings
                     'name'          => 'pdp_login_url',
                     'type'          => 'link',
                     'return_format' => 'url',
-                    'placeholder'   => home_url('/inloggen'),
+                    'placeholder'   => home_url('/login'),
                 ],
                 [
                     'key'           => 'field_boozed_pdp_maatwerk_url',

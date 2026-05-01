@@ -39,7 +39,7 @@ function boozed_auth_page_url($slug, $fallback_path)
 
 function boozed_login_page_url()
 {
-    return boozed_auth_page_url('inloggen', '/inloggen');
+    return boozed_auth_page_url('login', '/login');
 }
 
 function boozed_forgot_password_page_url()
@@ -53,7 +53,7 @@ function boozed_reset_password_page_url()
 }
 
 /**
- * Use /inloggen instead of /wp-login (Dutch login URL).
+ * Use /login instead of /wp-login.
  */
 add_filter('login_url', function ($login_url, $redirect, $force_reauth) {
     $url = boozed_login_page_url();
@@ -103,7 +103,7 @@ add_filter('logout_url', function ($logout_url, $redirect) {
 }, 10, 2);
 
 add_filter('register_url', function ($register_url) {
-    return str_replace(['wp-login.php', 'wp-login'], 'inloggen', $register_url);
+    return str_replace(['wp-login.php', 'wp-login'], 'login', $register_url);
 }, 10, 1);
 
 add_filter('lostpassword_url', function ($lostpassword_url) {
@@ -119,7 +119,7 @@ add_filter('login_redirect', function ($redirect_to, $requested_redirect_to, $us
 
 /**
  * Handle front-end logout action.
- * Supports URLs like /inloggen/?action=logout&_wpnonce=...&redirect_to=...
+ * Supports URLs like /login/?action=logout&_wpnonce=...&redirect_to=...
  */
 add_action('init', function () {
     if (strtolower((string) ($_SERVER['REQUEST_METHOD'] ?? 'GET')) !== 'get') {
@@ -146,7 +146,7 @@ add_action('init', function () {
     exit;
 });
 
-// Redirect GET requests to wp-login.php to /inloggen (allow POST so the login form submission works).
+// Redirect GET requests to wp-login.php to /login (allow POST so the login form submission works).
 add_action('login_init', function () {
     $script = isset($_SERVER['SCRIPT_NAME']) ? $_SERVER['SCRIPT_NAME'] : '';
     if (strpos($script, 'wp-login') === false || $_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -180,6 +180,21 @@ add_action('login_init', function () {
 });
 
 add_action('template_redirect', function () {
+    // Backward compatibility: old Dutch auth slug now points to /login.
+    if (trim((string) parse_url((string) ($_SERVER['REQUEST_URI'] ?? ''), PHP_URL_PATH), '/') === 'inloggen') {
+        $target = boozed_login_page_url();
+
+        if (isset($_GET['redirect_to'])) {
+            $redirect_to = esc_url_raw((string) wp_unslash($_GET['redirect_to']));
+            if ($redirect_to !== '' && wp_validate_redirect($redirect_to, home_url('/')) !== false) {
+                $target = add_query_arg('redirect_to', rawurlencode($redirect_to), $target);
+            }
+        }
+
+        wp_safe_redirect($target, 301);
+        exit;
+    }
+
     $uri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
     if (preg_match('#^/wp-login(\?|$)#', $uri)) {
         $target = boozed_login_page_url();

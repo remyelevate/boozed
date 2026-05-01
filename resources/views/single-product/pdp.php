@@ -37,7 +37,7 @@ if ($has_dimensions) {
 }
 
 $account_url = (function_exists('get_field') ? get_field('pdp_registration_url', 'option') : null) ?: home_url('/registreren');
-$login_url = (function_exists('get_field') ? get_field('pdp_login_url', 'option') : null) ?: home_url('/inloggen');
+$login_url = (function_exists('get_field') ? get_field('pdp_login_url', 'option') : null) ?: home_url('/login');
 $maatwerk_url = (function_exists('get_field') ? get_field('pdp_maatwerk_url', 'option') : null) ?: '#';
 
 // Translatable texts from global ACF (PDP)

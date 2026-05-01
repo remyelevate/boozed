@@ -16,7 +16,7 @@ $has_image = $image_url !== '';
 $reset_base_url = get_permalink() ? trailingslashit((string) get_permalink()) : (function_exists('boozed_reset_password_page_url') ? boozed_reset_password_page_url() : trailingslashit(home_url('/wachtwoord-resetten')));
 $login_url = $login_page_link !== ''
 	? $login_page_link
-	: (function_exists('boozed_login_page_url') ? boozed_login_page_url() : trailingslashit(home_url('/inloggen')));
+	: (function_exists('boozed_login_page_url') ? boozed_login_page_url() : trailingslashit(home_url('/login')));
 $forgot_url = $forgot_page_link !== ''
 	? $forgot_page_link
 	: (function_exists('boozed_forgot_password_page_url') ? boozed_forgot_password_page_url() : trailingslashit(home_url('/wachtwoord-vergeten')));

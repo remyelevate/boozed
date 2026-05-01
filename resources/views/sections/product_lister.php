@@ -31,11 +31,11 @@ $current_url = get_permalink();
 $assortiment_url = function_exists('boozed_plp_url') ? boozed_plp_url() : home_url('/assortiment');
 $acf_login_url = function_exists('get_field') ? (string) get_field('pdp_login_url', 'option') : '';
 if ($acf_login_url === '') {
-	$acf_login_url = function_exists('boozed_login_page_url') ? boozed_login_page_url() : home_url('/inloggen');
+	$acf_login_url = function_exists('boozed_login_page_url') ? boozed_login_page_url() : home_url('/login');
 }
 $acf_login_url = wp_validate_redirect(
 	$acf_login_url,
-	function_exists('boozed_login_page_url') ? boozed_login_page_url() : home_url('/inloggen')
+	function_exists('boozed_login_page_url') ? boozed_login_page_url() : home_url('/login')
 );
 $cta_login_href = add_query_arg('redirect_to', $assortiment_url, $acf_login_url);
 $product_cat_raw = isset($_GET['product_cat']) ? $_GET['product_cat'] : '';
