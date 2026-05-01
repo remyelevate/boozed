@@ -359,7 +359,7 @@ $flyout_id = $section_id . '-filters';
 				if ($item_index < count($items)) :
 					$item = $items[$item_index];
 					?>
-					<div class="product-lister__card aspect-[314/435]">
+					<div class="product-lister__card">
 						<?php \App\Components::render('product-card', $item); ?>
 					</div>
 					<?php
@@ -449,7 +449,7 @@ body.product-lister-flyout-open {
 /* Style filter chips: when checkbox is checked, style the span (indigo bg, white text) */
 .product-lister__style-check:checked + span { background-color: #312783; border-color: #312783; color: #fff; }
 
-/* Product cards: portrait 314×435 aspect ratio, fill grid cell */
+/* Product cards: keep PLP tiles compact and consistent */
 .product-lister__card { min-width: 0; }
 @media (min-width: 768px) {
 	.product-lister__card {
@@ -462,8 +462,8 @@ body.product-lister-flyout-open {
 		min-height: 0;
 	}
 	.product-lister__card .product-card__img {
-		aspect-ratio: 314 / 435;
-		flex: 1 1 0;
+		aspect-ratio: 1 / 1;
+		flex: 0 0 auto;
 		min-height: 0;
 	}
 	.product-lister__card .product-card__img img {
