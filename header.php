@@ -25,6 +25,26 @@ $theme_uri    = get_template_directory_uri();
 $header_menu  = get_field('header_menu', 'option');
 $cta_text     = get_field('header_cta_text', 'option') ?: __('Offerte aanvragen', 'boozed');
 $business_phone = get_field('business_phone', 'option');
+$is_logged_in = is_user_logged_in();
+$request_uri  = isset($_SERVER['REQUEST_URI']) ? (string) wp_unslash($_SERVER['REQUEST_URI']) : '/';
+$current_url  = home_url($request_uri);
+if (wp_validate_redirect($current_url, home_url('/')) === false) {
+    $current_url = home_url('/');
+}
+$login_page_url = function_exists('boozed_login_page_url') ? boozed_login_page_url() : home_url('/login/');
+$current_path = (string) wp_parse_url($current_url, PHP_URL_PATH);
+$login_path   = (string) wp_parse_url($login_page_url, PHP_URL_PATH);
+$is_login_path = untrailingslashit($current_path) === untrailingslashit($login_path);
+$login_redirect_target = remove_query_arg(['redirect_to', 'action', '_wpnonce'], $current_url);
+if (wp_validate_redirect($login_redirect_target, home_url('/')) === false) {
+    $login_redirect_target = home_url('/');
+}
+$login_url = $login_page_url;
+if (!$is_login_path) {
+    $login_url = function_exists('boozed_login_url') ? boozed_login_url($login_redirect_target) : $login_page_url;
+}
+$wishlist_url = home_url('/wishlist/');
+$logout_url   = wp_logout_url(home_url('/'));
 $nav_args     = [
     'container'      => false,
     'menu_class'     => 'nav-menu flex flex-nowrap items-center justify-center gap-4 lg:gap-8 font-body text-body-sm lg:text-body-md font-medium whitespace-nowrap',
@@ -36,6 +56,8 @@ if ( ! empty( $header_menu ) ) {
 } else {
     $nav_args['theme_location'] = 'primary_navigation';
 }
+$account_icon_svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" class="site-header__account-icon" aria-hidden="true" focusable="false"><path d="M230.93,220a8,8,0,0,1-6.93,4H32a8,8,0,0,1-6.92-12c15.23-26.33,38.7-45.21,66.09-54.16a72,72,0,1,1,73.66,0c27.39,8.95,50.86,27.83,66.09,54.16A8,8,0,0,1,230.93,220Z"></path></svg>';
+$account_chevron_svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" class="site-header__account-chevron" aria-hidden="true" focusable="false"><path d="M211.31,100.69a8,8,0,0,1,0,11.31l-80,80a8,8,0,0,1-11.31,0l-80-80a8,8,0,0,1,11.31-11.31L128,177.37l76.69-76.68A8,8,0,0,1,211.31,100.69Z"></path></svg>';
 ?>
 
 <div id="page" class="site">
@@ -69,6 +91,28 @@ if ( ! empty( $header_menu ) ) {
 
             <div class="site-header__actions hidden md:flex items-center gap-3 lg:gap-6 shrink-0">
                 <span class="site-header__lang font-body text-body-xs lg:text-body-sm">NL/EN</span>
+                <div class="site-header__account js-account-menu">
+                    <?php if ( ! $is_logged_in ) : ?>
+                        <a href="<?php echo esc_url($login_url); ?>" class="site-header__account-login" aria-label="<?php esc_attr_e('Login', 'boozed'); ?>">
+                            <?php echo $account_icon_svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+                            <span><?php esc_html_e('Login', 'boozed'); ?></span>
+                        </a>
+                    <?php else : ?>
+                        <button
+                            type="button"
+                            class="site-header__account-toggle"
+                            aria-label="<?php esc_attr_e('Account menu', 'boozed'); ?>"
+                            aria-haspopup="menu"
+                        >
+                            <?php echo $account_icon_svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+                            <?php echo $account_chevron_svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+                        </button>
+                        <div class="site-header__account-dropdown" role="menu">
+                            <a href="<?php echo esc_url($wishlist_url); ?>" class="site-header__account-dropdown-link" role="menuitem"><?php esc_html_e('Wishlist', 'boozed'); ?></a>
+                            <a href="<?php echo esc_url($logout_url); ?>" class="site-header__account-dropdown-link" role="menuitem"><?php esc_html_e('Uitloggen', 'boozed'); ?></a>
+                        </div>
+                    <?php endif; ?>
+                </div>
                 <?php if ( $business_phone ) : ?>
                     <a href="<?php echo esc_url( 'tel:' . preg_replace( '/\s+/', '', $business_phone ) ); ?>" class="site-header__phone flex items-center gap-1.5 lg:gap-2 font-body text-body-sm lg:text-body-md hover:underline focus:outline-none focus:ring-2 focus:ring-brand-white focus:ring-offset-2 focus:ring-offset-transparent rounded whitespace-nowrap">
                         <svg class="w-4 h-4 lg:w-5 lg:h-5 shrink-0" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
@@ -87,11 +131,34 @@ if ( ! empty( $header_menu ) ) {
                 ?>
             </div>
 
-            <button type="button" class="site-header__toggle md:hidden flex flex-col justify-center items-center w-10 h-10 rounded focus:outline-none text-inherit" aria-expanded="false" aria-controls="mobile-menu" aria-label="<?php esc_attr_e( 'Open menu', 'boozed' ); ?>">
-                <span class="site-header__toggle-bar w-6 h-0.5 bg-current rounded-full transition-all duration-300"></span>
-                <span class="site-header__toggle-bar w-6 h-0.5 bg-current rounded-full mt-1.5 transition-all duration-300"></span>
-                <span class="site-header__toggle-bar w-6 h-0.5 bg-current rounded-full mt-1.5 transition-all duration-300"></span>
-            </button>
+            <div class="site-header__mobile-controls md:hidden flex items-center gap-1.5 shrink-0">
+                <div class="site-header__account js-account-menu">
+                    <?php if ( ! $is_logged_in ) : ?>
+                        <a href="<?php echo esc_url($login_url); ?>" class="site-header__account-login site-header__account-login--mobile" aria-label="<?php esc_attr_e('Login', 'boozed'); ?>">
+                            <?php echo $account_icon_svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+                        </a>
+                    <?php else : ?>
+                        <button
+                            type="button"
+                            class="site-header__account-toggle site-header__account-toggle--mobile"
+                            aria-label="<?php esc_attr_e('Account menu', 'boozed'); ?>"
+                            aria-haspopup="menu"
+                        >
+                            <?php echo $account_icon_svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+                            <?php echo $account_chevron_svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+                        </button>
+                        <div class="site-header__account-dropdown" role="menu">
+                            <a href="<?php echo esc_url($wishlist_url); ?>" class="site-header__account-dropdown-link" role="menuitem"><?php esc_html_e('Wishlist', 'boozed'); ?></a>
+                            <a href="<?php echo esc_url($logout_url); ?>" class="site-header__account-dropdown-link" role="menuitem"><?php esc_html_e('Uitloggen', 'boozed'); ?></a>
+                        </div>
+                    <?php endif; ?>
+                </div>
+                <button type="button" class="site-header__toggle md:hidden flex flex-col justify-center items-center w-10 h-10 rounded focus:outline-none text-inherit" aria-expanded="false" aria-controls="mobile-menu" aria-label="<?php esc_attr_e( 'Open menu', 'boozed' ); ?>">
+                    <span class="site-header__toggle-bar w-6 h-0.5 bg-current rounded-full transition-all duration-300"></span>
+                    <span class="site-header__toggle-bar w-6 h-0.5 bg-current rounded-full mt-1.5 transition-all duration-300"></span>
+                    <span class="site-header__toggle-bar w-6 h-0.5 bg-current rounded-full mt-1.5 transition-all duration-300"></span>
+                </button>
+            </div>
         </div>
     </header>
 

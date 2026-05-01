@@ -93,6 +93,83 @@
   .site-header.has-backdrop .site-header__toggle:focus {
     @apply outline-none;
   }
+  .site-header .site-header__account {
+    @apply relative shrink-0;
+  }
+  .site-header .site-header__account-icon {
+    width: 1.625rem;
+    height: 1.625rem;
+    flex-shrink: 0;
+  }
+  .site-header .site-header__account-chevron {
+    width: 0.875rem;
+    height: 0.875rem;
+    transition: transform 0.2s ease;
+  }
+  .site-header .site-header__account:hover .site-header__account-chevron,
+  .site-header .site-header__account:focus-within .site-header__account-chevron {
+    transform: rotate(180deg);
+  }
+  .site-header .site-header__account-login,
+  .site-header .site-header__account-toggle {
+    @apply inline-flex items-center gap-1.5 text-inherit no-underline transition-colors duration-200;
+  }
+  .site-header .site-header__account-login {
+    @apply font-body text-body-sm lg:text-body-md;
+  }
+  .site-header .site-header__account-login:hover,
+  .site-header .site-header__account-toggle:hover {
+    @apply text-brand-red;
+  }
+  .site-header .site-header__account-login:focus-visible,
+  .site-header .site-header__account-toggle:focus-visible,
+  .site-header .site-header__account-dropdown-link:focus-visible {
+    @apply outline-none ring-2 ring-brand-white ring-offset-2 ring-offset-transparent rounded;
+  }
+  .site-header.has-backdrop .site-header__account-login:focus-visible,
+  .site-header.has-backdrop .site-header__account-toggle:focus-visible,
+  .site-header.has-backdrop .site-header__account-dropdown-link:focus-visible {
+    @apply ring-brand-purple ring-offset-brand-white;
+  }
+  .site-header .site-header__account-dropdown {
+    @apply absolute right-0 top-full min-w-[150px] py-2 border;
+    background: #0C0A21;
+    border-color: rgba(44, 63, 113, 0.3);
+    border-radius: 0;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+    z-index: 60;
+  }
+  .site-header .site-header__account:hover .site-header__account-dropdown,
+  .site-header .site-header__account:focus-within .site-header__account-dropdown {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+  .site-header .site-header__account-dropdown-link {
+    @apply flex items-center gap-1.5 px-4 py-2.5 font-body text-body-sm no-underline transition-colors duration-150;
+    color: #FFFCF2;
+  }
+  .site-header .site-header__account-dropdown-link:hover {
+    background: rgba(44, 63, 113, 0.5);
+    color: #C41E3A;
+  }
+  .site-header .site-header__account-toggle--mobile,
+  .site-header .site-header__account-login--mobile {
+    @apply inline-flex items-center justify-center h-10 px-1 rounded text-inherit;
+  }
+  .site-header .site-header__account-login--mobile {
+    @apply gap-0;
+  }
+  .site-header .site-header__account-login--mobile span {
+    @apply sr-only;
+  }
+  .site-header .site-header__mobile-controls .site-header__account-dropdown {
+    right: -0.25rem;
+  }
   /* Mobile menu open: hamburger to X */
   .site-header__mobile.is-open {
     @apply opacity-100 visible;
@@ -199,6 +276,37 @@
     .site-header .site-header__lang,
     .site-header .site-header__phone {
       display: none;
+    }
+    .site-header .site-header__account-login span {
+      @apply sr-only;
+    }
+    .site-header .site-header__cta {
+      padding-inline: 0.875rem;
+      font-size: 0.875rem;
+      line-height: 1.2;
+    }
+  }
+  @media (min-width: 1280px) and (max-width: 1439px) {
+    .site-header .site-header-inner {
+      gap: 0.75rem;
+    }
+    .site-header .site-header__nav {
+      margin-inline: 0.375rem;
+    }
+    .site-header .site-header__nav .nav-menu {
+      gap: 1.25rem;
+    }
+    .site-header .site-header__actions {
+      gap: 0.75rem;
+    }
+    .site-header .site-header__lang {
+      display: none;
+    }
+    .site-header .site-header__account-login span {
+      @apply sr-only;
+    }
+    .site-header .site-header__phone {
+      font-size: 0.95rem;
     }
     .site-header .site-header__cta {
       padding-inline: 0.875rem;
