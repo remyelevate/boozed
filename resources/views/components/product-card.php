@@ -34,7 +34,7 @@ $card_class = 'product-card flex flex-col bg-brand-white border border-brand-bor
 			<img src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($image_alt ?: $title); ?>" class="w-full h-full object-cover" loading="lazy">
 		<?php endif; ?>
 	</div>
-	<div class="product-card__content p-4 md:p-5 flex-1 flex flex-col gap-1">
+	<div class="product-card__content p-4 md:p-5 flex flex-col gap-1">
 		<?php if ($show_category && $category_label !== '') : ?>
 			<span class="product-card__category font-body text-body-sm text-brand-indigo/60"><?php echo esc_html($category_label); ?></span>
 		<?php endif; ?>
