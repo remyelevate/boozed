@@ -385,11 +385,11 @@
     @apply inline-flex;
   }
   
-  /* Mega menu panel - full screen width and layered above the fixed header */
+  /* Mega menu panel - full screen width, opens below fixed header */
   .mega-menu-panel {
     @apply fixed left-0 right-0 w-screen pointer-events-none;
-    top: 0;
-    z-index: 60;
+    top: var(--header-total-height);
+    z-index: 45;
     overflow: visible;
   }
   
@@ -425,8 +425,8 @@
   }
   .mega-menu-inner--first {
     @apply flex-col;
-    /* Push content below the header */
-    padding-top: calc(var(--page-header-site-header-offset) + 2rem);
+    /* Panel already starts below header, keep normal inner spacing */
+    padding-top: 2rem;
     padding-bottom: 2.5rem;
   }
   
