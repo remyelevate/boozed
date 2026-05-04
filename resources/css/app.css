@@ -385,11 +385,11 @@
     @apply inline-flex;
   }
   
-  /* Mega menu panel - full screen width, starts at top to include header area */
+  /* Mega menu panel - full screen width and layered above the fixed header */
   .mega-menu-panel {
     @apply fixed left-0 right-0 w-screen pointer-events-none;
     top: 0;
-    z-index: 45;
+    z-index: 60;
     overflow: visible;
   }
   
