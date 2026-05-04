@@ -337,9 +337,24 @@
   /* Prevent descender clipping on labels like "Wat wij doen" */
   .site-header__nav .nav-menu > li > .nav-link {
     @apply inline-flex items-center py-2;
+    gap: 0.35rem;
     line-height: 1.5;
     padding-bottom: calc(0.5rem + 1px);
     overflow: visible;
+  }
+  .site-header__nav .site-header__nav-chevron {
+    width: 0.875rem;
+    height: 0.875rem;
+    display: block;
+    margin-top: 1px;
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+  }
+  .site-header__nav .has-dropdown:hover > .nav-link .site-header__nav-chevron,
+  .site-header__nav .has-dropdown:focus-within > .nav-link .site-header__nav-chevron,
+  .site-header__nav .has-mega-menu:hover > .nav-link .site-header__nav-chevron,
+  .site-header__nav .has-mega-menu:focus-within > .nav-link .site-header__nav-chevron {
+    transform: rotate(180deg);
   }
   .site-header__nav .nav-link:hover,
   .site-header__nav .nav-link.is-current,

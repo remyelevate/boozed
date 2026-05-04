@@ -94,6 +94,9 @@ class NavWalker extends \Walker_Nav_Menu {
                 $count = self::get_vacature_count();
                 $title_html .= ' <span class="nav-vacature-badge inline-flex items-center justify-center min-w-6 h-6 px-1.5 rounded-full bg-brand-coral text-brand-white font-body text-body-xs font-medium leading-none ml-1.5" aria-label="' . esc_attr( sprintf( _n( '%d vacature', '%d vacatures', $count, 'boozed' ), $count ) ) . '">' . (int) $count . '</span>';
             }
+            if ( $has_children ) {
+                $title_html .= '<svg class="site-header__nav-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M211.31,100.69a8,8,0,0,1,0,11.31l-80,80a8,8,0,0,1-11.31,0l-80-80a8,8,0,0,1,11.31-11.31L128,177.37l76.69-76.68A8,8,0,0,1,211.31,100.69Z"></path></svg>';
+            }
             $output .= '<a' . $attr_string . '>' . $title_html . '</a>';
             /* Mega panel is now rendered separately outside the nav via get_mega_menu_panel() */
             return;
