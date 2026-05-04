@@ -352,6 +352,13 @@ CSS;
 
     $js = <<<'JS'
 (function() {
+    function hasVisualEditor(editorId, wrap) {
+        if (window.tinymce && window.tinymce.get(editorId)) {
+            return true;
+        }
+        return !!(wrap && wrap.querySelector('.mce-tinymce'));
+    }
+
     function setMode(editorId, mode) {
         var wrap = document.getElementById('wp-' + editorId + '-wrap');
         if (!wrap) return;
@@ -384,6 +391,25 @@ CSS;
         return mode === 'tmce' ? wrap.classList.contains('tmce-active') : wrap.classList.contains('html-active');
     }
 
+    function ensureEditorModeConsistency(editorId) {
+        var wrap = document.getElementById('wp-' + editorId + '-wrap');
+        if (!wrap) return;
+
+        // If WP marks mode as Visual but TinyMCE is unavailable, recover to Text mode.
+        if (wrap.classList.contains('tmce-active') && !hasVisualEditor(editorId, wrap)) {
+            setMode(editorId, 'html');
+        }
+    }
+
+    function ensureAllEditorsConsistency() {
+        var wraps = document.querySelectorAll('.wp-editor-wrap');
+        wraps.forEach(function(wrap) {
+            var textarea = wrap.querySelector('textarea.wp-editor-area');
+            if (!textarea || !textarea.id) return;
+            ensureEditorModeConsistency(textarea.id);
+        });
+    }
+
     document.addEventListener('click', function(event) {
         var button = event.target.closest('.wp-switch-editor');
         if (!button) return;
@@ -400,6 +426,7 @@ CSS;
                 if (!isModeApplied(editorId, mode)) {
                     setMode(editorId, mode);
                 }
+                ensureEditorModeConsistency(editorId);
             }, 0);
             return;
         }
@@ -407,7 +434,14 @@ CSS;
         // Fallback only when switchEditors is unavailable.
         event.preventDefault();
         setMode(editorId, mode);
+        ensureEditorModeConsistency(editorId);
     });
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', ensureAllEditorsConsistency);
+    } else {
+        ensureAllEditorsConsistency();
+    }
 })();
 JS;
     wp_register_script('boozed-admin-wysiwyg-fix', '', [], null, true);
