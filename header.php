@@ -181,19 +181,19 @@ $account_chevron_svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256
         </div>
     </header>
 
-    <div class="site-header__mobile fixed inset-0 z-40 bg-brand-indigo opacity-0 invisible transition-opacity duration-300 md:opacity-0 md:invisible md:pointer-events-none overflow-hidden" id="mobile-menu" aria-hidden="true">
+    <div class="site-header__mobile fixed inset-0 z-40 bg-brand-indigo opacity-0 invisible transition-opacity duration-300 md:opacity-0 md:invisible md:pointer-events-none overflow-y-auto overflow-x-hidden" id="mobile-menu" aria-hidden="true">
         <?php
         $mobile_menu_lottie_url = get_template_directory_uri() . '/assets/animations/boozed.json';
         ?>
         <div class="mobile-menu__lottie absolute inset-0 z-0 flex items-end justify-center pointer-events-none opacity-50 pb-16" aria-hidden="true" data-mobile-menu-lottie="<?php echo esc_url( $mobile_menu_lottie_url ); ?>">
             <div class="mobile-menu__lottie-inner w-[min(80vmin,400px)] h-[min(80vmin,400px)]"></div>
         </div>
-        <div class="mobile-menu__content relative z-10 flex flex-col items-start justify-start min-h-full py-24 px-6 pl-section-x">
+        <div class="mobile-menu__content relative z-10 flex flex-col items-start justify-start pt-20 pb-12 px-6 pl-section-x">
             <?php if ( ! empty( $header_topbar_menu ) ) : ?>
-                <nav class="flex flex-col items-stretch gap-0 w-full max-w-md mobile-menu__nav mobile-menu__topbar-nav mb-8" aria-label="<?php esc_attr_e( 'Topbar mobile menu', 'boozed' ); ?>">
+                <nav class="flex flex-col items-stretch gap-0 w-full max-w-md mobile-menu__nav mobile-menu__topbar-nav mb-4" aria-label="<?php esc_attr_e( 'Topbar mobile menu', 'boozed' ); ?>">
                     <?php
                     wp_nav_menu( array_merge( $topbar_nav_args, [
-                        'menu_class' => 'flex flex-col gap-0 font-body text-h5 font-medium text-brand-white mobile-menu__items',
+                        'menu_class' => 'flex flex-col gap-0 font-body text-body-md font-medium text-brand-white mobile-menu__items',
                         'walker'     => new \App\MobileNavWalker(),
                     ] ) );
                     ?>

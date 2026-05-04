@@ -228,6 +228,11 @@
   .site-header__mobile.is-open {
     @apply opacity-100 visible;
   }
+  /* Hide topbar when mobile menu is open (header z-50 sits above the z-40 overlay) */
+  .site-header.mobile-menu-open .site-header__top {
+    @apply opacity-0 pointer-events-none;
+    transition: opacity 0.2s ease;
+  }
 
   /* Mobile menu – Lottie (boozed.json) at bottom below links, 50% opacity, rotate + scale */
   .mobile-menu__lottie-inner {
@@ -242,6 +247,10 @@
   }
   .mobile-menu__topbar-nav .mobile-menu__items > li {
     @apply border-brand-nude/30;
+  }
+  .mobile-menu__topbar-nav .mobile-menu__items .nav-link,
+  .mobile-menu__topbar-nav .mobile-menu__items .mobile-menu__accordion-trigger {
+    @apply py-2.5;
   }
   .mobile-menu__nav .mobile-menu__items .nav-link,
   .mobile-menu__nav .mobile-menu__items .mobile-menu__accordion-trigger {
