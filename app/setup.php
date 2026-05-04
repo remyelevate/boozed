@@ -323,6 +323,79 @@ add_filter('user_can_richedit', function ($can) {
     return $can;
 }, 999);
 
+/**
+ * ACF WYSIWYG hardening in admin:
+ * - Prevent inherited white-on-white text in the backing textarea.
+ * - Provide a fallback tab switcher when editor JS fails to initialize.
+ */
+add_action('admin_enqueue_scripts', function () {
+    $css = <<<'CSS'
+/* Keep ACF/Classic editor textarea readable even when global admin styles leak in. */
+.wp-editor-wrap .wp-editor-area,
+.acf-field-wysiwyg textarea.wp-editor-area {
+    color: #1d2327 !important;
+    background: #fff !important;
+}
+
+/* Match core behavior: hide textarea when Visual mode is active. */
+.wp-editor-wrap.tmce-active textarea.wp-editor-area {
+    display: none;
+}
+
+/* Match core behavior: hide TinyMCE iframe when Text mode is active. */
+.wp-editor-wrap.html-active .mce-tinymce {
+    display: none;
+}
+CSS;
+    wp_register_style('boozed-admin-wysiwyg-fix', false, [], null);
+    wp_enqueue_style('boozed-admin-wysiwyg-fix');
+    wp_add_inline_style('boozed-admin-wysiwyg-fix', $css);
+
+    $js = <<<'JS'
+(function() {
+    function setMode(editorId, mode) {
+        var wrap = document.getElementById('wp-' + editorId + '-wrap');
+        if (!wrap) return;
+
+        var textarea = document.getElementById(editorId);
+        var iframeWrap = wrap.querySelector('.mce-tinymce');
+        var tmceBtn = wrap.querySelector('.switch-tmce');
+        var htmlBtn = wrap.querySelector('.switch-html');
+
+        var useTmce = mode === 'tmce';
+        wrap.classList.toggle('tmce-active', useTmce);
+        wrap.classList.toggle('html-active', !useTmce);
+
+        if (tmceBtn) tmceBtn.classList.toggle('active', useTmce);
+        if (htmlBtn) htmlBtn.classList.toggle('active', !useTmce);
+        if (textarea) textarea.style.display = useTmce ? 'none' : '';
+        if (iframeWrap) iframeWrap.style.display = useTmce ? '' : 'none';
+
+        // Best effort to focus the visible editor after switching.
+        if (useTmce && window.tinymce && window.tinymce.get(editorId)) {
+            window.tinymce.get(editorId).focus();
+        } else if (!useTmce && textarea) {
+            textarea.focus();
+        }
+    }
+
+    document.addEventListener('click', function(event) {
+        var button = event.target.closest('.wp-switch-editor');
+        if (!button) return;
+
+        var editorId = button.getAttribute('data-wp-editor-id');
+        if (!editorId) return;
+
+        event.preventDefault();
+        setMode(editorId, button.classList.contains('switch-tmce') ? 'tmce' : 'html');
+    }, true);
+})();
+JS;
+    wp_register_script('boozed-admin-wysiwyg-fix', '', [], null, true);
+    wp_enqueue_script('boozed-admin-wysiwyg-fix');
+    wp_add_inline_script('boozed-admin-wysiwyg-fix', $js);
+}, 100);
+
 add_action('acf/init', function () {
     if (!function_exists('acf_add_local_field_group')) {
         return;
