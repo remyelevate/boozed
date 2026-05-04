@@ -32,6 +32,16 @@
   body {
     @apply font-body text-body font-normal antialiased;
   }
+
+  ::selection {
+    background: #E83F44;
+    color: #ffffff;
+  }
+
+  ::-moz-selection {
+    background: #E83F44;
+    color: #ffffff;
+  }
 }
 
 /* Header: constrain entire header to viewport width (outside @layer so utilities can't override) */
