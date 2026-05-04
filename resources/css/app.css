@@ -71,7 +71,7 @@
   /* Top bar: light when transparent */
   .site-header .site-header__top {
     background: #312783;
-    @apply border-b border-white/20;
+    @apply border-b border-white/20 overflow-hidden;
   }
   .site.site--has-topbar {
     --header-top-height: 36px;
@@ -86,10 +86,15 @@
     min-height: var(--header-top-height);
   }
   .site-header .site-header__top-nav {
-    @apply flex items-center;
+    @apply flex items-center overflow-x-auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .site-header .site-header__top-nav::-webkit-scrollbar {
+    display: none;
   }
   .site-header .site-header__top-menu {
-    @apply m-0 list-none p-0 flex items-center gap-5 md:gap-7;
+    @apply m-0 list-none p-0 flex flex-nowrap items-center gap-5 md:gap-7;
   }
   .site-header .site-header__top-menu > li {
     @apply relative m-0;

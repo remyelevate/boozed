@@ -188,7 +188,7 @@ $account_chevron_svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256
         <div class="mobile-menu__lottie absolute inset-0 z-0 flex items-end justify-center pointer-events-none opacity-50 pb-16" aria-hidden="true" data-mobile-menu-lottie="<?php echo esc_url( $mobile_menu_lottie_url ); ?>">
             <div class="mobile-menu__lottie-inner w-[min(80vmin,400px)] h-[min(80vmin,400px)]"></div>
         </div>
-        <div class="mobile-menu__content relative z-10 flex flex-col items-start justify-start pt-20 pb-12 px-6 pl-section-x">
+        <div class="mobile-menu__content relative z-10 flex flex-col items-start justify-start pt-28 pb-12 px-6 pl-section-x">
             <?php if ( ! empty( $header_topbar_menu ) ) : ?>
                 <nav class="flex flex-col items-stretch gap-0 w-full max-w-md mobile-menu__nav mobile-menu__topbar-nav mb-4" aria-label="<?php esc_attr_e( 'Topbar mobile menu', 'boozed' ); ?>">
                     <?php
