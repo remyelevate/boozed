@@ -13,10 +13,7 @@
 
 .site-header__nav .menu-item-has-children > a,
 .site-header__nav .dropdown-trigger > a,
-.site-header__nav .has-dropdown > a,
-.site-header__top-nav .menu-item-has-children > a,
-.site-header__top-nav .dropdown-trigger > a,
-.site-header__top-nav .has-dropdown > a {
+.site-header__nav .has-dropdown > a {
   display: inline-block;
   padding: 0.5rem 0;
 }

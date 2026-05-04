@@ -73,12 +73,12 @@
     background: #312783;
     @apply border-b border-white/20;
   }
-  .site-header.site-header--has-topbar {
+  .site.site--has-topbar {
     --header-top-height: 36px;
     --page-header-site-header-offset: max(7.5rem, calc(env(safe-area-inset-top, 0px) + 6.75rem));
   }
   @media (min-width: 768px) {
-    .site-header.site-header--has-topbar {
+    .site.site--has-topbar {
       --page-header-site-header-offset: 7.75rem;
     }
   }
@@ -96,6 +96,11 @@
   }
   .site-header .site-header__top-link {
     @apply inline-flex items-center gap-1.5 py-2 text-body-xs md:text-body-sm text-brand-white no-underline transition-colors duration-200;
+    white-space: nowrap;
+  }
+  .site-header .site-header__top-nav .has-dropdown > .site-header__top-link {
+    display: flex;
+    align-items: center;
   }
   .site-header .site-header__top-link:hover,
   .site-header .site-header__top-link:focus-visible,

@@ -70,7 +70,7 @@ $account_icon_svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 25
 $account_chevron_svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" class="site-header__account-chevron" aria-hidden="true" focusable="false"><path d="M211.31,100.69a8,8,0,0,1,0,11.31l-80,80a8,8,0,0,1-11.31,0l-80-80a8,8,0,0,1,11.31-11.31L128,177.37l76.69-76.68A8,8,0,0,1,211.31,100.69Z"></path></svg>';
 ?>
 
-<div id="page" class="site">
+<div id="page" class="site <?php echo ! empty( $header_topbar_menu ) ? 'site--has-topbar' : ''; ?>">
     <!-- Page transition overlay: paint-fill forward on leave, reverse on enter -->
     <div id="page-transition-overlay" class="page-transition-overlay fixed inset-0 z-[10000] pointer-events-none opacity-0 invisible flex items-center justify-center" aria-hidden="true">
         <video id="page-transition-forward" class="page-transition-video absolute inset-0 w-full h-full object-cover" muted playsinline preload="auto" src="<?php echo esc_url( $theme_uri . '/assets/images/paint-fill.webm' ); ?>"></video>
