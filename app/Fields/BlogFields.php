@@ -50,13 +50,33 @@ class BlogFields
     {
         return [
             [
-                'key'           => 'field_boozed_blog_sections',
-                'label'         => __('Sections', 'boozed'),
-                'name'          => 'sections',
-                'type'          => 'flexible_content',
-                'button_label'  => __('Add section', 'boozed'),
-                'instructions'  => __('Build the blog post with sections. Use "Post content" to output the main editor content at a chosen position, or add custom sections (e.g. Text with WYSIWYG, CTA, Hero). Leave empty to use the default: title, featured image, then main content.', 'boozed'),
-                'layouts'       => boozed_filter_sections_by_visibility([
+                'key'           => 'field_boozed_blog_use_news_article_template',
+                'label'         => __('Use fixed news layout', 'boozed'),
+                'name'          => 'use_news_article_template',
+                'type'          => 'true_false',
+                'instructions'  => __('When enabled, the post uses the centered news article template (title, excerpt, share, featured image, main content only). Flexible sections below are hidden and not output.', 'boozed'),
+                'default_value' => 0,
+                'ui'            => 1,
+                'ui_on_text'    => __('Yes', 'boozed'),
+                'ui_off_text'   => __('No', 'boozed'),
+            ],
+            [
+                'key'               => 'field_boozed_blog_sections',
+                'label'             => __('Sections', 'boozed'),
+                'name'              => 'sections',
+                'type'              => 'flexible_content',
+                'button_label'      => __('Add section', 'boozed'),
+                'instructions'      => __('Build the blog post with sections. Use "Post content" to output the main editor content at a chosen position, or add custom sections (e.g. Text with WYSIWYG, CTA, Hero). Leave empty to use the default: title, featured image, then main content.', 'boozed'),
+                'conditional_logic' => [
+                    [
+                        [
+                            'field'    => 'field_boozed_blog_use_news_article_template',
+                            'operator' => '!=',
+                            'value'    => '1',
+                        ],
+                    ],
+                ],
+                'layouts'           => boozed_filter_sections_by_visibility([
                     'layout_boozed_post_content' => PostContent::get(),
                     'layout_boozed_tekst'        => Tekst::get(),
                     'layout_boozed_tekst_media'  => TekstMedia::get(),

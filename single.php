@@ -1,8 +1,8 @@
 <?php
 /**
  * Template for single blog post.
- * Renders: page header (marquee title + date, author, reading time, breadcrumbs), optional featured image banner.
- * If the post has ACF flexible sections, those are rendered; otherwise the main post content is shown.
+ * When ACF "Use fixed news layout" is enabled: centered news template (title, excerpt, meta, share, image, content only).
+ * Otherwise: page header (marquee title + meta + breadcrumbs), optional featured image banner; flexible sections or main content.
  */
 
 get_header();
@@ -10,7 +10,14 @@ get_header();
 while (have_posts()) {
     the_post();
 
-    $post_id   = get_the_ID();
+    $post_id = get_the_ID();
+    $use_news_article_template = function_exists('get_field') && (int) get_field('use_news_article_template', $post_id) === 1;
+
+    if ($use_news_article_template) {
+        include get_template_directory() . '/resources/views/partials/single-post-news.php';
+        continue;
+    }
+
     $thumb_id  = get_post_thumbnail_id($post_id);
     $has_thumb = (int) $thumb_id > 0;
     $has_sections = function_exists('have_rows') && have_rows('sections', $post_id);

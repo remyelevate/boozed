@@ -832,6 +832,22 @@
     @apply block;
   }
 
+  /* Fixed news article template: pull quote / blockquote (scoped — legacy single unchanged) */
+  .single-post-news .entry-content blockquote {
+    @apply relative my-8 mx-0 border-0 py-8 pr-6 pl-12 md:px-14 md:pl-16;
+    @apply bg-pink-50 border-l-4 border-pink-400;
+  }
+  .single-post-news .entry-content blockquote::before {
+    content: "\201C";
+    @apply pointer-events-none absolute left-4 top-5 font-heading text-3xl leading-none text-pink-300 md:left-6 md:top-6 md:text-4xl;
+  }
+  .single-post-news .entry-content blockquote p {
+    @apply text-center font-body text-body-lg italic text-brand-black m-0 last:mb-0;
+  }
+  .single-post-news .entry-content blockquote cite {
+    @apply mt-4 block text-center not-italic text-body-sm text-brand-black/80;
+  }
+
   /* Text + Media section: caption ticker when content overflows */
   @keyframes tekst-media-ticker {
     0% { transform: translateX(0); }
