@@ -352,6 +352,15 @@ CSS;
 
     $js = <<<'JS'
 (function() {
+    var tmceRecoveryTimers = Object.create(null);
+
+    function clearTmceRecovery(editorId) {
+        if (tmceRecoveryTimers[editorId]) {
+            window.clearTimeout(tmceRecoveryTimers[editorId]);
+            delete tmceRecoveryTimers[editorId];
+        }
+    }
+
     function hasVisualEditor(editorId, wrap) {
         if (window.tinymce && window.tinymce.get(editorId)) {
             return true;
@@ -391,23 +400,44 @@ CSS;
         return mode === 'tmce' ? wrap.classList.contains('tmce-active') : wrap.classList.contains('html-active');
     }
 
-    function ensureEditorModeConsistency(editorId) {
-        var wrap = document.getElementById('wp-' + editorId + '-wrap');
-        if (!wrap) return;
+    /**
+     * TinyMCE init is async relative to clicks. Immediately checking for an editor causes false negatives
+     * and prevents Visual mode ever sticking after selecting it.
+     */
+    function scheduleVisualRecovery(editorId, mode) {
+        clearTmceRecovery(editorId);
 
-        // If WP marks mode as Visual but TinyMCE is unavailable, recover to Text mode.
-        if (wrap.classList.contains('tmce-active') && !hasVisualEditor(editorId, wrap)) {
-            setMode(editorId, 'html');
+        if (mode !== 'tmce') {
+            return;
         }
-    }
 
-    function ensureAllEditorsConsistency() {
-        var wraps = document.querySelectorAll('.wp-editor-wrap');
-        wraps.forEach(function(wrap) {
-            var textarea = wrap.querySelector('textarea.wp-editor-area');
-            if (!textarea || !textarea.id) return;
-            ensureEditorModeConsistency(textarea.id);
-        });
+        var attempts = 0;
+        var maxAttempts = 30; // ~3s total at 100ms intervals
+
+        var tick = function() {
+            var wrap = document.getElementById('wp-' + editorId + '-wrap');
+            if (!wrap || !wrap.classList.contains('tmce-active')) {
+                delete tmceRecoveryTimers[editorId];
+                return;
+            }
+
+            if (hasVisualEditor(editorId, wrap)) {
+                delete tmceRecoveryTimers[editorId];
+                return;
+            }
+
+            attempts += 1;
+            if (attempts >= maxAttempts) {
+                // Last resort fallback: expose content for editing rather than collapsing the UI.
+                delete tmceRecoveryTimers[editorId];
+                setMode(editorId, 'html');
+                return;
+            }
+
+            tmceRecoveryTimers[editorId] = window.setTimeout(tick, 100);
+        };
+
+        tmceRecoveryTimers[editorId] = window.setTimeout(tick, 250);
     }
 
     document.addEventListener('click', function(event) {
@@ -419,29 +449,25 @@ CSS;
 
         var mode = button.classList.contains('switch-tmce') ? 'tmce' : 'html';
 
+        clearTmceRecovery(editorId);
+
         // Let WordPress switchEditors handle normal behavior first.
         if (window.switchEditors && typeof window.switchEditors.go === 'function') {
             window.switchEditors.go(editorId, mode);
-            window.setTimeout(function() {
+            window.requestAnimationFrame(function() {
                 if (!isModeApplied(editorId, mode)) {
                     setMode(editorId, mode);
                 }
-                ensureEditorModeConsistency(editorId);
-            }, 0);
+                scheduleVisualRecovery(editorId, mode);
+            });
             return;
         }
 
         // Fallback only when switchEditors is unavailable.
         event.preventDefault();
         setMode(editorId, mode);
-        ensureEditorModeConsistency(editorId);
+        scheduleVisualRecovery(editorId, mode);
     });
-
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', ensureAllEditorsConsistency);
-    } else {
-        ensureAllEditorsConsistency();
-    }
 })();
 JS;
     wp_register_script('boozed-admin-wysiwyg-fix', '', [], null, true);
