@@ -95,7 +95,7 @@
   /* Top bar: light when transparent */
   .site-header .site-header__top {
     background: #312783;
-    @apply border-b border-white/20 overflow-hidden;
+    @apply border-b border-white/20 overflow-visible;
   }
   .site.site--has-topbar {
     --header-top-height: 36px;
@@ -113,6 +113,11 @@
     @apply flex items-center overflow-x-auto;
     scrollbar-width: none;
     -ms-overflow-style: none;
+  }
+  @media (min-width: 768px) {
+    .site-header .site-header__top-nav {
+      overflow: visible;
+    }
   }
   .site-header .site-header__top-nav::-webkit-scrollbar {
     display: none;
