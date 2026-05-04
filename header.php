@@ -83,7 +83,7 @@ $account_chevron_svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256
     }
     ?>
     
-    <header class="site-header <?php echo ! empty( $header_topbar_menu ) ? 'site-header--has-topbar' : ''; ?> fixed top-0 left-0 right-0 z-50 w-full transition-[background-color,color] duration-300 text-brand-white" id="site-header" role="banner">
+    <header class="site-header <?php echo ! empty( $header_topbar_menu ) ? 'site-header--has-topbar' : ''; ?> fixed top-0 left-0 right-0 z-50 w-full overflow-x-hidden transition-[background-color,color] duration-300 text-brand-white" id="site-header" role="banner">
         <div class="site-header__backdrop absolute inset-0 bg-brand-white opacity-0 transition-opacity duration-300 pointer-events-none" aria-hidden="true"></div>
         <?php if ( ! empty( $header_topbar_menu ) ) : ?>
             <div class="site-header__top relative">
