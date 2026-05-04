@@ -99,7 +99,10 @@
       }
       if (isOpen) return;
       isOpen = true;
-      
+
+      var headerBottom = header.getBoundingClientRect().bottom;
+      megaPanel.style.setProperty('--mega-panel-content-top', (headerBottom + 32) + 'px');
+
       document.body.classList.add('header-mega-open');
       megaPanel.classList.add('is-open');
       megaPanel.setAttribute('aria-hidden', 'false');
