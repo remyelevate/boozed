@@ -337,14 +337,13 @@ add_action('admin_enqueue_scripts', function () {
     background: #fff !important;
 }
 
-/* Match core behavior: hide textarea when Visual mode is active. */
-.wp-editor-wrap.tmce-active textarea.wp-editor-area {
-    display: none;
+/* Keep visual editor usable even when third-party CSS affects editor sizing. */
+.wp-editor-wrap .mce-tinymce {
+    min-height: 220px;
 }
 
-/* Match core behavior: hide TinyMCE iframe when Text mode is active. */
-.wp-editor-wrap.html-active .mce-tinymce {
-    display: none;
+.wp-editor-wrap .mce-edit-area iframe {
+    min-height: 180px;
 }
 CSS;
     wp_register_style('boozed-admin-wysiwyg-fix', false, [], null);
@@ -379,6 +378,12 @@ CSS;
         }
     }
 
+    function isModeApplied(editorId, mode) {
+        var wrap = document.getElementById('wp-' + editorId + '-wrap');
+        if (!wrap) return false;
+        return mode === 'tmce' ? wrap.classList.contains('tmce-active') : wrap.classList.contains('html-active');
+    }
+
     document.addEventListener('click', function(event) {
         var button = event.target.closest('.wp-switch-editor');
         if (!button) return;
@@ -386,9 +391,23 @@ CSS;
         var editorId = button.getAttribute('data-wp-editor-id');
         if (!editorId) return;
 
+        var mode = button.classList.contains('switch-tmce') ? 'tmce' : 'html';
+
+        // Let WordPress switchEditors handle normal behavior first.
+        if (window.switchEditors && typeof window.switchEditors.go === 'function') {
+            window.switchEditors.go(editorId, mode);
+            window.setTimeout(function() {
+                if (!isModeApplied(editorId, mode)) {
+                    setMode(editorId, mode);
+                }
+            }, 0);
+            return;
+        }
+
+        // Fallback only when switchEditors is unavailable.
         event.preventDefault();
-        setMode(editorId, button.classList.contains('switch-tmce') ? 'tmce' : 'html');
-    }, true);
+        setMode(editorId, mode);
+    });
 })();
 JS;
     wp_register_script('boozed-admin-wysiwyg-fix', '', [], null, true);
