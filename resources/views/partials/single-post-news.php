@@ -109,7 +109,16 @@ $link_col = 'text-brand-indigo hover:opacity-90';
                 <ul class="flex flex-wrap items-center gap-3 list-none m-0 p-0" role="list">
                     <li>
                         <a href="<?php echo esc_url($share_linkedin); ?>" target="_blank" rel="noopener noreferrer" class="single-post-news__share-btn single-post-news__share-btn--linkedin flex h-12 w-12 items-center justify-center rounded-full bg-[#0A66C2] text-white no-underline hover:opacity-90 transition-opacity" aria-label="<?php esc_attr_e('Share on LinkedIn', 'boozed'); ?>">
-                            <span class="font-heading font-bold text-sm leading-none" aria-hidden="true">in</span>
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                <g clip-path="url(#clip_linkedin_icon)">
+                                    <path d="M15.8333 0H4.16667C1.86583 0 0 1.86583 0 4.16667V15.8333C0 18.1342 1.86583 20 4.16667 20H15.8333C18.135 20 20 18.1342 20 15.8333V4.16667C20 1.86583 18.135 0 15.8333 0ZM6.66667 15.8333H4.16667V6.66667H6.66667V15.8333ZM5.41667 5.61C4.61167 5.61 3.95833 4.95167 3.95833 4.14C3.95833 3.32833 4.61167 2.67 5.41667 2.67C6.22167 2.67 6.875 3.32833 6.875 4.14C6.875 4.95167 6.2225 5.61 5.41667 5.61ZM16.6667 15.8333H14.1667V11.1633C14.1667 8.35667 10.8333 8.56917 10.8333 11.1633V15.8333H8.33333V6.66667H10.8333V8.1375C11.9967 5.9825 16.6667 5.82333 16.6667 10.2008V15.8333Z" fill="white"/>
+                                </g>
+                                <defs>
+                                    <clipPath id="clip_linkedin_icon">
+                                        <rect width="20" height="20" fill="white"/>
+                                    </clipPath>
+                                </defs>
+                            </svg>
                         </a>
                     </li>
                     <li>
@@ -119,12 +128,16 @@ $link_col = 'text-brand-indigo hover:opacity-90';
                     </li>
                     <li>
                         <a href="<?php echo esc_url($share_email_href); ?>" class="single-post-news__share-btn single-post-news__share-btn--email flex h-12 w-12 items-center justify-center rounded-full bg-brand-purple text-white no-underline hover:opacity-90 transition-opacity" aria-label="<?php esc_attr_e('Share by email', 'boozed'); ?>">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M224 48H32a8 8 0 0 0-8 8v136a8 8 0 0 0 8 8h192a8 8 0 0 0 8-8V56a8 8 0 0 0-8-8Zm-96 85.15L52.57 64h150.86ZM98.71 128 32 181.81V74.19Zm16.05 16.14 13 11a8 8 0 0 0 10.49 0l13-11 51.78 59.86H63Zm51.23-16.14L224 74.18v107.64Z"/></svg>
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                <path d="M0 2.5V17.5H20V2.5H0ZM17.9317 4.16667L10 10.5942L2.06833 4.16667H17.9317ZM1.66667 15.8333V5.98583L10 12.7392L18.3333 5.98583V15.8333H1.66667Z" fill="white"/>
+                            </svg>
                         </a>
                     </li>
                     <li>
                         <button type="button" class="single-post-news__share-copy flex h-12 w-12 cursor-pointer items-center justify-center rounded-full bg-brand-coral text-white border-0 hover:opacity-90 transition-opacity" data-copy-url="<?php echo esc_attr($permalink); ?>" aria-label="<?php esc_attr_e('Copy link', 'boozed'); ?>">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M216 32H88a8 8 0 0 0-8 8v40H40a8 8 0 0 0-8 8v128a8 8 0 0 0 8 8h128a8 8 0 0 0 8-8v-40h40a8 8 0 0 0 8-8V40a8 8 0 0 0-8-8Zm-56 176H48V96h112Zm48-48h-32V88a8 8 0 0 0-8-8H96V48h112Z"/></svg>
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                <path d="M13.3346 0.833313H3.33464C2.41797 0.833313 1.66797 1.58331 1.66797 2.49998V14.1666H3.33464V2.49998H13.3346V0.833313ZM15.8346 4.16665H6.66797C5.7513 4.16665 5.0013 4.91665 5.0013 5.83331V17.5C5.0013 18.4166 5.7513 19.1666 6.66797 19.1666H15.8346C16.7513 19.1666 17.5013 18.4166 17.5013 17.5V5.83331C17.5013 4.91665 16.7513 4.16665 15.8346 4.16665ZM15.8346 17.5H6.66797V5.83331H15.8346V17.5Z" fill="white"/>
+                            </svg>
                         </button>
                     </li>
                 </ul>
