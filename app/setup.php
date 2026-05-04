@@ -291,33 +291,26 @@ add_action('acf/init', function () {
 });
 
 /**
- * ACF hides the Visual/Text (code) tabs for `wysiwyg` fields when
- * `user_can_richedit()` is false. Some roles/users don't have that
- * capability, but we still want the tabs visible in the ACF UI.
+ * Force the Visual editor on for every user in wp-admin.
  *
- * Scope: only while ACF is rendering a `wysiwyg` field (theme admin screens).
+ * WordPress returns false from `user_can_richedit()` when a user has the
+ * per-profile "Disable the visual editor when writing" option set
+ * (user meta `rich_editing = 'false'`). When that happens:
+ *   - ACF hides the Visual/Text tabs on `wysiwyg` fields entirely.
+ *   - More importantly, ACF's hidden `wp_editor( '', 'acf_content' )` template
+ *     (rendered on `admin_footer` via ACF_Assets::print_uploader_scripts) is
+ *     output WITHOUT TinyMCE settings, so TinyMCE is never enqueued for that
+ *     user. ACF then can't initialize TinyMCE on dynamic flexible-content
+ *     WYSIWYG fields, so clicking "Visueel" leaves the editor blank
+ *     (display:none textarea, no iframe) until our JS fallback kicks in and
+ *     reverts to text mode after a few seconds.
+ *
+ * Forcing the filter on for the whole admin context ensures TinyMCE assets
+ * are loaded and the Visual tab works for every editor, regardless of their
+ * personal "Disable visual editor" preference.
  */
-$boozed_acf_force_richedit_for_wysiwyg = false;
-add_action('acf/render_field', function ($field) {
-    if (!is_admin()) {
-        return;
-    }
-    global $boozed_acf_force_richedit_for_wysiwyg;
-    $boozed_acf_force_richedit_for_wysiwyg = is_array($field) && (($field['type'] ?? '') === 'wysiwyg');
-}, -1000);
-add_action('acf/render_field', function () {
-    if (!is_admin()) {
-        return;
-    }
-    global $boozed_acf_force_richedit_for_wysiwyg;
-    $boozed_acf_force_richedit_for_wysiwyg = false;
-}, 10000);
 add_filter('user_can_richedit', function ($can) {
-    if (!is_admin()) {
-        return $can;
-    }
-    global $boozed_acf_force_richedit_for_wysiwyg;
-    if (!empty($boozed_acf_force_richedit_for_wysiwyg)) {
+    if (is_admin()) {
         return true;
     }
     return $can;
