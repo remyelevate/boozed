@@ -97,6 +97,10 @@
   .site-header .site-header__top-link {
     @apply inline-flex items-center gap-1.5 py-2 text-body-xs md:text-body-sm text-brand-white no-underline transition-colors duration-200;
     white-space: nowrap;
+    line-height: 1.2;
+  }
+  .site-header .site-header__top-link > span {
+    display: inline-block;
   }
   .site-header .site-header__top-nav .has-dropdown > .site-header__top-link {
     display: flex;
@@ -110,6 +114,8 @@
   .site-header .site-header__top-chevron {
     width: 0.875rem;
     height: 0.875rem;
+    display: block;
+    margin-top: 1px;
     transition: transform 0.2s ease;
   }
   .site-header .site-header__top-nav .has-dropdown:hover > .site-header__top-link .site-header__top-chevron,
@@ -420,7 +426,7 @@
   .mega-menu-inner--first {
     @apply flex-col;
     /* Push content below the header */
-    padding-top: calc(var(--header-total-height) + 2rem);
+    padding-top: calc(var(--page-header-site-header-offset) + 2rem);
     padding-bottom: 2.5rem;
   }
   
