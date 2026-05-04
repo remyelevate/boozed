@@ -54,15 +54,14 @@ $slot_positions = [
 
 $phosphor_chevron_right = '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 256 256" fill="currentColor" class="w-5 h-5 shrink-0" aria-hidden="true"><path d="m181.66 133.66l-80 80a8 8 0 0 1-11.32-11.32L164.69 128L90.34 53.66a8 8 0 0 1 11.32-11.32l80 80a8 8 0 0 1 0 11.32Z"/></svg>';
 $brands_video_dir = get_template_directory_uri() . '/assets/images';
-$brands_poster_url = $brands_video_dir . '/paint%20fill.gif';
 ?>
-<section class="brands relative overflow-hidden min-h-[500px] md:min-h-[1024px]">
+<section class="brands relative overflow-hidden min-h-[100dvh] md:min-h-[1024px]">
 	<div class="brands__video-wrap absolute inset-0 z-0 w-full h-full pointer-events-none" aria-hidden="true">
-		<video class="brands__video w-full h-full object-cover" muted playsinline preload="auto" poster="<?php echo esc_url($brands_poster_url); ?>">
+		<video class="brands__video w-full h-full object-cover" muted playsinline preload="auto">
 			<source src="<?php echo esc_url($brands_video_dir . '/paint-fill.mp4'); ?>" type="video/mp4">
 		</video>
 	</div>
-	<div class="brands__inner relative z-[1] max-w-section mx-auto px-4 md:px-section-x w-full h-[500px] md:h-[1024px] flex items-center justify-center">
+	<div class="brands__inner relative z-[1] max-w-section mx-auto px-4 md:px-section-x w-full h-[100dvh] md:h-[1024px] flex items-center justify-center">
 		<?php /* Scattered logos – absolutely positioned via inline styles */ ?>
 		<?php if ( ! empty($brands_fill)) : ?>
 			<?php foreach ($brands_fill as $i => $item) :
@@ -74,7 +73,8 @@ $brands_poster_url = $brands_video_dir . '/paint%20fill.gif';
 				$href_attr = $url ? ' href="' . $url . '"' : '';
 				$pos_style = isset($slot_positions[$i]) ? $slot_positions[$i] : 'top:50%;left:50%';
 			?>
-			<<?php echo $tag; ?> class="brands__logo hidden md:flex" style="<?php echo esc_attr($pos_style); ?>"<?php echo $href_attr; ?>>
+			<?php $mobile_visibility = in_array($i, [0, 1, 2, 3, 8, 10], true) ? 'flex' : 'hidden md:flex'; ?>
+			<<?php echo $tag; ?> class="brands__logo brands__logo--slot-<?php echo (int) $i; ?> <?php echo esc_attr($mobile_visibility); ?>" style="<?php echo esc_attr($pos_style); ?>"<?php echo $href_attr; ?>>
 				<img src="<?php echo esc_url($img_src); ?>" alt="" class="brands__logo-img" loading="lazy">
 			</<?php echo $tag; ?>>
 			<?php endforeach; ?>

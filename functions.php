@@ -39,16 +39,25 @@ function boozed_auth_page_url($slug, $fallback_path)
 
 function boozed_login_page_url()
 {
+    if (!(get_page_by_path('login') instanceof \WP_Post)) {
+        return home_url('/wp-login.php');
+    }
     return boozed_auth_page_url('login', '/login');
 }
 
 function boozed_forgot_password_page_url()
 {
+    if (!(get_page_by_path('wachtwoord-vergeten') instanceof \WP_Post)) {
+        return add_query_arg('action', 'lostpassword', home_url('/wp-login.php'));
+    }
     return boozed_auth_page_url('wachtwoord-vergeten', '/wachtwoord-vergeten');
 }
 
 function boozed_reset_password_page_url()
 {
+    if (!(get_page_by_path('wachtwoord-resetten') instanceof \WP_Post)) {
+        return add_query_arg('action', 'rp', home_url('/wp-login.php'));
+    }
     return boozed_auth_page_url('wachtwoord-resetten', '/wachtwoord-resetten');
 }
 
@@ -152,6 +161,10 @@ add_action('login_init', function () {
     if (strpos($script, 'wp-login') === false || $_SERVER['REQUEST_METHOD'] === 'POST') {
         return;
     }
+    if (!(get_page_by_path('login') instanceof \WP_Post)) {
+        // No custom login page in this environment: keep native wp-login.php reachable.
+        return;
+    }
 
     $action = isset($_GET['action']) ? sanitize_key((string) $_GET['action']) : 'login';
     $target = boozed_login_page_url();
@@ -197,6 +210,9 @@ add_action('template_redirect', function () {
 
     $uri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
     if (preg_match('#^/wp-login(\?|$)#', $uri)) {
+        if (!(get_page_by_path('login') instanceof \WP_Post)) {
+            return;
+        }
         $target = boozed_login_page_url();
         if (!empty($_GET['action']) && in_array(sanitize_key((string) $_GET['action']), ['lostpassword', 'retrievepassword'], true)) {
             $target = boozed_forgot_password_page_url();

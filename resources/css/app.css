@@ -34,6 +34,20 @@
   }
 }
 
+/* Header: constrain entire header to viewport width (outside @layer so utilities can't override) */
+.site-header {
+  max-width: 100vw !important;
+  overflow: visible !important;
+}
+.site-header .site-header-inner {
+  max-width: 100vw;
+}
+
+.site-footer__cta-banner {
+  max-width: 100vw;
+  overflow-x: clip;
+}
+
 @layer components {
   /* Header: transparent over hero (white text), white backdrop + dark logo/text when scrolled or hovered */
   .site-header .site-header__logo {
@@ -1176,6 +1190,49 @@
     filter: none;
     cursor: pointer;
     @apply opacity-100;
+  }
+  @media (max-width: 767px) {
+    .brands__logo {
+      width: 76px;
+      height: 76px;
+      opacity: 0.45;
+    }
+    .brands__logo--slot-0 {
+      top: 10% !important;
+      left: 6% !important;
+      right: auto !important;
+      bottom: auto !important;
+    }
+    .brands__logo--slot-1 {
+      top: 7% !important;
+      left: 32% !important;
+      right: auto !important;
+      bottom: auto !important;
+    }
+    .brands__logo--slot-2 {
+      top: 11% !important;
+      right: 22% !important;
+      left: auto !important;
+      bottom: auto !important;
+    }
+    .brands__logo--slot-3 {
+      top: 7% !important;
+      right: 5% !important;
+      left: auto !important;
+      bottom: auto !important;
+    }
+    .brands__logo--slot-8 {
+      bottom: 12% !important;
+      left: 10% !important;
+      right: auto !important;
+      top: auto !important;
+    }
+    .brands__logo--slot-10 {
+      bottom: 14% !important;
+      right: 10% !important;
+      left: auto !important;
+      top: auto !important;
+    }
   }
 
   /* Footer CTA banner – large Lottie arrow on top, secondary link underline */

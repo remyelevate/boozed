@@ -69,7 +69,7 @@ $phosphor_chevron_right = '<svg xmlns="http://www.w3.org/2000/svg" width="1em" h
 
 <section class="py-10 md:py-section-y overflow-hidden max-w-section mx-auto">
 	<!-- Single horizontal track: copy card first, then project cards -->
-	<div class="ps-track flex flex-row flex-nowrap gap-4 overflow-x-auto overflow-y-hidden cursor-grab touch-pan-x" id="ps-track">
+	<div class="ps-track flex flex-row flex-nowrap gap-4 overflow-x-auto overflow-y-hidden cursor-grab" id="ps-track">
 		<!-- Copy card (first slide) – design 494×533 -->
 		<div class="shrink-0 flex flex-col justify-center bg-brand-indigo p-8 md:p-12 w-[90vw] md:w-[494px] aspect-[494/533]" id="ps-copy">
 			<h2 class="font-heading font-bold text-h2 md:text-h2-lg text-brand-white mb-4 md:mb-6"><?php echo esc_html($heading); ?></h2>
@@ -234,7 +234,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		}, true);
 	});
 
-	// Touch – only handle horizontal swipes; let vertical scrolls pass through
+	// Touch – capture only clear horizontal swipes, let vertical body scroll pass through
 	var touchX = 0, touchY = 0, touchScroll = 0, touchDirection = null;
 	track.addEventListener('touchstart', function(e) {
 		touchX = e.touches[0].pageX;
@@ -246,7 +246,11 @@ document.addEventListener('DOMContentLoaded', function() {
 		var dx = e.touches[0].pageX - touchX;
 		var dy = e.touches[0].pageY - touchY;
 		if (!touchDirection) {
-			touchDirection = Math.abs(dx) > Math.abs(dy) ? 'h' : 'v';
+			var adx = Math.abs(dx);
+			var ady = Math.abs(dy);
+			// Require a minimum movement and clear horizontal intent before locking.
+			if (adx < 8 && ady < 8) return;
+			touchDirection = (adx > ady * 1.2) ? 'h' : 'v';
 		}
 		if (touchDirection === 'h') {
 			e.preventDefault();

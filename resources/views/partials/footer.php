@@ -90,7 +90,7 @@ $arrow_lottie_url = $theme_uri . '/assets/animations/arrow.json';
     <div class="site-footer__cta-banner relative overflow-visible border-b border-brand-white/10 mt-[min(25vmin,140px)] md:mt-[min(22.5vmin,180px)]" data-footer-cta-lottie="<?php echo esc_url($arrow_lottie_url); ?>">
         <div class="relative max-w-section mx-auto px-4 md:px-section-x py-12 md:py-16">
             <div class="site-footer__cta-lottie absolute left-4 md:left-[68px] top-0 -translate-y-1/2 -scale-x-100 w-[min(50vmin,280px)] h-[min(50vmin,280px)] md:w-[min(45vmin,360px)] md:h-[min(45vmin,360px)] pointer-events-none z-0" aria-hidden="true"></div>
-            <div class="relative z-10 flex w-full min-w-0 flex-col items-center text-center px-[calc(min(50vmin,280px)+1.5rem)] md:px-[calc(min(45vmin,360px)+5rem)]">
+            <div class="relative z-10 flex w-full min-w-0 flex-col items-center text-center px-6 md:pl-[calc(min(45vmin,360px)+5rem)] md:pr-6">
                 <h3 class="font-heading font-bold text-h4 md:text-h2 text-brand-white m-0 mb-6 md:mb-8 max-w-2xl"><?php echo esc_html($footer_cta_title); ?></h3>
                 <div class="flex flex-col sm:flex-row items-center justify-center gap-4 md:gap-6">
                     <?php if ($footer_cta_button_text !== '') : ?>

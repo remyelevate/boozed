@@ -112,6 +112,28 @@ $has_posts = !empty($posts);
 #bl-custom-cursor {
 	transform: translate(-50%, -50%);
 }
+
+/* Mobile: stack news items vertically instead of horizontal carousel cards */
+@media (max-width: 767px) {
+	.blog-lister .bl-track {
+		flex-direction: column;
+		overflow-x: visible;
+	}
+	.blog-lister .bl-card {
+		width: 100% !important;
+		min-height: 0 !important;
+		height: auto !important;
+		flex-direction: column;
+	}
+	.blog-lister .bl-card-text,
+	.blog-lister .bl-card-img {
+		width: 100%;
+	}
+	.blog-lister .bl-card-img,
+	.blog-lister .bl-card-img img {
+		min-height: 220px;
+	}
+}
 </style>
 <?php endif; ?>
 
