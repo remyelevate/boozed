@@ -23,6 +23,7 @@
 <?php
 $theme_uri    = get_template_directory_uri();
 $header_menu  = get_field('header_menu', 'option');
+$header_topbar_menu = get_field('header_topbar_menu', 'option');
 $cta_text     = get_field('header_cta_text', 'option') ?: __('Offerte aanvragen', 'boozed');
 $business_phone = get_field('business_phone', 'option');
 $is_logged_in = is_user_logged_in();
@@ -56,6 +57,15 @@ if ( ! empty( $header_menu ) ) {
 } else {
     $nav_args['theme_location'] = 'primary_navigation';
 }
+$topbar_nav_args = [
+    'container'   => false,
+    'menu_class'  => 'site-header__top-menu',
+    'fallback_cb' => false,
+    'walker'      => new \App\TopbarNavWalker(),
+];
+if ( ! empty( $header_topbar_menu ) ) {
+    $topbar_nav_args['menu'] = (int) $header_topbar_menu;
+}
 $account_icon_svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" class="site-header__account-icon" aria-hidden="true" focusable="false"><path d="M230.93,220a8,8,0,0,1-6.93,4H32a8,8,0,0,1-6.92-12c15.23-26.33,38.7-45.21,66.09-54.16a72,72,0,1,1,73.66,0c27.39,8.95,50.86,27.83,66.09,54.16A8,8,0,0,1,230.93,220Z"></path></svg>';
 $account_chevron_svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" class="site-header__account-chevron" aria-hidden="true" focusable="false"><path d="M211.31,100.69a8,8,0,0,1,0,11.31l-80,80a8,8,0,0,1-11.31,0l-80-80a8,8,0,0,1,11.31-11.31L128,177.37l76.69-76.68A8,8,0,0,1,211.31,100.69Z"></path></svg>';
 ?>
@@ -73,8 +83,17 @@ $account_chevron_svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256
     }
     ?>
     
-    <header class="site-header fixed top-0 left-0 right-0 z-50 w-full transition-[background-color,color] duration-300 text-brand-white" id="site-header" role="banner">
+    <header class="site-header <?php echo ! empty( $header_topbar_menu ) ? 'site-header--has-topbar' : ''; ?> fixed top-0 left-0 right-0 z-50 w-full transition-[background-color,color] duration-300 text-brand-white" id="site-header" role="banner">
         <div class="site-header__backdrop absolute inset-0 bg-brand-white opacity-0 transition-opacity duration-300 pointer-events-none" aria-hidden="true"></div>
+        <?php if ( ! empty( $header_topbar_menu ) ) : ?>
+            <div class="site-header__top relative">
+                <div class="site-header__top-inner w-full max-w-section mx-auto px-4 md:px-section-x">
+                    <nav class="site-header__top-nav" aria-label="<?php esc_attr_e( 'Topbar', 'boozed' ); ?>">
+                        <?php wp_nav_menu( $topbar_nav_args ); ?>
+                    </nav>
+                </div>
+            </div>
+        <?php endif; ?>
         <div class="site-header-inner relative flex items-center justify-between gap-4 w-full max-w-section mx-auto px-4 md:px-section-x pt-[max(1.5rem,calc(env(safe-area-inset-top,0px)+0.5rem))] pb-4 md:py-4 min-w-0">
             <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="site-header__logo flex items-center gap-3 shrink-0" aria-label="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>">
                 <img src="<?php echo esc_url( $theme_uri . '/assets/images/logo-light.svg' ); ?>" alt="" class="site-header__logo-img site-header__logo-img--light h-10 w-auto md:h-12" width="140" height="40">
@@ -170,6 +189,16 @@ $account_chevron_svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256
             <div class="mobile-menu__lottie-inner w-[min(80vmin,400px)] h-[min(80vmin,400px)]"></div>
         </div>
         <div class="mobile-menu__content relative z-10 flex flex-col items-start justify-start min-h-full py-24 px-6 pl-section-x">
+            <?php if ( ! empty( $header_topbar_menu ) ) : ?>
+                <nav class="flex flex-col items-stretch gap-0 w-full max-w-md mobile-menu__nav mobile-menu__topbar-nav mb-8" aria-label="<?php esc_attr_e( 'Topbar mobile menu', 'boozed' ); ?>">
+                    <?php
+                    wp_nav_menu( array_merge( $topbar_nav_args, [
+                        'menu_class' => 'flex flex-col gap-0 font-body text-h5 font-medium text-brand-white mobile-menu__items',
+                        'walker'     => new \App\MobileNavWalker(),
+                    ] ) );
+                    ?>
+                </nav>
+            <?php endif; ?>
             <nav class="flex flex-col items-stretch gap-0 w-full max-w-md mobile-menu__nav" aria-label="<?php esc_attr_e( 'Mobile menu', 'boozed' ); ?>">
                 <?php
                 if ( has_nav_menu( 'primary_navigation' ) || ! empty( $header_menu ) ) {

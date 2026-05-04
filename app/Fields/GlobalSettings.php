@@ -40,6 +40,17 @@ class GlobalSettings
                     'instructions'  => __('Choose which WordPress menu to show in the header.', 'boozed'),
                 ],
                 [
+                    'key'           => 'field_boozed_header_topbar_menu',
+                    'label'         => __('Topbar menu', 'boozed'),
+                    'name'          => 'header_topbar_menu',
+                    'type'          => 'select',
+                    'choices'       => [],
+                    'default_value' => '',
+                    'allow_null'    => 1,
+                    'return_format' => 'value',
+                    'instructions'  => __('Choose which WordPress menu to show in the topbar above the header.', 'boozed'),
+                ],
+                [
                     'key'           => 'field_boozed_header_cta_text',
                     'label'         => __('CTA button text', 'boozed'),
                     'name'          => 'header_cta_text',
@@ -463,6 +474,15 @@ class GlobalSettings
     protected static function load_header_menu_choices()
     {
         add_filter('acf/load_field/name=header_menu', function ($field) {
+            $menus = wp_get_nav_menus();
+            $field['choices'] = [ '' => __('— Select menu —', 'boozed') ];
+            foreach ($menus as $menu) {
+                $field['choices'][ (string) $menu->term_id ] = $menu->name;
+            }
+            return $field;
+        });
+
+        add_filter('acf/load_field/name=header_topbar_menu', function ($field) {
             $menus = wp_get_nav_menus();
             $field['choices'] = [ '' => __('— Select menu —', 'boozed') ];
             foreach ($menus as $menu) {
