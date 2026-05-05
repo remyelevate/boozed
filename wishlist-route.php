@@ -73,14 +73,20 @@ if (!$current) {
                                             <?php if (!empty($item['image_url'])) : ?>
                                                 <img src="<?php echo esc_url($item['image_url']); ?>" alt="<?php echo esc_attr($item['title']); ?>">
                                             <?php endif; ?>
-                                            <a href="<?php echo esc_url($item['url']); ?>"><?php echo esc_html($item['title']); ?></a>
+                                            <a href="<?php echo esc_url($item['url']); ?>" class="wishlist-list__product-title"><?php echo esc_html($item['title']); ?></a>
                                         </div>
                                     </td>
                                     <td><?php echo wp_kses_post($item['price_html'] ?: '&mdash;'); ?></td>
                                     <td class="wishlist-list__actions-col">
                                         <div class="wishlist-list__actions">
-                                            <button type="button" data-wishlist-remove><?php esc_html_e('Verwijderen', 'boozed'); ?></button>
-                                            <button type="button" data-wishlist-move><?php esc_html_e('Verplaatsen', 'boozed'); ?></button>
+                                            <button type="button" data-wishlist-remove aria-label="<?php esc_attr_e('Verwijderen', 'boozed'); ?>">
+                                                <span class="wishlist-list__action-label"><?php esc_html_e('Verwijderen', 'boozed'); ?></span>
+                                                <svg class="wishlist-list__action-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM400-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg>
+                                            </button>
+                                            <button type="button" data-wishlist-move aria-label="<?php esc_attr_e('Verplaatsen', 'boozed'); ?>">
+                                                <span class="wishlist-list__action-label"><?php esc_html_e('Verplaatsen', 'boozed'); ?></span>
+                                                <svg class="wishlist-list__action-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="m280-400 200-200-56-56-296 296 296 296 56-56-200-200h552v-80H280Z"/></svg>
+                                            </button>
                                         </div>
                                     </td>
                                 </tr>
