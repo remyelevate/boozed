@@ -666,6 +666,11 @@
     padding-top: calc(var(--page-header-site-header-offset) + 24px);
   }
 
+  /* Wishlist pages: keep content clear of the fixed header */
+  .wishlist-page {
+    padding-top: calc(var(--page-header-site-header-offset) + 24px);
+  }
+
   .page-header__cta-secondary::after {
     content: '';
     @apply block absolute bottom-0 left-0 h-0.5 bg-brand-coral origin-left transition-[width] duration-200 ease-out;
