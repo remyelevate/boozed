@@ -17,7 +17,7 @@ $default_wishlist_url = !empty($wishlists[0]['url']) ? (string) $wishlists[0]['u
             </button>
             <div class="wishlist-modal__state is-active" data-wishlist-state="form">
                 <div class="wishlist-modal__icon" aria-hidden="true">
-                    <svg viewBox="0 0 256 256" fill="currentColor"><path d="M178,40a54.83,54.83,0,0,0-48,28.8A54.83,54.83,0,0,0,82,40C51.72,40,28,64.92,28,96.8c0,70.42,91.05,120.14,95,122.23a8,8,0,0,0,7.54,0c3.91-2.09,95-51.81,95-122.23C228,64.92,204.28,40,174,40Zm0,16c22.2,0,38,17.24,38,40.8,0,56.74-71.5,100.12-86,108-14.5-7.88-86-51.26-86-108C44,73.24,59.8,56,82,56c20.31,0,34.88,18.55,40.62,31.22a8,8,0,0,0,14.76,0C143.12,74.55,157.69,56,178,56Zm52,28h-16V68a8,8,0,0,0-16,0V84H182a8,8,0,0,0,0,16h16v16a8,8,0,0,0,16,0V100h16a8,8,0,0,0,0-16Z"/></svg>
+                    <svg viewBox="0 -960 960 960" fill="currentColor"><path d="M440-501Zm0 381L313-234q-72-65-123.5-116t-85-96q-33.5-45-49-87T40-621q0-94 63-156.5T260-840q52 0 99 22t81 62q34-40 81-62t99-22q81 0 136 45.5T831-680h-85q-18-40-53-60t-73-20q-51 0-88 27.5T463-660h-46q-31-45-70.5-72.5T260-760q-57 0-98.5 39.5T120-621q0 33 14 67t50 78.5q36 44.5 98 104T440-228q26-23 61-53t56-50l9 9 19.5 19.5L605-283l9 9q-22 20-56 49.5T498-172l-58 52Zm280-160v-120H600v-80h120v-120h80v120h120v80H800v120h-80Z"/></svg>
                 </div>
                 <h2 id="wishlist-modal-title" class="wishlist-modal__title"><?php esc_html_e('Kies Wenslijst:', 'boozed'); ?></h2>
                 <?php if (empty($wishlists)) : ?>
@@ -45,7 +45,7 @@ $default_wishlist_url = !empty($wishlists[0]['url']) ? (string) $wishlists[0]['u
             </div>
             <div class="wishlist-modal__state" data-wishlist-state="success">
                 <div class="wishlist-modal__icon" aria-hidden="true">
-                    <svg viewBox="0 0 256 256" fill="currentColor"><path d="M243.33,96.35c0,70.42-91,120.14-94.95,122.23a8,8,0,0,1-7.54,0c-3.91-2.09-95-51.81-95-122.23C45.87,64.47,69.58,39.55,99.87,39.55A54.77,54.77,0,0,1,148,68.35a54.77,54.77,0,0,1,48.13-28.8C226.42,39.55,250.13,64.47,250.13,96.35Zm-55.47-20.93a8,8,0,0,0-11.32,0l-44.38,44.39-20.68-20.69a8,8,0,1,0-11.31,11.32l26.34,26.34a8,8,0,0,0,11.31,0l50-50A8,8,0,0,0,187.86,75.42Z"/></svg>
+                    <svg viewBox="0 -960 960 960" fill="currentColor"><path d="m424-296 282-282-56-56-226 226-114-114-56 56 170 170Zm56 216q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/></svg>
                 </div>
                 <p class="wishlist-modal__message" data-wishlist-success-text></p>
                 <a href="<?php echo esc_url($default_wishlist_url); ?>" class="wishlist-modal__button wishlist-modal__button--primary" data-wishlist-view-link><?php esc_html_e('Bekijk Wenslijst', 'boozed'); ?></a>
