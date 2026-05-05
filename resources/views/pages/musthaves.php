@@ -31,7 +31,7 @@ $musthaves_login = function_exists('boozed_login_url') ? boozed_login_url(get_pe
                 <article class="wishlist-list" data-wishlist-id="<?php echo esc_attr($wishlist['id']); ?>">
                     <div class="wishlist-list__header flex items-center justify-between gap-4 mb-3">
                         <h2 class="font-heading font-bold text-h4 text-brand-indigo m-0"><?php echo esc_html($wishlist['title']); ?></h2>
-                        <div class="flex items-center gap-2">
+                        <div class="wishlist-list__header-actions flex items-center gap-2">
                             <button class="wishlist-list__action" data-wishlist-rename><?php esc_html_e('Hernoemen', 'boozed'); ?></button>
                             <button class="wishlist-list__action" data-wishlist-delete><?php esc_html_e('Verwijderen', 'boozed'); ?></button>
                         </div>
