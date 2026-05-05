@@ -3,7 +3,7 @@ $is_logged_in = is_user_logged_in();
 $wishlists = $is_logged_in ? \App\WishlistHandler::getCurrentUserWishlistsWithProducts() : [];
 $musthaves_login = function_exists('boozed_login_url') ? boozed_login_url(get_permalink()) : wp_login_url(get_permalink());
 ?>
-<section class="wishlist-page max-w-section mx-auto px-4 py-10 md:px-section-x md:py-section-y" data-wishlist-manager>
+<section class="wishlist-page max-w-section mx-auto px-4 pb-10 md:px-section-x md:pb-section-y" data-wishlist-manager>
     <div class="wishlist-page__header mb-8 flex items-center justify-between gap-4">
         <h1 class="font-heading font-bold text-h1 text-brand-indigo m-0"><?php esc_html_e('Wenslijsten', 'boozed'); ?></h1>
         <?php if ($is_logged_in) : ?>

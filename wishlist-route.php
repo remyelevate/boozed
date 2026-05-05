@@ -38,7 +38,7 @@ if (!$current) {
     return;
 }
 ?>
-<section class="wishlist-page max-w-section mx-auto px-4 py-10 md:px-section-x md:py-section-y" data-wishlist-manager>
+<section class="wishlist-page max-w-section mx-auto px-4 pb-10 md:px-section-x md:pb-section-y" data-wishlist-manager>
     <h1 class="font-heading font-bold text-h1 text-brand-indigo mb-8"><?php echo esc_html($current['title']); ?></h1>
     <div class="wishlist-manager__toolbar mb-6 flex flex-wrap items-center gap-3">
         <a href="<?php echo esc_url(home_url('/wishlist/')); ?>" class="wishlist-route__back-link"><?php esc_html_e('Mijn wenslijsten', 'boozed'); ?></a>
